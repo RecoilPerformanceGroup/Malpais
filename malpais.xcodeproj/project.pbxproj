@@ -10,6 +10,8 @@
 		4BA258A61153B0800008D49C /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
 		4BA258F41153B1E80008D49C /* testApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BA258F31153B1E80008D49C /* testApp.mm */; };
 		4BA259911153B98B0008D49C /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
+		7FBF1BAA12E49AD2009E32EF /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C1C512AD16C000197290 /* BWToolkitFramework.framework */; };
+		7FBF1BD212E49E6F009E32EF /* libdc1394.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C19412AD16C000197290 /* libdc1394.a */; };
 		DD7B14AE11A3CF38000D9775 /* osc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7B146211A3CF38000D9775 /* osc.a */; };
 		DD7B14AF11A3CF38000D9775 /* ofxOscBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7B146611A3CF38000D9775 /* ofxOscBundle.cpp */; };
 		DD7B14B011A3CF38000D9775 /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7B146811A3CF38000D9775 /* ofxOscMessage.cpp */; };
@@ -28,7 +30,6 @@
 		DD7B14BD11A3CF38000D9775 /* ofxMatrix3x3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7B14A111A3CF38000D9775 /* ofxMatrix3x3.cpp */; };
 		DD7B14BE11A3CF38000D9775 /* ofxMatrix4x4.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7B14A311A3CF38000D9775 /* ofxMatrix4x4.cpp */; };
 		DD7B14BF11A3CF38000D9775 /* ofxQuaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7B14A811A3CF38000D9775 /* ofxQuaternion.cpp */; };
-		DD7B158111A3CFBE000D9775 /* libdc1394.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7B156611A3CFBE000D9775 /* libdc1394.a */; };
 		DD7B158611A3CFD7000D9775 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7B158511A3CFD7000D9775 /* QTKit.framework */; };
 		DD7B158811A3CFDE000D9775 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7B158711A3CFDE000D9775 /* CoreMIDI.framework */; };
 		DDB7C1F412AD16C100197290 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C14D12AD16C000197290 /* AppDelegate.mm */; };
@@ -53,7 +54,6 @@
 		DDB7C20712AD16C100197290 /* Libdc1394GrabberVideoFormatHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C17312AD16C000197290 /* Libdc1394GrabberVideoFormatHelper.cpp */; };
 		DDB7C20812AD16C100197290 /* NormalCameraInstance.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C17612AD16C000197290 /* NormalCameraInstance.mm */; };
 		DDB7C20912AD16C100197290 /* ofxVideoGrabberFeature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C17712AD16C000197290 /* ofxVideoGrabberFeature.cpp */; };
-		DDB7C20A12AD16C100197290 /* libdc1394.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C19412AD16C000197290 /* libdc1394.a */; };
 		DDB7C20B12AD16C100197290 /* coordWarp.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C19812AD16C000197290 /* coordWarp.mm */; };
 		DDB7C20C12AD16C100197290 /* KeystoneProjector.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C19A12AD16C000197290 /* KeystoneProjector.mm */; };
 		DDB7C20D12AD16C100197290 /* Keystoner.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C19C12AD16C000197290 /* Keystoner.mm */; };
@@ -76,7 +76,6 @@
 		DDB7C21E12AD16C100197290 /* PYMIDIVirtualDestination.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C1BF12AD16C000197290 /* PYMIDIVirtualDestination.m */; };
 		DDB7C21F12AD16C100197290 /* PYMIDIVirtualEndpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C1C112AD16C000197290 /* PYMIDIVirtualEndpoint.m */; };
 		DDB7C22012AD16C100197290 /* PYMIDIVirtualSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C1C312AD16C000197290 /* PYMIDIVirtualSource.m */; };
-		DDB7C22112AD16C100197290 /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C1C512AD16C000197290 /* BWToolkitFramework.framework */; };
 		DDB7C22212AD16C100197290 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C1CF12AD16C000197290 /* main.mm */; };
 		DDB7C22312AD16C100197290 /* PluginOpenGLControl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C1D212AD16C000197290 /* PluginOpenGLControl.mm */; };
 		DDB7C22412AD16C100197290 /* PluginOpenGLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C1D412AD16C000197290 /* PluginOpenGLView.mm */; };
@@ -117,7 +116,7 @@
 		E45BE9810E8CC7DD009D7055 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9770E8CC7DD009D7055 /* CoreServices.framework */; };
 		E45BE9830E8CC7DD009D7055 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9790E8CC7DD009D7055 /* OpenGL.framework */; };
 		E45BE9840E8CC7DD009D7055 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */; };
-		E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */; };
+		E4C2422B10CC554B004149E2 /* openFrameworks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2421E10CC549C004149E2 /* openFrameworks.a */; };
 		E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424410CC5A17004149E2 /* AppKit.framework */; };
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
@@ -268,24 +267,6 @@
 		DD7B14AB11A3CF38000D9775 /* ofxVec3f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVec3f.h; sourceTree = "<group>"; };
 		DD7B14AC11A3CF38000D9775 /* ofxVec4f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVec4f.h; sourceTree = "<group>"; };
 		DD7B14AD11A3CF38000D9775 /* ofxVectorMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVectorMath.h; sourceTree = "<group>"; };
-		DD7B154F11A3CFBE000D9775 /* camera.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
-		DD7B155011A3CFBE000D9775 /* capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = capture.h; sourceTree = "<group>"; };
-		DD7B155111A3CFBE000D9775 /* control.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = control.h; sourceTree = "<group>"; };
-		DD7B155211A3CFBE000D9775 /* conversions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = conversions.h; sourceTree = "<group>"; };
-		DD7B155311A3CFBE000D9775 /* dc1394.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dc1394.h; sourceTree = "<group>"; };
-		DD7B155411A3CFBE000D9775 /* format7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = format7.h; sourceTree = "<group>"; };
-		DD7B155511A3CFBE000D9775 /* iso.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iso.h; sourceTree = "<group>"; };
-		DD7B155811A3CFBE000D9775 /* log.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
-		DD7B155A11A3CFBE000D9775 /* capture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = capture.h; sourceTree = "<group>"; };
-		DD7B155B11A3CFBE000D9775 /* register.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = register.h; sourceTree = "<group>"; };
-		DD7B155C11A3CFBE000D9775 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		DD7B155E11A3CFBE000D9775 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
-		DD7B156011A3CFBE000D9775 /* avt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = avt.h; sourceTree = "<group>"; };
-		DD7B156111A3CFBE000D9775 /* basler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basler.h; sourceTree = "<group>"; };
-		DD7B156211A3CFBE000D9775 /* basler_sff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = basler_sff.h; sourceTree = "<group>"; };
-		DD7B156311A3CFBE000D9775 /* pixelink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pixelink.h; sourceTree = "<group>"; };
-		DD7B156411A3CFBE000D9775 /* video.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = video.h; sourceTree = "<group>"; };
-		DD7B156611A3CFBE000D9775 /* libdc1394.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libdc1394.a; sourceTree = "<group>"; };
 		DD7B158511A3CFD7000D9775 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		DD7B158711A3CFDE000D9775 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
 		DDB7C14C12AD16C000197290 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -326,7 +307,7 @@
 		DDB7C17312AD16C000197290 /* Libdc1394GrabberVideoFormatHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Libdc1394GrabberVideoFormatHelper.cpp; sourceTree = "<group>"; };
 		DDB7C17412AD16C000197290 /* Libdc1394GrabberVideoFormatHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Libdc1394GrabberVideoFormatHelper.h; sourceTree = "<group>"; };
 		DDB7C17512AD16C000197290 /* NormalCameraInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NormalCameraInstance.h; sourceTree = "<group>"; };
-		DDB7C17612AD16C000197290 /* NormalCameraInstance.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = NormalCameraInstance.mm; sourceTree = "<group>"; };
+		DDB7C17612AD16C000197290 /* NormalCameraInstance.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = NormalCameraInstance.mm; path = ofxVideoGrabber/NormalCameraInstance.mm; sourceTree = "<group>"; };
 		DDB7C17712AD16C000197290 /* ofxVideoGrabberFeature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxVideoGrabberFeature.cpp; sourceTree = "<group>"; };
 		DDB7C17812AD16C000197290 /* ofxVideoGrabberFeature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoGrabberFeature.h; sourceTree = "<group>"; };
 		DDB7C17912AD16C000197290 /* ofxVideoGrabberSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVideoGrabberSDK.h; sourceTree = "<group>"; };
@@ -492,8 +473,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD7B158111A3CFBE000D9775 /* libdc1394.a in Frameworks */,
-				E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */,
+				E4C2422B10CC554B004149E2 /* openFrameworks.a in Frameworks */,
 				E45BE0AA0E8CC67C009D7055 /* GLee.a in Frameworks */,
 				E45BE2E40E8CC69C009D7055 /* rtAudio.a in Frameworks */,
 				E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */,
@@ -524,11 +504,10 @@
 				4BA258A61153B0800008D49C /* BWToolkitFramework.framework in Frameworks */,
 				DD7B14AE11A3CF38000D9775 /* osc.a in Frameworks */,
 				DD7B14B511A3CF38000D9775 /* openCV.a in Frameworks */,
-				DD7B158111A3CFBE000D9775 /* libdc1394.a in Frameworks */,
 				DD7B158611A3CFD7000D9775 /* QTKit.framework in Frameworks */,
 				DD7B158811A3CFDE000D9775 /* CoreMIDI.framework in Frameworks */,
-				DDB7C20A12AD16C100197290 /* libdc1394.a in Frameworks */,
-				DDB7C22112AD16C100197290 /* BWToolkitFramework.framework in Frameworks */,
+				7FBF1BAA12E49AD2009E32EF /* BWToolkitFramework.framework in Frameworks */,
+				7FBF1BD212E49E6F009E32EF /* libdc1394.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -815,96 +794,6 @@
 			path = src;
 			sourceTree = "<group>";
 		};
-		DD7B154C11A3CFBE000D9775 /* osx */ = {
-			isa = PBXGroup;
-			children = (
-				DD7B154D11A3CFBE000D9775 /* include */,
-				DD7B156511A3CFBE000D9775 /* lib */,
-			);
-			name = osx;
-			path = ../../../addons/ofxCocoaPlugins/src/CorePlugins/Cameras/ofxVideoGrabber/osx;
-			sourceTree = SOURCE_ROOT;
-		};
-		DD7B154D11A3CFBE000D9775 /* include */ = {
-			isa = PBXGroup;
-			children = (
-				DD7B154E11A3CFBE000D9775 /* dc1394 */,
-			);
-			path = include;
-			sourceTree = "<group>";
-		};
-		DD7B154E11A3CFBE000D9775 /* dc1394 */ = {
-			isa = PBXGroup;
-			children = (
-				DD7B154F11A3CFBE000D9775 /* camera.h */,
-				DD7B155011A3CFBE000D9775 /* capture.h */,
-				DD7B155111A3CFBE000D9775 /* control.h */,
-				DD7B155211A3CFBE000D9775 /* conversions.h */,
-				DD7B155311A3CFBE000D9775 /* dc1394.h */,
-				DD7B155411A3CFBE000D9775 /* format7.h */,
-				DD7B155511A3CFBE000D9775 /* iso.h */,
-				DD7B155611A3CFBE000D9775 /* juju */,
-				DD7B155711A3CFBE000D9775 /* linux */,
-				DD7B155811A3CFBE000D9775 /* log.h */,
-				DD7B155911A3CFBE000D9775 /* macosx */,
-				DD7B155B11A3CFBE000D9775 /* register.h */,
-				DD7B155C11A3CFBE000D9775 /* types.h */,
-				DD7B155D11A3CFBE000D9775 /* usb */,
-				DD7B155E11A3CFBE000D9775 /* utils.h */,
-				DD7B155F11A3CFBE000D9775 /* vendor */,
-				DD7B156411A3CFBE000D9775 /* video.h */,
-			);
-			path = dc1394;
-			sourceTree = "<group>";
-		};
-		DD7B155611A3CFBE000D9775 /* juju */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = juju;
-			sourceTree = "<group>";
-		};
-		DD7B155711A3CFBE000D9775 /* linux */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = linux;
-			sourceTree = "<group>";
-		};
-		DD7B155911A3CFBE000D9775 /* macosx */ = {
-			isa = PBXGroup;
-			children = (
-				DD7B155A11A3CFBE000D9775 /* capture.h */,
-			);
-			path = macosx;
-			sourceTree = "<group>";
-		};
-		DD7B155D11A3CFBE000D9775 /* usb */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = usb;
-			sourceTree = "<group>";
-		};
-		DD7B155F11A3CFBE000D9775 /* vendor */ = {
-			isa = PBXGroup;
-			children = (
-				DD7B156011A3CFBE000D9775 /* avt.h */,
-				DD7B156111A3CFBE000D9775 /* basler.h */,
-				DD7B156211A3CFBE000D9775 /* basler_sff.h */,
-				DD7B156311A3CFBE000D9775 /* pixelink.h */,
-			);
-			path = vendor;
-			sourceTree = "<group>";
-		};
-		DD7B156511A3CFBE000D9775 /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				DD7B156611A3CFBE000D9775 /* libdc1394.a */,
-			);
-			path = lib;
-			sourceTree = "<group>";
-		};
 		DDB7C14A12AD16C000197290 /* ofxCocoaPlugins */ = {
 			isa = PBXGroup;
 			children = (
@@ -968,6 +857,7 @@
 				DDB7C16512AD16C000197290 /* Cameras.mm */,
 				DDB7C16612AD16C000197290 /* Cameras.xib */,
 				DDB7C16712AD16C000197290 /* IIDCCameraInstance.h */,
+				DDB7C17612AD16C000197290 /* NormalCameraInstance.mm */,
 				DDB7C16812AD16C000197290 /* IIDCCameraInstance.mm */,
 				DDB7C16912AD16C000197290 /* ofxVideoGrabber */,
 			);
@@ -979,7 +869,6 @@
 			children = (
 				DDB7C16A12AD16C000197290 /* Libdc1394Grabber */,
 				DDB7C17512AD16C000197290 /* NormalCameraInstance.h */,
-				DDB7C17612AD16C000197290 /* NormalCameraInstance.mm */,
 				DDB7C17712AD16C000197290 /* ofxVideoGrabberFeature.cpp */,
 				DDB7C17812AD16C000197290 /* ofxVideoGrabberFeature.h */,
 				DDB7C17912AD16C000197290 /* ofxVideoGrabberSDK.h */,
@@ -1294,7 +1183,6 @@
 			isa = PBXGroup;
 			children = (
 				DD7B144C11A3CF38000D9775 /* addons */,
-				DD7B154C11A3CFBE000D9775 /* osx */,
 				4BA2589C1153B0790008D49C /* GraphKitHeaders */,
 				DD7B158711A3CFDE000D9775 /* CoreMIDI.framework */,
 				4BA258A51153B0800008D49C /* BWToolkitFramework.framework */,
@@ -1504,7 +1392,7 @@
 		E4C2421710CC549C004149E2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */,
+				E4C2421E10CC549C004149E2 /* openFrameworks.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1616,7 +1504,14 @@
 			isa = PBXProject;
 			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "malpais" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = E4B69B4A0A3A1720003C02F2;
 			productRefGroup = E4B69B4A0A3A1720003C02F2;
 			projectDirPath = "";
@@ -1634,10 +1529,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */ = {
+		E4C2421E10CC549C004149E2 /* openFrameworks.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = openFrameworksDebug.a;
+			path = openFrameworks.a;
 			remoteRef = E4C2421D10CC549C004149E2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -1831,6 +1726,7 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../../../of_preRelease_v0061_osxSL_FAT/addons/ofxCocoaPlugins/src/Libs\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
@@ -1840,6 +1736,7 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../src/Libs\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../src/Libs\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/../../../addons/ofxCocoaPlugins/src/Libs\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G4;
@@ -1870,6 +1767,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../../../of_preRelease_v0061_osxSL_FAT/addons/ofxCocoaPlugins/src/CorePlugins/Cameras/ofxVideoGrabber/osx/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/freeimage/lib/osx\"";
@@ -1882,6 +1780,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../libs/rtAudio/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../src/CorePlugins/Cameras/ofxVideoGrabber/osx/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/../../ofxOpenCv/libs/opencv/lib/osx\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9 = "\"$(SRCROOT)/../../../addons/ofxCocoaPlugins/src/CorePlugins/Cameras/ofxVideoGrabber/osx/lib\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)Universal";
 				WRAPPER_EXTENSION = app;
@@ -1984,8 +1883,10 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_10)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/../../../addons/ofxCocoaPlugins/src/Libs\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../src/core-plot/build/Debug\"/**";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/..\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)\"";
@@ -2034,8 +1935,10 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/freeimage/lib/osx\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10 = "\"$(SRCROOT)/../../../addons/ofxCocoaPlugins/src/CorePlugins/Cameras/ofxVideoGrabber/osx/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14 = "\"$(SRCROOT)/../../../libs/fmodex/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15 = "\"$(SRCROOT)/../../../libs/freetype/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/../../../libs/FreeImage/lib/osx\"";
@@ -2068,6 +1971,7 @@
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
 				);
 				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../../../of_preRelease_v0061_osxSL_FAT/addons/ofxCocoaPlugins/src/Libs\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
@@ -2078,6 +1982,7 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../src/Libs\"";
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/../src/Libs\"";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_9 = "\"$(SRCROOT)/../../../addons/ofxCocoaPlugins/src/Libs\"";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G4;
@@ -2108,6 +2013,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../../../../of_preRelease_v0061_osxSL_FAT/addons/ofxCocoaPlugins/src/CorePlugins/Cameras/ofxVideoGrabber/osx/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/freeimage/lib/osx\"";
@@ -2120,6 +2026,7 @@
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/../../../libs/rtAudio/lib/osx\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7 = "\"$(SRCROOT)/../src/CorePlugins/Cameras/ofxVideoGrabber/osx/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8 = "\"$(SRCROOT)/../../ofxOpenCv/libs/opencv/lib/osx\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9 = "\"$(SRCROOT)/../../../addons/ofxCocoaPlugins/src/CorePlugins/Cameras/ofxVideoGrabber/osx/lib\"";
 				PREBINDING = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
