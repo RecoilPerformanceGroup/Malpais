@@ -918,8 +918,8 @@
 				DDB7C1E712AD16C100197290 /* Views */,
 			);
 			name = ofxCocoaPlugins;
-			path = ../../../../of_preRelease_v0061_osxSL_FAT/addons/ofxCocoaPlugins/src;
-			sourceTree = SOURCE_ROOT;
+			path = ../../../addons/ofxCocoaPlugins/src;
+			sourceTree = "<group>";
 		};
 		DDB7C14B12AD16C000197290 /* Application */ = {
 			isa = PBXGroup;

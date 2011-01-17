@@ -368,6 +368,76 @@
 		vrLen = 722;
 		vrLoc = 0;
 	};
+	DD593C5E12E49967005F2189 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DDB7C14C12AD16C000197290 /* AppDelegate.h */;
+		name = "AppDelegate.h: 17";
+		rLen = 0;
+		rLoc = 542;
+		rType = 0;
+		vrLen = 722;
+		vrLoc = 0;
+	};
+	DD593C5F12E49967005F2189 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DDB7C1D312AD16C000197290 /* PluginOpenGLView.h */;
+		name = "PluginOpenGLView.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 591;
+		vrLoc = 0;
+	};
+	DD593C6012E49967005F2189 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DDB7C1D312AD16C000197290 /* PluginOpenGLView.h */;
+		name = "PluginOpenGLView.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 591;
+		vrLoc = 0;
+	};
+	DD593C6912E4999D005F2189 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DDB7C1D312AD16C000197290 /* PluginOpenGLView.h */;
+		name = "PluginOpenGLView.h: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 591;
+		vrLoc = 0;
+	};
+	DD593C6A12E4999D005F2189 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DDC8EA64113809D800574926 /* SamplePlugin.mm */;
+		name = "SamplePlugin.mm: 11";
+		rLen = 0;
+		rLoc = 404;
+		rType = 0;
+		vrLen = 1150;
+		vrLoc = 0;
+	};
+	DD593C6B12E4999D005F2189 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DDC8EA64113809D800574926 /* SamplePlugin.mm */;
+		name = "SamplePlugin.mm: 11";
+		rLen = 0;
+		rLoc = 404;
+		rType = 0;
+		vrLen = 1150;
+		vrLoc = 0;
+	};
+	DD593C6C12E499A2005F2189 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DDC8EA64113809D800574926 /* SamplePlugin.mm */;
+		name = "SamplePlugin.mm: 13";
+		rLen = 0;
+		rLoc = 421;
+		rType = 0;
+		vrLen = 1150;
+		vrLoc = 0;
+	};
 	DD795A6D114C1CCB00F7443A /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = DD795A6E114C1CCB00F7443A /* NSRunLoop.h */;
@@ -403,7 +473,7 @@
 		rLen = 0;
 		rLoc = 307;
 		rType = 0;
-		vrLen = 1244;
+		vrLen = 1159;
 		vrLoc = 0;
 	};
 	DD7B15D311A576CA000D9775 /* PBXTextBookmark */ = {
@@ -720,9 +790,9 @@
 	};
 	DDB7C1D312AD16C000197290 /* PluginOpenGLView.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1150, 962}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1082, 1040}}";
 			sepNavSelRange = "{0, 0}";
-			sepNavVisRange = "{0, 782}";
+			sepNavVisRange = "{0, 591}";
 		};
 	};
 	DDB7C1D412AD16C000197290 /* PluginOpenGLView.mm */ = {
@@ -2366,7 +2436,7 @@
 		rLen = 0;
 		rLoc = 307;
 		rType = 0;
-		vrLen = 1693;
+		vrLen = 1159;
 		vrLoc = 0;
 	};
 	DDB7C35512AD226200197290 /* PBXTextBookmark */ = {
@@ -3825,9 +3895,9 @@
 	};
 	DDC8EA64113809D800574926 /* SamplePlugin.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1464, 494}}";
-			sepNavSelRange = "{404, 0}";
-			sepNavVisRange = "{78, 398}";
+			sepNavIntBoundsRect = "{{0, 0}, {1082, 494}}";
+			sepNavSelRange = "{421, 0}";
+			sepNavVisRange = "{0, 1150}";
 		};
 	};
 	DDC8EDC01138454100574926 /* PBXTextBookmark */ = {
@@ -4479,6 +4549,13 @@
 			DD2A0ECF11456B7B0087EBA8 = DD2A0ECF11456B7B0087EBA8 /* PBXTextBookmark */;
 			DD2A0F6D1145733E0087EBA8 = DD2A0F6D1145733E0087EBA8 /* PBXTextBookmark */;
 			DD593C5912E4967E005F2189 /* PBXTextBookmark */ = DD593C5912E4967E005F2189 /* PBXTextBookmark */;
+			DD593C5E12E49967005F2189 /* PBXTextBookmark */ = DD593C5E12E49967005F2189 /* PBXTextBookmark */;
+			DD593C5F12E49967005F2189 /* PBXTextBookmark */ = DD593C5F12E49967005F2189 /* PBXTextBookmark */;
+			DD593C6012E49967005F2189 /* PBXTextBookmark */ = DD593C6012E49967005F2189 /* PBXTextBookmark */;
+			DD593C6912E4999D005F2189 /* PBXTextBookmark */ = DD593C6912E4999D005F2189 /* PBXTextBookmark */;
+			DD593C6A12E4999D005F2189 /* PBXTextBookmark */ = DD593C6A12E4999D005F2189 /* PBXTextBookmark */;
+			DD593C6B12E4999D005F2189 /* PBXTextBookmark */ = DD593C6B12E4999D005F2189 /* PBXTextBookmark */;
+			DD593C6C12E499A2005F2189 /* PBXTextBookmark */ = DD593C6C12E499A2005F2189 /* PBXTextBookmark */;
 			DD795A6D114C1CCB00F7443A = DD795A6D114C1CCB00F7443A /* PBXTextBookmark */;
 			DD7B15A011A3D060000D9775 = DD7B15A011A3D060000D9775 /* PlistBookmark */;
 			DD7B15D211A576CA000D9775 = DD7B15D211A576CA000D9775 /* PBXTextBookmark */;
