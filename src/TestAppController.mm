@@ -22,7 +22,7 @@ extern ofAppBaseWindow * window;
 
 
 -(void) setupApp{
-	[pluginManagerController setNumberOutputViews:2];	
+	[pluginManagerController setNumberOutputViews:1];	
 }
 
 
@@ -40,13 +40,14 @@ extern ofAppBaseWindow * window;
 
 -(void) setupPlugins{
 	NSLog(@"Setup plugins");
+	[pluginManagerController addHeader:@"Input"];
+	[pluginManagerController addPlugin:[[Kinect alloc] init]];
 	
-	[pluginManagerController addHeader:@"My Plugins"];
-	[pluginManagerController addPlugin:[[SamplePlugin alloc] init]];
-	[pluginManagerController addPlugin:[[SamplePlugin2 alloc] init]];
+	//[pluginManagerController addPlugin:[[SamplePlugin alloc] init]];
+	//[pluginManagerController addPlugin:[[SamplePlugin2 alloc] init]];
 
 	[pluginManagerController addHeader:@"Core Plugins"];
-	[pluginManagerController addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Wall", @"Floor", nil]]];
+	[pluginManagerController addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Floor", nil]]];
 
 	
 	//[pluginManagerController addPlugin:[[Cameras alloc] initWithNumberCameras:1]];
