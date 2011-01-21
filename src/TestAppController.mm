@@ -41,7 +41,8 @@ extern ofAppBaseWindow * window;
 -(void) setupPlugins{
 	NSLog(@"Setup plugins");
 	[pluginManagerController addHeader:@"Input"];
-	[pluginManagerController addPlugin:[[Kinect alloc] init]];
+	//[pluginManagerController addPlugin:[[Kinect alloc] init]];
+	[pluginManagerController addPlugin:[[Wave alloc] init]];
 	
 	//[pluginManagerController addPlugin:[[SamplePlugin alloc] init]];
 	//[pluginManagerController addPlugin:[[SamplePlugin2 alloc] init]];

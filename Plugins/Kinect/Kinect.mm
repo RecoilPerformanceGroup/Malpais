@@ -280,7 +280,7 @@
 		ofSetColor(255, 0, 0, 255);
 		ofCircle(rfoot.x, rfoot.z, 15.0/640);
 		ofFill();
-		ofSetColor(255, 0t, 0, 255*(1-rfoot.y/500.0));
+		ofSetColor(255, 0, 0, 255*(1-rfoot.y/500.0));
 		ofCircle(rfoot.x, rfoot.z, 15.0/640);
 		
 		

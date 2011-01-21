@@ -4,3 +4,4 @@
 #include "SamplePlugin.h"
 #include "SamplePlugin2.h"
 #include "Kinect.h"
+#include "Wave.h"
