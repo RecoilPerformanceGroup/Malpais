@@ -12,6 +12,8 @@
 		4BA259911153B98B0008D49C /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
 		7FBF1BAA12E49AD2009E32EF /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C1C512AD16C000197290 /* BWToolkitFramework.framework */; };
 		7FBF1BD212E49E6F009E32EF /* libdc1394.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C19412AD16C000197290 /* libdc1394.a */; };
+		DD0A21DD12EF0F6D0068DCF1 /* DCAudioRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0A21DB12EF0F6D0068DCF1 /* DCAudioRecorder.cpp */; };
+		DD0A229D12EF1CA10068DCF1 /* CARingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0A229B12EF1CA10068DCF1 /* CARingBuffer.cpp */; };
 		DD593CDE12E4A777005F2189 /* Kinect.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD593CDD12E4A777005F2189 /* Kinect.xib */; };
 		DD593CE112E4A78D005F2189 /* Kinect.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD593CE012E4A78D005F2189 /* Kinect.mm */; };
 		DD593DAF12E4A9A1005F2189 /* README in Resources */ = {isa = PBXBuildFile; fileRef = DD593D6912E4A9A1005F2189 /* README */; };
@@ -216,6 +218,10 @@
 		4BA258A51153B0800008D49C /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = ../../../addons/ofxCocoaPlugins/src/Libs/BWToolkitFramework.framework; sourceTree = "<group>"; };
 		4BA258F21153B1E80008D49C /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testApp.h; sourceTree = "<group>"; };
 		4BA258F31153B1E80008D49C /* testApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = testApp.mm; sourceTree = "<group>"; };
+		DD0A21DB12EF0F6D0068DCF1 /* DCAudioRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DCAudioRecorder.cpp; sourceTree = "<group>"; };
+		DD0A21DC12EF0F6D0068DCF1 /* DCAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAudioRecorder.h; sourceTree = "<group>"; };
+		DD0A229B12EF1CA10068DCF1 /* CARingBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CARingBuffer.cpp; path = Extras/CoreAudio/PublicUtility/CARingBuffer.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		DD0A229C12EF1CA10068DCF1 /* CARingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CARingBuffer.h; path = Extras/CoreAudio/PublicUtility/CARingBuffer.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		DD593CDD12E4A777005F2189 /* Kinect.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Kinect.xib; sourceTree = "<group>"; };
 		DD593CDF12E4A78D005F2189 /* Kinect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kinect.h; sourceTree = "<group>"; };
 		DD593CE012E4A78D005F2189 /* Kinect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Kinect.mm; sourceTree = "<group>"; };
@@ -648,6 +654,15 @@
 			path = ../../../addons/ofxCocoaPlugins/src/Libs/GraphKitHeaders;
 			sourceTree = "<group>";
 		};
+		DD0A217F12EEFAB90068DCF1 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				DD0A21DB12EF0F6D0068DCF1 /* DCAudioRecorder.cpp */,
+				DD0A21DC12EF0F6D0068DCF1 /* DCAudioRecorder.h */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
 		DD593CDC12E4A761005F2189 /* Kinect */ = {
 			isa = PBXGroup;
 			children = (
@@ -784,6 +799,8 @@
 		DD6DCDED12E9B4FC00F2B664 /* Public Utility */ = {
 			isa = PBXGroup;
 			children = (
+				DD0A229B12EF1CA10068DCF1 /* CARingBuffer.cpp */,
+				DD0A229C12EF1CA10068DCF1 /* CARingBuffer.h */,
 				DD6DCDEE12E9B4FC00F2B664 /* AUOutputBL.cpp */,
 				DD6DCDEF12E9B4FC00F2B664 /* AUOutputBL.h */,
 				DD6DCDF012E9B4FC00F2B664 /* CAAudioChannelLayout.cpp */,
@@ -1076,6 +1093,7 @@
 				DD9C01CC12E8768B00EF6F51 /* WaveObject.h */,
 				DD9C01CD12E8768B00EF6F51 /* WaveObject.mm */,
 				DD9C01C912E8758A00EF6F51 /* Wave.xib */,
+				DD0A217F12EEFAB90068DCF1 /* Audio */,
 				DD6DCDED12E9B4FC00F2B664 /* Public Utility */,
 			);
 			path = Wave;
@@ -1965,6 +1983,8 @@
 				DD6DCE0212E9B4FC00F2B664 /* CAComponentDescription.cpp in Sources */,
 				DD6DCE0312E9B4FC00F2B664 /* CAXException.cpp in Sources */,
 				DD6DCE0412E9B4FC00F2B664 /* CAStreamBasicDescription.cpp in Sources */,
+				DD0A21DD12EF0F6D0068DCF1 /* DCAudioRecorder.cpp in Sources */,
+				DD0A229D12EF1CA10068DCF1 /* CARingBuffer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

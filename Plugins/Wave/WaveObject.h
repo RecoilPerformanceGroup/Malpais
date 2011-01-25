@@ -4,27 +4,48 @@
 #include "CAStreamBasicDescription.h"
 #include "CAAudioUnit.h"
 
-@interface WaveObject : NSObject {
+#include "DCAudioRecorder.h"
+
+#define NUMSEGMENTS 20
+
+struct segment {
 	float y;
-	
+	float v;
+	float a;
+};
+
+@interface WaveObject : NSObject {
 	ExtAudioFileRef audioFile;
 	float *audioBuffer;
 	
 	UInt64 numFrames;
-	int i;
 	
 	float avgMin, avgMax;
 	
+	segment segments[NUMSEGMENTS];
+	
+	ofSoundPlayer sound;
+	
+	NSMutableArray * waves;
+	
+	bool liveAudio;
+	DCAudioRecorder * audioRecorder;
+	AudioBufferList liveBuffer;
 	vector<float> simplifiedCurve;
+	
 }
 
-@property (readonly) float y;
 @property (readonly) float avgMin;
-@property (readonly) float avgMax;
-@property (readonly) vector<float>  simplifiedCurve;
+@property (readonly) float avgMax;;
+@property (retain, readwrite) NSMutableArray * waves;
 
 -(void) updateWithSpeed:(float)speed;
+-(void) draw;
 -(void) loadAudio:(NSString*)name;
+-(void) loadMic;
 -(float *) getWaveData;
+-(vector<float>* ) simplifiedCurve;
+
+-(segment*)segments;
 
 @end
