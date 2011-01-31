@@ -5,3 +5,4 @@
 #include "SamplePlugin2.h"
 #include "Kinect.h"
 #include "Wave.h"
+#include "FysiskeReaktioner.h"

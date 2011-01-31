@@ -41,14 +41,15 @@ extern ofAppBaseWindow * window;
 -(void) setupPlugins{
 	NSLog(@"Setup plugins");
 	[pluginManagerController addHeader:@"Input"];
-	//[pluginManagerController addPlugin:[[Kinect alloc] init]];
+	[pluginManagerController addPlugin:[[Kinect alloc] init]];
 	[pluginManagerController addPlugin:[[Wave alloc] init]];
-	
+	[pluginManagerController addPlugin:[[FysiskeReaktioner alloc] init]];
+
 	//[pluginManagerController addPlugin:[[SamplePlugin alloc] init]];
 	//[pluginManagerController addPlugin:[[SamplePlugin2 alloc] init]];
 
 	[pluginManagerController addHeader:@"Core Plugins"];
-	[pluginManagerController addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Floor", nil]]];
+	[pluginManagerController addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Floor", @"Wall", nil]]];
 
 	
 	//[pluginManagerController addPlugin:[[Cameras alloc] initWithNumberCameras:1]];
