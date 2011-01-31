@@ -14,6 +14,8 @@
 		7FBF1BD212E49E6F009E32EF /* libdc1394.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C19412AD16C000197290 /* libdc1394.a */; };
 		DD0A21DD12EF0F6D0068DCF1 /* DCAudioRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0A21DB12EF0F6D0068DCF1 /* DCAudioRecorder.cpp */; };
 		DD0A229D12EF1CA10068DCF1 /* CARingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0A229B12EF1CA10068DCF1 /* CARingBuffer.cpp */; };
+		DD2561DA12F3268D00BD0498 /* FysiskeReaktioner.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD2561D912F3268D00BD0498 /* FysiskeReaktioner.mm */; };
+		DD2561DC12F3269700BD0498 /* FysiskeReaktioner.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD2561DB12F3269700BD0498 /* FysiskeReaktioner.xib */; };
 		DD593CDE12E4A777005F2189 /* Kinect.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD593CDD12E4A777005F2189 /* Kinect.xib */; };
 		DD593CE112E4A78D005F2189 /* Kinect.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD593CE012E4A78D005F2189 /* Kinect.mm */; };
 		DD593DAF12E4A9A1005F2189 /* README in Resources */ = {isa = PBXBuildFile; fileRef = DD593D6912E4A9A1005F2189 /* README */; };
@@ -222,6 +224,9 @@
 		DD0A21DC12EF0F6D0068DCF1 /* DCAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAudioRecorder.h; sourceTree = "<group>"; };
 		DD0A229B12EF1CA10068DCF1 /* CARingBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CARingBuffer.cpp; path = Extras/CoreAudio/PublicUtility/CARingBuffer.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		DD0A229C12EF1CA10068DCF1 /* CARingBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CARingBuffer.h; path = Extras/CoreAudio/PublicUtility/CARingBuffer.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
+		DD2561D812F3268D00BD0498 /* FysiskeReaktioner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FysiskeReaktioner.h; sourceTree = "<group>"; };
+		DD2561D912F3268D00BD0498 /* FysiskeReaktioner.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FysiskeReaktioner.mm; sourceTree = "<group>"; };
+		DD2561DB12F3269700BD0498 /* FysiskeReaktioner.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FysiskeReaktioner.xib; sourceTree = "<group>"; };
 		DD593CDD12E4A777005F2189 /* Kinect.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Kinect.xib; sourceTree = "<group>"; };
 		DD593CDF12E4A78D005F2189 /* Kinect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Kinect.h; sourceTree = "<group>"; };
 		DD593CE012E4A78D005F2189 /* Kinect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Kinect.mm; sourceTree = "<group>"; };
@@ -661,6 +666,16 @@
 				DD0A21DC12EF0F6D0068DCF1 /* DCAudioRecorder.h */,
 			);
 			path = Audio;
+			sourceTree = "<group>";
+		};
+		DD2561D712F3267E00BD0498 /* FysiskeReaktioner */ = {
+			isa = PBXGroup;
+			children = (
+				DD2561D812F3268D00BD0498 /* FysiskeReaktioner.h */,
+				DD2561D912F3268D00BD0498 /* FysiskeReaktioner.mm */,
+				DD2561DB12F3269700BD0498 /* FysiskeReaktioner.xib */,
+			);
+			path = FysiskeReaktioner;
 			sourceTree = "<group>";
 		};
 		DD593CDC12E4A761005F2189 /* Kinect */ = {
@@ -1458,6 +1473,7 @@
 			isa = PBXGroup;
 			children = (
 				DD9C01C512E8755600EF6F51 /* Wave */,
+				DD2561D712F3267E00BD0498 /* FysiskeReaktioner */,
 				DD593CDC12E4A761005F2189 /* Kinect */,
 				DDB7C34B12AD221800197290 /* SamplePlugin2 */,
 				DDC8EA62113809C900574926 /* SamplePlugin */,
@@ -1813,6 +1829,7 @@
 			isa = PBXProject;
 			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "malpais" */;
 			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				English,
@@ -1867,6 +1884,7 @@
 				DD593CDE12E4A777005F2189 /* Kinect.xib in Resources */,
 				DD593DAF12E4A9A1005F2189 /* README in Resources */,
 				DD9C01CA12E8758A00EF6F51 /* Wave.xib in Resources */,
+				DD2561DC12F3269700BD0498 /* FysiskeReaktioner.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1985,6 +2003,7 @@
 				DD6DCE0412E9B4FC00F2B664 /* CAStreamBasicDescription.cpp in Sources */,
 				DD0A21DD12EF0F6D0068DCF1 /* DCAudioRecorder.cpp in Sources */,
 				DD0A229D12EF1CA10068DCF1 /* CARingBuffer.cpp in Sources */,
+				DD2561DA12F3268D00BD0498 /* FysiskeReaktioner.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
