@@ -12,8 +12,12 @@
 
 @implementation FysiskeReaktioner
 
+-(id) initPlugin{
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"camperWheelHeight"];	
+}
+
 -(void) setup{
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"camperWheelHeight"];
+
 }
 
 -(void) update:(NSDictionary *)drawingInformation{
@@ -32,6 +36,7 @@
 			rfoot = [self mapToWall:user->right_lower_arm.worldEnd];
 		}
 		
+		//lfoot = [self mapToWall:ofxPoint3f(0,0,0)];
 		
 		ApplySurface(@"Wall");{
 			
@@ -73,12 +78,15 @@
 }
 
 -(ofxPoint2f) mapToWall:(ofxPoint3f)pIn{
-	ofxPoint3f p = [GetPlugin(Kinect) convertWorldToProjection:pIn];
+	ofxPoint3f p = [GetPlugin(Kinect) convertWorldToFloor:pIn];
+	cout<<p.x<<"  "<<p.y<<"  "<<p.z<<endl;
+//	p = ofxPoint3f(0.5,0.3,0.0);
 	//P er nu i floor space.
 	
 	//Flyt punktet til foden
 	p.x -= [self floorCoordinate:0].x;
 	p.z -= [self floorCoordinate:0].y;
+
 	
 	//Roter punktet 
 	float angle = ([self floorCoordinate:1] - [self floorCoordinate:0]).angle(ofxVec2f(1,0));
@@ -87,10 +95,12 @@
 	
 	p.x = _v.x;
 	p.z = _v.y;
-	
+		
 	//Skaler målene
-	float scale = 1.0/([self floorCoordinate:1] - [self floorCoordinate:0]).length();
+	float scale = [[([GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0]) aspect] floatValue] / ([self floorCoordinate:1] - [self floorCoordinate:0]).length();
 	p *= scale;
+	
+	p.y += PropF(@"camperWheelHeight");
 	
 	return p;
 	

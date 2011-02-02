@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		33D7296412F85998009CD4A3 /* libOpenNI.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D7296312F85998009CD4A3 /* libOpenNI.dylib */; };
 		4BA258A61153B0800008D49C /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
 		4BA258F41153B1E80008D49C /* testApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BA258F31153B1E80008D49C /* testApp.mm */; };
 		4BA259911153B98B0008D49C /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
@@ -25,7 +26,6 @@
 		DD593DB312E4A9A1005F2189 /* ofxOpenNIRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD593D7312E4A9A1005F2189 /* ofxOpenNIRecorder.cpp */; };
 		DD593DB412E4A9A1005F2189 /* ofxTrackedUser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD593D7612E4A9A1005F2189 /* ofxTrackedUser.cpp */; };
 		DD593DB512E4A9A1005F2189 /* ofxUserGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD593D7812E4A9A1005F2189 /* ofxUserGenerator.cpp */; };
-		DD593DBF12E4A9F8005F2189 /* libOpenNI.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DD593DBE12E4A9F8005F2189 /* libOpenNI.dylib */; };
 		DD6DCD1D12E9B48400F2B664 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD6DCD1C12E9B48400F2B664 /* CoreServices.framework */; };
 		DD6DCDFD12E9B4FC00F2B664 /* AUOutputBL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD6DCDEE12E9B4FC00F2B664 /* AUOutputBL.cpp */; };
 		DD6DCDFE12E9B4FC00F2B664 /* CAAudioChannelLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD6DCDF012E9B4FC00F2B664 /* CAAudioChannelLayout.cpp */; };
@@ -209,6 +209,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		33D7296312F85998009CD4A3 /* libOpenNI.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libOpenNI.dylib; path = /usr/lib/libOpenNI.dylib; sourceTree = "<absolute>"; };
 		4BA2589D1153B0790008D49C /* GRAreaDataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRAreaDataSet.h; sourceTree = "<group>"; };
 		4BA2589E1153B0790008D49C /* GRAxes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRAxes.h; sourceTree = "<group>"; };
 		4BA2589F1153B0790008D49C /* GRChartView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRChartView.h; sourceTree = "<group>"; };
@@ -296,7 +297,6 @@
 		DD593D7712E4A9A1005F2189 /* ofxTrackedUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTrackedUser.h; sourceTree = "<group>"; };
 		DD593D7812E4A9A1005F2189 /* ofxUserGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxUserGenerator.cpp; sourceTree = "<group>"; };
 		DD593D7912E4A9A1005F2189 /* ofxUserGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxUserGenerator.h; sourceTree = "<group>"; };
-		DD593DBE12E4A9F8005F2189 /* libOpenNI.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libOpenNI.dylib; path = bin/data/openni/lib/libOpenNI.dylib; sourceTree = SOURCE_ROOT; };
 		DD6DCD1C12E9B48400F2B664 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		DD6DCDEE12E9B4FC00F2B664 /* AUOutputBL.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AUOutputBL.cpp; path = Extras/CoreAudio/PublicUtility/AUOutputBL.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
 		DD6DCDEF12E9B4FC00F2B664 /* AUOutputBL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AUOutputBL.h; path = Extras/CoreAudio/PublicUtility/AUOutputBL.h; sourceTree = SYSTEM_DEVELOPER_DIR; };
@@ -634,9 +634,9 @@
 				DD7B158811A3CFDE000D9775 /* CoreMIDI.framework in Frameworks */,
 				7FBF1BAA12E49AD2009E32EF /* BWToolkitFramework.framework in Frameworks */,
 				7FBF1BD212E49E6F009E32EF /* libdc1394.a in Frameworks */,
-				DD593DBF12E4A9F8005F2189 /* libOpenNI.dylib in Frameworks */,
 				DDE0386B12E9B2CA0068E569 /* AudioUnit.framework in Frameworks */,
 				DD6DCD1D12E9B48400F2B664 /* CoreServices.framework in Frameworks */,
+				33D7296412F85998009CD4A3 /* libOpenNI.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -691,7 +691,7 @@
 		DD593CE212E4A9A1005F2189 /* ofxOpenNI */ = {
 			isa = PBXGroup;
 			children = (
-				DD593DBE12E4A9F8005F2189 /* libOpenNI.dylib */,
+				33D7296312F85998009CD4A3 /* libOpenNI.dylib */,
 				DD593D1412E4A9A1005F2189 /* include */,
 				DD593D6912E4A9A1005F2189 /* README */,
 				DD593D6A12E4A9A1005F2189 /* src */,
@@ -1133,18 +1133,18 @@
 		DDB7C14B12AD16C000197290 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				DDB7C15212AD16C000197290 /* MainMenu.xib */,
+				DDB7C15712AD16C000197290 /* OutputPanel.xib */,
 				DDB7C14C12AD16C000197290 /* AppDelegate.h */,
 				DDB7C14D12AD16C000197290 /* AppDelegate.mm */,
 				DDB7C14E12AD16C000197290 /* GraphDebugger.h */,
 				DDB7C14F12AD16C000197290 /* GraphDebugger.mm */,
 				DDB7C15012AD16C000197290 /* GraphDebugView.h */,
 				DDB7C15112AD16C000197290 /* GraphDebugView.mm */,
-				DDB7C15212AD16C000197290 /* MainMenu.xib */,
 				DDB7C15312AD16C000197290 /* MainWindow.h */,
 				DDB7C15412AD16C000197290 /* MainWindow.m */,
 				DDB7C15512AD16C000197290 /* ofAppCocoaWindow.h */,
 				DDB7C15612AD16C000197290 /* ofAppCocoaWindow.mm */,
-				DDB7C15712AD16C000197290 /* OutputPanel.xib */,
 				DDB7C15812AD16C000197290 /* OutputPanelController.h */,
 				DDB7C15912AD16C000197290 /* OutputPanelController.mm */,
 				DDB7C15A12AD16C000197290 /* OutputViewManager.h */,
@@ -2168,6 +2168,7 @@
 					../../../libs/poco/include,
 					../../../addons/,
 				);
+				LIBRARY_SEARCH_PATHS = /usr/lib;
 				MACH_O_TYPE = mh_execute;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
@@ -2251,7 +2252,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_OBJC_GC = required;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G4;
+				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
