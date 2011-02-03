@@ -32,6 +32,9 @@ struct segment {
 	DCAudioRecorder * audioRecorder;
 	AudioBufferList liveBuffer;
 	vector<float> simplifiedCurve;
+	vector<float> softCurve;
+	
+	int nBandsToGet;
 	
 }
 
@@ -45,6 +48,7 @@ struct segment {
 -(void) loadMic;
 -(float *) getWaveData;
 -(vector<float>* ) simplifiedCurve;
+-(vector<float>* ) softCurve;
 
 -(segment*)segments;
 
