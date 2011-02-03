@@ -12,7 +12,7 @@
 
 @implementation FysiskeReaktioner
 
--(id) initPlugin{
+-(void) initPlugin{
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"camperWheelHeight"];	
 }
 
