@@ -1,14 +1,144 @@
 #import "Kinect.h"
 
 #import "Keystoner.h"
+#include <algorithm>
+
+//--------------------
+//-- Blob --
+//--------------------
+
+@implementation Blob
+@synthesize cameraId, originalblob, floorblob, segment, avgDepth;
+
+-(id)initWithMouse:(ofPoint*)point{
+	if([super init]){
+		blob = new ofxCvBlob();
+		floorblob = new ofxCvBlob();
+		
+		originalblob = new ofxCvBlob();
+		//		originalblob->area = blob->area = _blob->area;
+		//      originalblob->length = blob->length = _blob->length ;
+		//       originalblob->boundingRect = blob->boundingRect = _blob->boundingRect;
+        floorblob->centroid = originalblob->centroid = blob->centroid = *point;
+		//        originalblob->hole = blob->hole = _blob->hole;
+		
+		floorblob->nPts = originalblob->nPts = blob->nPts = 30;
+		for(int i=0;i<30;i++){
+			float a = TWO_PI*i/30.0;
+			blob->pts.push_back(ofPoint(cos(a)*0.05+point->x, sin(a)*0.05+point->y)); 
+		}
+		floorblob->pts =  originalblob->pts = blob->pts ;
+		
+		
+	} 
+	return self;
+}
+
+
+-(ofxPoint2f) getLowestPoint{
+	
+	if(low)
+		return *low;
+	else {
+		for(int u=0;u< [self nPts];u++){
+			if(!low || [self pts][u].y > low->y){
+				if(low){
+					low->x = [self pts][u].x;
+					low->y = [self pts][u].y;
+				} else {
+					low = new ofxPoint2f([self pts][u]);
+				}
+			}
+		}
+		return *low;
+	}
+	
+}
+
+-(id)initWithBlob:(ofxCvBlob*)_blob{
+	if([super init]){
+		blob = new ofxCvBlob();
+		floorblob = new ofxCvBlob();
+		
+		originalblob = new ofxCvBlob();
+		originalblob->area = blob->area = _blob->area;
+        originalblob->length = blob->length = _blob->length ;
+        originalblob->boundingRect = blob->boundingRect = _blob->boundingRect;
+        originalblob->centroid = blob->centroid = _blob->centroid;
+        originalblob->hole = blob->hole = _blob->hole;
+		
+		floorblob->nPts = originalblob->nPts = blob->nPts = _blob->nPts;
+		floorblob->pts =  originalblob->pts = blob->pts = _blob->pts; 
+		
+	} 
+	return self;
+}
+
+- (void)dealloc {
+	delete blob;
+	delete floorblob;
+	delete originalblob;
+    [super dealloc];
+}
+
+-(void) normalize:(int)w height:(int)h{
+	for(int i=0;i<blob->nPts;i++){
+		blob->pts[i].x /= (float)w;
+		blob->pts[i].y /= (float)h;
+	}
+	blob->area /= (float)w*h;
+	blob->centroid.x /=(float) w;
+	blob->centroid.y /= (float)h;
+	blob->boundingRect.width /= (float)w; 
+	blob->boundingRect.height /= (float)h; 
+	blob->boundingRect.x /= (float)w; 
+	blob->boundingRect.y /= (float)h; 
+	
+	originalblob->pts = blob->pts;
+	originalblob->area = blob->area;
+	originalblob->centroid = blob->centroid;
+	originalblob->boundingRect = blob->boundingRect;
+}
+
+-(vector <ofPoint>)pts{
+	return blob->pts;
+}
+-(int)nPts{
+	return blob->nPts;	
+}
+-(ofPoint)centroid{
+	return blob->centroid;		
+}
+-(float) area{
+	return blob->area;		
+}
+-(float)length{
+	return blob->length;		
+}
+-(ofRectangle) boundingRect{
+	return blob->boundingRect;	
+}
+-(BOOL) hole{
+	return blob->hole;		
+}
+
+@end
+
+
 
 @implementation Kinect
+@synthesize blobs;
 
 -(void) initPlugin{
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-30 maxValue:30] named:@"angle1"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-30 maxValue:30] named:@"angle2"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-30 maxValue:30] named:@"angle3"];
 	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:4] named:@"priority0"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:4] named:@"priority1"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:4] named:@"priority2"];
+	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:500] named:@"segmentSize"];
 	
 	if([customProperties valueForKey:@"point0a"] == nil){
 		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0a"];
@@ -27,8 +157,7 @@
 		[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"point2b"];
 		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point2x"];
 		[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"point2y"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point2z"];
-		
+		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point2z"];		
 		
 		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"proj0x"];
 		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"proj0y"];
@@ -42,166 +171,206 @@
 	}
 	
 	stop = NO;
+	draggedPoint = -1;
+	
+	for(int i=0;i<3;i++){
+		dancers[i].userId = -1;
+		dancers[i].state = 0;
+	}
+	
+	blobs = [[NSMutableArray array] retain];
+	threadBlobs = [[NSMutableArray array] retain];
 }
 
 -(void) setup{
-	//ofSetLogLevel(OF_LOG_VERBOSE);
-	//	context = new ofxOpenNIContext();
-	//context.enableLogging();
+	//ofSetLogLevel(OF_LOG_VERBOSE);	
 	context.setup();
-	//	context.setupUsingXMLFile("");
+	kinectConnected = depth.setup(&context);
 	
-	//	depth = new ofxDepthGenerator();
-	depth.setup(&context);
-//	depth.setMirrored(true);
+	if(kinectConnected){
+		users.setup(&context, &depth);		
+		[self calculateMatrix];	 
+	}
 	
-	//	users = new ofxUserGenerator();
-	users.setup(&context, &depth);
-	//	users.startPoseDetection(0);
+	thread = [[NSThread alloc] initWithTarget:self
+									 selector:@selector(performBlobTracking:)
+									   object:nil];
+	pthread_mutex_init(&mutex, NULL);
+	pthread_mutex_init(&drawingMutex, NULL);
+	threadUpdateContour = NO;
 	
-	draggedPoint = -1;
+	for(int i=0;i<NUM_SEGMENTS;i++){
+		grayImage[i] = new ofxCvGrayscaleImage();
+		threadGrayImage[i] = new ofxCvGrayscaleImage();
+		
+		grayImage[i]->allocate(640,480);
+		threadGrayImage[i]->allocate(640,480);
+	}
 	
-	[self calculateMatrix];
+	threadedPixels = new XnDepthPixel[640*480];
+	threadedPixelsSorted = new XnDepthPixel[640*480];
 	
+	contourFinder = new ofxCvContourFinder();
 	
+	[thread start];
 }
+
 -(void) update:(NSDictionary *)drawingInformation{
-	if(!stop){
+	if(!stop && kinectConnected){
 		context.update();
 		depth.update();
 		users.update();		
-	}
-}
--(void) draw:(NSDictionary *)drawingInformation{
-	//	depth->draw(0,0,1,1);
-	//glScaled(1.0/640.0, 1.0/480.0, 1);
-	
-	//	ofxTrackedUser* tracked = users.getTrackedUser(0);
-	/*	if(tracked != NULL)
-	 cout<<"not null"<<endl;*/
-	//users.draw();
-	ApplySurface(@"Floor");
-	
-	ofxPoint2f projHandles[3];	
-	projHandles[0] = [self projPoint:0];
-	projHandles[1] = [self projPoint:1];
-	projHandles[2] = [self projPoint:2];
-	
-	ofFill();
-	//Y Axis 
-	ofSetColor(0, 255, 0);
-	ofCircle(projHandles[0].x,projHandles[0].y, 10/640.0);
-	
-	//X Axis
-	ofSetColor(255, 0, 0);
-	ofCircle(projHandles[1].x,projHandles[1].y, 10/640.0);
-	ofLine(projHandles[0].x, projHandles[0].y, projHandles[1].x, projHandles[1].y);
-	
-	//Z Axis
-	ofSetColor(0, 0, 255);
-	ofCircle(projHandles[2].x,projHandles[2].y, 10/640.0);
-	ofLine(projHandles[0].x, projHandles[0].y, projHandles[2].x, projHandles[2].y);
-	
-	
-	PopSurface();
-}
-
--(void) controlDraw:(NSDictionary *)drawingInformation{
-	ofBackground(0, 0, 0);
-	
-	ofxPoint3f points[3];
-	ofxPoint2f handles[3];
-	ofxPoint2f projHandles[3];
-	
-	points[0] = [self point3:0];
-	points[1] = [self point3:1];
-	points[2] = [self point3:2];
-	
-	handles[0] = [self point2:0];
-	handles[1] = [self point2:1];
-	handles[2] = [self point2:2];
-
-	projHandles[0] = [self projPoint:0];
-	projHandles[1] = [self projPoint:1];
-	projHandles[2] = [self projPoint:2];
-	
-
-	
-	glPushMatrix();{
-		glScaled(0.5, 0.5, 1.0);
-		users.draw();
-	}glPopMatrix();
-	
-	//----------
-	//Depth image
-	glPushMatrix();{
-		glTranslated(0, 0, 0);
-		glScaled((640/2), (480/2), 1);
 		
-		ofNoFill();
-		//Y Axis 
-		ofSetColor(0, 255, 0);
-		ofCircle(handles[0].x,handles[0].y, 10/640.0);
-		
-		//X Axis
-		ofSetColor(255, 0, 0);
-		ofCircle(handles[1].x,handles[1].y, 10/640.0);
-		ofLine(handles[0].x, handles[0].y, handles[1].x, handles[1].y);
-		
-		//Z Axis
-		ofSetColor(0, 0, 255);
-		ofCircle(handles[2].x,handles[2].y, 10/640.0);
-		ofLine(handles[0].x, handles[0].y, handles[2].x, handles[2].y);
-	}glPopMatrix();
-	
-	//----------
-	//Top view
-	glPushMatrix();{
-		glTranslated((640/2), 0, 0);
-		glScaled((640/2), (480/2), 1);
-		
-		glTranslated(0.5, 0, 0);
-		glScaled(1.0/4000.0, 1.0/4000.0, 1);
-		
-		ofFill();
-		//Y Axis 
-		ofSetColor(0, 255, 0);
-		ofCircle(points[0].x,points[0].z, 2000*10/640.0);
-		
-		//X Axis
-		ofSetColor(255, 0, 0);
-		ofCircle(points[1].x,points[1].z, 2000*10/640.0);
-		ofLine(points[0].x, points[0].z, points[1].x, points[1].z);
-		
-		//Z Axis
-		ofSetColor(0, 0, 255);
-		ofCircle(points[2].x,points[2].z, 2000*10/640.0);
-		ofLine(points[0].x, points[0].z, points[2].x, points[2].z);
-		
-	}glPopMatrix();
-	
-	//----------
-	//Projectionview
-	glPushMatrix();{
-		glTranslated(0, 480/2, 0);
-		glScaled((640/2), (480/2), 1);
-		glScaled(640/480, 1, 1);
-		glTranslated(0.5, 0.5, 0);
-		
-		float aspect = [self floorAspect];
-		ofFill();
-		ofSetColor(70, 70, 70);
-		if(aspect < 1){
-			glTranslated(-aspect/2, -0.5, 0);
-		} else {
-			glTranslated(-0.5, -(1.0/aspect)/2.0, 0);
-			glScaled(1.0/aspect, 1.0/aspect, 1);
+		//Blob tracking
+		{
+			pthread_mutex_lock(&drawingMutex);
+			pthread_mutex_lock(&mutex);
+			if(!threadUpdateContour){
+				
+				xn::DepthMetaData dmd;
+				depth.getXnDepthGenerator().GetMetaData(dmd);	
+				
+				// get the pixels
+				const XnDepthPixel* pixels = dmd.Data();
+				
+				memcpy(threadedPixels, pixels, 640*480*sizeof(XnDepthPixel));
+				
+				
+				//Find segmenter
+				
+				
+				
+				//	
+				for(int i=0;i<NUM_SEGMENTS;i++){
+					*grayImage[i] = *threadGrayImage[i];
+					//	threadGrayImage[i]->set(0);					
+				}
+				
+				[self setBlobs:threadBlobs];
+				
+				threadUpdateContour = YES;
+				
+				
+			}
+			
+			pthread_mutex_unlock(&mutex);
+			pthread_mutex_unlock(&drawingMutex);
 		}
 		
-		ofRect(0,0,aspect, 1);
-		ofNoFill();
-		ofSetColor(120, 120, 120);
-		ofRect(0,0,aspect, 1);
+		
+		//cout<<"Depth max value: "<<depth.getXnDepthGenerator().GetDevice MaxDepth()<<endl;
+		
+		vector<ofxTrackedUser*> vusers = users.getFoundUsers(); 
+		
+		int numberNonstoredUsers = 0;
+		
+		bool dancerFound[3];
+		for(int i=0;i<3;i++)
+			dancerFound[i] = false;
+		
+		for(int i=0;i<vusers.size();i++){
+			//------
+			//Uncalibrated user
+			if(vusers[i]->is_found && !vusers[i]->is_tracked){
+				for(int p=1;p<4;p++){
+					int dancer = -1;
+					for(int d=0;d<3;d++){
+						if(PropI(([NSString stringWithFormat:@"priority%i",d])) == p && dancers[i].state == 1){
+							//Prioritering passer, og danseren har ikke nogen user tilknyttet, men har en calibration
+							dancer = d;
+						}
+					}
+					if(dancer >= 0){
+						ofxTrackedUser * user = vusers[i];
+						if(users.getXnUserGenerator().GetSkeletonCap().IsCalibrationData(dancer)){
+							NSLog(@"Load calibration");
+							users.stopPoseDetection(user->id);
+							
+							XnStatus status = users.getXnUserGenerator().GetSkeletonCap().LoadCalibrationData(user->id,dancer);
+							users.startTracking(user->id);
+							dancers[dancer].userId = user->id;
+							if(!status){
+								dancers[dancer].state = 2;
+							}
+						}						
+					}
+				}
+			}
+			
+			//------
+			//Calibrated user
+			if(vusers[i]->is_tracked){
+				bool matchingUser = NO;
+				for(int j=0;j<3;j++){
+					if(vusers[i]->id == dancers[j].userId){
+						matchingUser = YES;
+						dancerFound[j] = true;
+					}
+				}
+				if(!matchingUser)
+					numberNonstoredUsers++;
+			}
+			
+			
+			//			printf("User %i: Is Calibrating %i, is tracking %i \n",i, vusers[i]->is_calibrating, vusers[i]->is_tracked);
+			//	printf("User %i:  \n",i);
+		}
+		
+		//------
+		//Update gui
+		
+		for(int j=0;j<3;j++){
+			NSTextField * label;
+			switch (j) {
+				case 0:
+					label = labelA;
+					break;
+				case 1:
+					label = labelB;
+					break;
+				case 2:
+					label = labelC;
+					break;						
+				default:
+					break;
+			}
+			
+			if(dancerFound[j] && dancers[j].state > 0){
+				dancerFound[j] = true;
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[label setStringValue:@"Tracking"];
+				});
+				dancers[j].state = 2;
+			} else if(dancers[j].state > 0){
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[label setStringValue:@"Searching"];	
+				});
+				dancers[j].state = 1;
+			} else {
+				dispatch_async(dispatch_get_main_queue(), ^{
+					[label setStringValue:@"No calibration!"];	
+				});
+			}
+		}
+		
+		dispatch_async(dispatch_get_main_queue(), ^{			
+			if(numberNonstoredUsers == 1){
+				[storeA setEnabled:true];
+			} else {
+				[storeA setEnabled:false];	
+			}
+		});
+	}
+}
+
+-(void) draw:(NSDictionary *)drawingInformation{
+	if([drawCalibration state]){
+		ApplySurface(@"Floor");
+		
+		ofxPoint2f projHandles[3];	
+		projHandles[0] = [self projPoint:0];
+		projHandles[1] = [self projPoint:1];
+		projHandles[2] = [self projPoint:2];
 		
 		ofFill();
 		//Y Axis 
@@ -219,55 +388,57 @@
 		ofLine(projHandles[0].x, projHandles[0].y, projHandles[2].x, projHandles[2].y);
 		
 		
-	}glPopMatrix();
-	
-	//----------	
-	//Mixed view
-	glPushMatrix();{
-		glTranslated(640/2, 480/2, 0);
-		glScaled((640/2), (480/2), 1);
-		glScaled(640/480, 1, 1);
-		glTranslated(0.5, 0.5, 0);
 		
-		float aspect = [self floorAspect];
-		ofFill();
-		ofSetColor(70, 70, 70);
-		if(aspect < 1){
-			glTranslated(-aspect/2, -0.5, 0);
-		} else {
-			glTranslated(-0.5, -(1.0/aspect)/2.0, 0);
-			glScaled(1.0/aspect, 1.0/aspect, 1);
-		}
+		ofxPoint3f kinect = [self convertWorldToFloor:ofxPoint3f(0,0,0)];
 		
-		ofRect(0,0,aspect, 1);
-		ofNoFill();
-		ofSetColor(120, 120, 120);
-		ofRect(0,0,aspect, 1);
-		
-		ofxPoint3f kinect = [self convertWorldToProjection:ofxPoint3f(0,0,0)];
-		ofxPoint3f p1 = [self convertWorldToProjection:points[0]];		
-		ofxPoint3f p2 = [self convertWorldToProjection:points[1]];		
-		ofxPoint3f p3 = [self convertWorldToProjection:points[2]];		
-		
-		ofxPoint3f lfoot, rfoot;
+		ofxPoint3f lfoot, rfoot, lhand, rhand;
 		if(users.getTrackedUsers().size() > 0){
 			ofxTrackedUser * user = users.getTrackedUser(0);
-			lfoot = [self convertWorldToProjection:user->left_lower_leg.worldEnd];
-			rfoot = [self convertWorldToProjection:user->right_lower_leg.worldEnd];
-		//	cout<<p4.y<<endl;
+			lfoot = [self convertWorldToFloor:user->left_lower_leg.worldEnd];
+			rfoot = [self convertWorldToFloor:user->right_lower_leg.worldEnd];
+			lhand = [self convertWorldToFloor:user->left_lower_arm.worldEnd];
+			rhand = [self convertWorldToFloor:user->right_lower_arm.worldEnd];
+			
+		}
+		
+		{
+			ofxPoint3f border0,border1, border2, border3;
+			xn::DepthMetaData dmd;
+			depth.getXnDepthGenerator().GetMetaData(dmd);
+			
+			XnPoint3D pIn[3];
+			pIn[0].X = 0;
+			pIn[0].Y = 240;
+			pIn[0].Z = 4200;
+			pIn[1].X = 320;
+			pIn[1].Y = 240;
+			pIn[1].Z = 4200;
+			pIn[2].X = 640;
+			pIn[2].Y = 240;
+			pIn[2].Z = 4200;
+			
+			XnPoint3D pOut[3];				
+			depth.getXnDepthGenerator().ConvertProjectiveToRealWorld(3, pIn, pOut);
+			border0 = [self convertWorldToFloor:ofxPoint3f(0,0,0)];
+			border1 = [self convertWorldToFloor:ofxPoint3f(pOut[0].X, pOut[0].Y, pOut[0].Z)];;
+			border2 = [self convertWorldToFloor:ofxPoint3f(pOut[1].X, pOut[1].Y, pOut[1].Z)];
+			border3 = [self convertWorldToFloor:ofxPoint3f(pOut[2].X, pOut[2].Y, pOut[2].Z)];
+			
+			ofSetColor(255, 0, 0);
+			glBegin(GL_LINE_STRIP);
+			glVertex2d(border0.x, border0.z);
+			glVertex2d(border1.x, border1.z);
+			glVertex2d(border2.x, border2.z);
+			glVertex2d(border3.x, border3.z);
+			glVertex2d(border0.x, border0.z);
+			glEnd();
 		}
 		
 		ofSetLineWidth(1);
 		ofFill();
 		ofSetColor(255, 255, 0);
 		ofCircle(kinect.x, kinect.z, 10.0/640);
-		ofSetColor(0, 255, 0);
-		ofCircle(p1.x, p1.z, 10.0/640);
-		ofSetColor(255, 0, 0);
-		ofCircle(p2.x, p2.z, 10.0/640);
-		ofSetColor(0, 0, 255);
-		ofCircle(p3.x, p3.z, 10.0/640);
-
+		
 		ofEnableAlphaBlending();
 		ofNoFill();
 		ofSetColor(0, 255, 0, 255);
@@ -283,16 +454,443 @@
 		ofSetColor(255, 0, 0, 255*(1-rfoot.y/500.0));
 		ofCircle(rfoot.x, rfoot.z, 15.0/640);
 		
+		ofNoFill();
+		ofSetColor(255, 255, 0, 255);
+		ofCircle(lhand.x, lhand.z, 15.0/640);
+		ofFill();
+		ofSetColor(255, 255, 0, 255*(1-lhand.y/500.0));
+		ofCircle(lhand.x, lhand.z, 15.0/640);
 		
-
 		
-	}glPopMatrix();
-	
-	
-	ofSetColor(255, 255, 255);
-	ofLine((640/2), 0, (640/2), 480);
-	ofLine(0, (480/2), 640, (480/2));	
+		ofNoFill();
+		ofSetColor(0, 255, 244, 255);
+		ofCircle(rhand.x, rhand.z, 15.0/640);
+		ofFill();
+		ofSetColor(0, 255, 255, 255*(1-rhand.y/500.0));
+		ofCircle(rhand.x, rhand.z, 15.0/640);
+		
+		
+		PopSurface();
+	}
 }
+
+-(void) controlDraw:(NSDictionary *)drawingInformation{
+	ofBackground(0, 0, 0);
+	
+	if(!kinectConnected){
+		ofSetColor(255, 255, 255);
+		ofDrawBitmapString("Kinect not connected", 640/2-80, 480/2-8);
+	} else {
+		ofEnableAlphaBlending();
+		
+		if([openglTabView indexOfTabViewItem:[openglTabView selectedTabViewItem]] == 0){
+			ofxPoint3f points[3];
+			ofxPoint2f handles[3];
+			ofxPoint2f projHandles[3];
+			
+			points[0] = [self point3:0];
+			points[1] = [self point3:1];
+			points[2] = [self point3:2];
+			
+			handles[0] = [self point2:0];
+			handles[1] = [self point2:1];
+			handles[2] = [self point2:2];
+			
+			projHandles[0] = [self projPoint:0];
+			projHandles[1] = [self projPoint:1];
+			projHandles[2] = [self projPoint:2];
+			
+			
+			
+			//----------
+			//Depth image	
+			
+			glPushMatrix();{
+				glScaled(0.5, 0.5, 1.0);
+				users.draw();
+			}glPopMatrix();
+			
+			
+			glPushMatrix();{
+				glTranslated(0, 0, 0);
+				glScaled((640/2), (480/2), 1);
+				
+				ofNoFill();
+				//Y Axis 
+				ofSetColor(0, 255, 0);
+				ofCircle(handles[0].x,handles[0].y, 10/640.0);
+				
+				//X Axis
+				ofSetColor(255, 0, 0);
+				ofCircle(handles[1].x,handles[1].y, 10/640.0);
+				ofLine(handles[0].x, handles[0].y, handles[1].x, handles[1].y);
+				
+				//Z Axis
+				ofSetColor(0, 0, 255);
+				ofCircle(handles[2].x,handles[2].y, 10/640.0);
+				ofLine(handles[0].x, handles[0].y, handles[2].x, handles[2].y);
+			}glPopMatrix();
+			ofSetColor(255, 255, 255);
+			ofDrawBitmapString("Depthimage", 10, 10);
+			
+			
+			//----------
+			//Top view
+			glPushMatrix();{
+				glTranslated((640/2), 0, 0);
+				glScaled((640/2), (480/2), 1);
+				
+				glTranslated(0.5, 0, 0);
+				glScaled(1.0/4000.0, 1.0/4000.0, 1);
+				
+				ofFill();
+				//Y Axis 
+				ofSetColor(0, 255, 0);
+				ofCircle(points[0].x,points[0].z, 2000*10/640.0);
+				
+				//X Axis
+				ofSetColor(255, 0, 0);
+				ofCircle(points[1].x,points[1].z, 2000*10/640.0);
+				ofLine(points[0].x, points[0].z, points[1].x, points[1].z);
+				
+				//Z Axis
+				ofSetColor(0, 0, 255);
+				ofCircle(points[2].x,points[2].z, 2000*10/640.0);
+				ofLine(points[0].x, points[0].z, points[2].x, points[2].z);
+				
+			}glPopMatrix();
+			ofSetColor(255, 255, 255);
+			ofDrawBitmapString("TOP - Kinect world", (640/2)+10, 10);
+			
+			//----------
+			//Projectionview
+			glPushMatrix();{
+				glTranslated(0, 480/2, 0);
+				glScaled((640/2), (480/2), 1);
+				glScaled(640/480, 1, 1);
+				glTranslated(0.5, 0.5, 0);
+				
+				float aspect = [self floorAspect];
+				ofFill();
+				ofSetColor(70, 70, 70);
+				if(aspect < 1){
+					glTranslated(-aspect/2, -0.5, 0);
+				} else {
+					glTranslated(-0.5, -(1.0/aspect)/2.0, 0);
+					glScaled(1.0/aspect, 1.0/aspect, 1);
+				}
+				
+				ofRect(0,0,aspect, 1);
+				ofNoFill();
+				ofSetColor(120, 120, 120);
+				ofRect(0,0,aspect, 1);
+				
+				ofFill();
+				//Y Axis 
+				ofSetColor(0, 255, 0);
+				ofCircle(projHandles[0].x,projHandles[0].y, 10/640.0);
+				
+				//X Axis
+				ofSetColor(255, 0, 0);
+				ofCircle(projHandles[1].x,projHandles[1].y, 10/640.0);
+				ofLine(projHandles[0].x, projHandles[0].y, projHandles[1].x, projHandles[1].y);
+				
+				//Z Axis
+				ofSetColor(0, 0, 255);
+				ofNoFill();
+				ofCircle(projHandles[2].x,projHandles[2].y, 10/640.0);
+				ofLine(projHandles[0].x, projHandles[0].y, projHandles[2].x, projHandles[2].y);
+				
+				
+			}glPopMatrix();
+			ofSetColor(255, 255, 255);
+			ofDrawBitmapString("TOP - Floorspace", 10, 480/2+10);
+			
+			//----------	
+			//Mixed view
+			glPushMatrix();{
+				glTranslated(640/2, 480/2, 0);	
+				glScaled((640/2), (480/2), 1);
+				glScaled(640/480, 1, 1);
+				glTranslated(0.5, 0.5, 0);
+				
+				float aspect = [self floorAspect];
+				ofFill();
+				ofSetColor(70, 70, 70);
+				if(aspect < 1){
+					glTranslated(-aspect/2, -0.5, 0);
+				} else {
+					glTranslated(-0.5, -(1.0/aspect)/2.0, 0);
+					glScaled(1.0/aspect, 1.0/aspect, 1);
+				}
+				
+				ofRect(0,0,aspect, 1);
+				ofNoFill();
+				ofSetColor(120, 120, 120);
+				ofRect(0,0,aspect, 1);
+				
+				ofxPoint3f kinect = [self convertWorldToFloor:ofxPoint3f(0,0,0)];
+				ofxPoint3f p1 = [self convertWorldToFloor:points[0]];		
+				ofxPoint3f p2 = [self convertWorldToFloor:points[1]];		
+				ofxPoint3f p3 = [self convertWorldToFloor:points[2]];		
+				
+				ofxPoint3f lfoot, rfoot, lhand, rhand;
+				if(users.getTrackedUsers().size() > 0){
+					ofxTrackedUser * user = users.getTrackedUser(0);
+					lfoot = [self convertWorldToFloor:user->left_lower_leg.worldEnd];
+					rfoot = [self convertWorldToFloor:user->right_lower_leg.worldEnd];
+					lhand = [self convertWorldToFloor:user->left_lower_arm.worldEnd];
+					rhand = [self convertWorldToFloor:user->right_lower_arm.worldEnd];
+					
+				}
+				
+				{
+					ofxPoint3f border0,border1, border2, border3;
+					xn::DepthMetaData dmd;
+					depth.getXnDepthGenerator().GetMetaData(dmd);
+					
+					XnPoint3D pIn[3];
+					pIn[0].X = 0;
+					pIn[0].Y = 240;
+					pIn[0].Z = 4200;
+					pIn[1].X = 320;
+					pIn[1].Y = 240;
+					pIn[1].Z = 4200;
+					pIn[2].X = 640;
+					pIn[2].Y = 240;
+					pIn[2].Z = 4200;
+					
+					XnPoint3D pOut[3];				
+					depth.getXnDepthGenerator().ConvertProjectiveToRealWorld(3, pIn, pOut);
+					border0 = [self convertWorldToFloor:ofxPoint3f(0,0,0)];
+					border1 = [self convertWorldToFloor:ofxPoint3f(pOut[0].X, pOut[0].Y, pOut[0].Z)];;
+					border2 = [self convertWorldToFloor:ofxPoint3f(pOut[1].X, pOut[1].Y, pOut[1].Z)];
+					border3 = [self convertWorldToFloor:ofxPoint3f(pOut[2].X, pOut[2].Y, pOut[2].Z)];
+					
+					ofSetColor(255, 0, 0);
+					glBegin(GL_LINE_STRIP);
+					glVertex2d(border0.x, border0.z);
+					glVertex2d(border1.x, border1.z);
+					glVertex2d(border2.x, border2.z);
+					glVertex2d(border3.x, border3.z);
+					glVertex2d(border0.x, border0.z);
+					glEnd();
+				}
+				
+				
+				ofSetLineWidth(1);
+				ofFill();
+				ofSetColor(255, 255, 0);
+				ofCircle(kinect.x, kinect.z, 10.0/640);
+				ofSetColor(0, 255, 0);
+				ofCircle(p1.x, p1.z, 10.0/640);
+				ofSetColor(255, 0, 0);
+				ofCircle(p2.x, p2.z, 10.0/640);
+				ofSetColor(0, 0, 255);
+				ofCircle(p3.x, p3.z, 10.0/640);
+				
+				ofEnableAlphaBlending();
+				ofNoFill();
+				ofSetColor(0, 255, 0, 255);
+				ofCircle(lfoot.x, lfoot.z, 15.0/640);
+				ofFill();
+				ofSetColor(0, 255, 0, 255*(1-lfoot.y/500.0));
+				ofCircle(lfoot.x, lfoot.z, 15.0/640);
+				
+				ofNoFill();
+				ofSetColor(255, 0, 0, 255);
+				ofCircle(rfoot.x, rfoot.z, 15.0/640);
+				ofFill();
+				ofSetColor(255, 0, 0, 255*(1-rfoot.y/500.0));
+				ofCircle(rfoot.x, rfoot.z, 15.0/640);
+				
+				ofNoFill();
+				ofSetColor(255, 255, 0, 255);
+				ofCircle(lhand.x, lhand.z, 15.0/640);
+				ofFill();
+				ofSetColor(255, 255, 0, 255*(1-lhand.y/500.0));
+				ofCircle(lhand.x, lhand.z, 15.0/640);
+				
+				
+				ofNoFill();
+				ofSetColor(0, 255, 244, 255);
+				ofCircle(rhand.x, rhand.z, 15.0/640);
+				ofFill();
+				ofSetColor(0, 255, 255, 255*(1-rhand.y/500.0));
+				ofCircle(rhand.x, rhand.z, 15.0/640);
+				
+				
+				
+			}glPopMatrix();
+			ofSetColor(255, 255, 255);
+			ofDrawBitmapString("TOP - Mixed world", 640/2+10, 480/2+10);
+			
+			
+			ofSetColor(255, 255, 255);
+			ofLine((640/2), 0, (640/2), 480);
+			ofLine(0, (480/2), 640, (480/2));	
+			
+		} else {
+			//----------
+			//Blob segment view	
+			glPushMatrix();{
+				glTranslated(0, 0, 0);
+				
+				int c = NUM_SEGMENTS/2.0;
+				for(int i=0;i<c;i++){
+					ofSetColor(200, 255, 200);
+					grayImage[i]->draw(i*640/c,0,640/c,480/c);
+					
+					ofSetColor(255, 255, 255);
+					ofLine(i*640/c, 0, i*640/c, 480/c);
+					if(distanceNear[i] > 0)
+						ofDrawBitmapString("Segment "+ofToString(i)+"\n "+ofToString(distanceNear[i])+" - "+ofToString(distanceFar[i]), i*640/c+5, 10);
+				}
+				glTranslated(0, 480/c, 0);
+				for(int i=c;i<c*2;i++){
+					ofSetColor(200, 255, 200);
+					grayImage[i]->draw((i-c)*640/c,0,640/c,480/c);
+					
+					ofSetColor(255, 255, 255);
+					ofLine((i-c)*640/c, 0, (i-c)*640/c, 480/c);
+					if(distanceNear[i] > 0)
+						ofDrawBitmapString("Segment "+ofToString(i)+"\n "+ofToString(distanceNear[i])+" - "+ofToString(distanceFar[i]), (i-c)*640/c+5, 10);
+					
+				}
+				ofLine(0, 0, 640, 0);
+				ofLine(0, 480/c, 640, 480/c);
+				ofLine(0, 480/c*2, 640, 2*480/c);
+				
+			}glPopMatrix();	
+			
+			
+			//----------
+			//Heat view
+			glPushMatrix();{
+				glTranslated(0, 480-30, 0);
+				glBegin(GL_LINES);
+				for(int i=0;i<1000;i++){
+					glColor3f(threadHeatMap[i]*20, threadHeatMap[i]*20, threadHeatMap[i]*20);
+					glVertex3d(640.0*i/1000.0, 0, 0);
+					glVertex3d(640.0*i/1000.0, 20, 0);
+				}
+				glEnd();
+				
+				glBegin(GL_LINES);
+				for(int i=0;i<NUM_SEGMENTS;i++){
+					if(distanceNear[i] > 0){
+						switch (i) {
+							case 0:
+								ofSetColor(255, 0, 0);
+								break;
+							case 1:
+								ofSetColor(0, 255, 0);
+								break;
+							case 2:
+								ofSetColor(0, 0, 255);
+								break;
+							case 3:
+								ofSetColor(255, 255, 0);
+								break;
+							case 4:
+								ofSetColor(255, 0, 255);
+								break;
+							default:
+								break;
+						}
+						
+						//glColor3f(threadHeatMap[i]*20, threadHeatMap[i]*20, threadHeatMap[i]*20);
+						glVertex3d(640.0*distanceNear[i]/10000, 0, 0);
+						glVertex3d(640.0*distanceNear[i]/10000, 20, 0);
+						glVertex3d(640.0*distanceFar[i]/10000, 0, 0);
+						glVertex3d(640.0*distanceFar[i]/10000, 20, 0);
+						
+					}
+				}
+				glEnd();
+				
+				glBegin(GL_LINES);
+				Blob * b;
+				for(b in blobs){
+					switch ([b segment]) {
+						case 0:
+							ofSetColor(255, 0, 0);
+							break;
+						case 1:
+							ofSetColor(0, 255, 0);
+							break;
+						case 2:
+							ofSetColor(0, 0, 255);
+							break;
+						case 3:
+							ofSetColor(255, 255, 0);
+							break;
+						case 4:
+							ofSetColor(255, 0, 255);
+							break;
+						default:
+							break;
+					}
+					glVertex3d(640.0*[b avgDepth]/10000, 0, 0);
+					glVertex3d(640.0*[b avgDepth]/10000, 30, 0);
+					
+				}
+				glEnd();
+				
+				
+			} glPopMatrix();
+			
+			
+			//----------
+			//Blob view
+			glPushMatrix();{
+				glTranslated(0, 480, 0);
+				
+				glPushMatrix();
+				glScaled(0.5, 0.5, 1.0);
+				users.draw();
+				glPopMatrix();
+				
+				Blob * b;
+				for(b in blobs){
+					switch ([b segment]) {
+						case 0:
+							ofSetColor(255, 0, 0);
+							break;
+						case 1:
+							ofSetColor(0, 255, 0);
+							break;
+						case 2:
+							ofSetColor(0, 0, 255);
+							break;
+						case 3:
+							ofSetColor(255, 255, 0);
+							break;
+						case 4:
+							ofSetColor(255, 0, 255);
+							break;
+						default:
+							break;
+					}
+					glBegin(GL_LINE_STRIP);
+					for(int i=0;i<[b nPts];i++){
+						ofxVec2f p = [b pts][i];
+						//				p = [GetPlugin(ProjectionSurfaces) convertPoint:[b pts][i] fromProjection:"Front" surface:"Floor"];
+						p = [b originalblob]->pts[i];
+						glVertex2f(p.x*320, p.y*240);
+						
+						//glVertex2f(w*3+p.x/640.0*w, p.y/480.0*h);
+						//cout<<p.x<<"  "<<p.y<<endl;
+						
+					}
+					glEnd();
+				}
+			}glPopMatrix();	
+		}
+	}
+}
+
+
 
 -(void) calculateMatrix{
 	ofxVec2f v1, v2, v3;
@@ -306,7 +904,7 @@
 	projHandles[0] = [self projPoint:0];
 	projHandles[1] = [self projPoint:1];
 	projHandles[2] = [self projPoint:2];	
-
+	
 	//Angle 1 er y akse rotation. Vinklen mellem de to blå akser (2)
 	v1 = ofxVec2f((points[2]-points[0]).x,(points[2]-points[0]).z);
 	v2 = -ofxVec2f((projHandles[2]-projHandles[0]).x,(projHandles[2]-projHandles[0]).y);	
@@ -317,7 +915,6 @@
 	//Angle 3 er z akse rotation. Den er fastdefineret i gulvspace
 	v1 = ofxVec2f((points[2]-points[0]).z,(points[2]-points[0]).y);
 	v2 = ofxVec2f(-1,0);	
-	//v2 = -ofxVec2f((projHandles[1]-projHandles[0]).x,(projHandles[1]-projHandles[0]).y);
 	float angle3 = v1.angle(v2);
 	
 	[Prop(@"angle1") setFloatValue:angle1];
@@ -334,8 +931,7 @@
 	
 	v2 = ofxVec2f(1,0);	
 	v3 = ofxVec2f((projHandles[1]-projHandles[0]).x,(projHandles[1]-projHandles[0]).y);	
-	float angle2 = v1.angle(v2);// + v3.angle(v2);	
-	//cout<<angle2<<endl;
+	float angle2 = v1.angle(v2);	
 	
 	[Prop(@"angle2") setFloatValue:angle2];
 	
@@ -343,40 +939,78 @@
 									  -PropF(@"angle2")*DEG_TO_RAD, ofxVec3f(0,0,1),
 									  PropF(@"angle3")*DEG_TO_RAD, ofxVec3f(1,0,0));
 	scale = 1.0/(points[1]-points[0]).length() ;
-
 	
 }
 
--(ofxPoint3f) convertWorldToProjection:(ofxPoint3f) p{
-	p -= [self point3:0];
-	
-	/*		p.rotate(PropF(@"angle2"), ofxVec3f(0,0,1));						
-	 p.rotate(PropF(@"angle1"), ofxVec3f(0,1,0));						
-	 p.rotate(PropF(@"angle3"), ofxVec3f(1,0,0));						
-	 */		
-	//				vertices[i].rotate(v1.angle(v2), ofPoint(0,0), ofxVec3f(0,0,1));
+-(ofxPoint3f) convertWorldToFloor:(ofxPoint3f) p{
+	p -= [self point3:0];	
 	
 	p = rotationMatrix.transform3x3(rotationMatrix,p);
 	
-	p.z *= -scale;
-	p.x *= scale;				
-	//p.y += 1.0/scale;
-	//p.y *= -scale;	
-//	cout<<p.x<<"  "<<p.y<<"  "<<p.z<<endl;
+	p.z *= -scale*([self projPoint:0] - [self projPoint:2]).length();
+	p.x *= scale*([self projPoint:0] - [self projPoint:2]).length();
+	//p.y *= scale*([self projPoint:0] - [self projPoint:2]).length();
 	
-	p.x *= ([self projPoint:0] - [self projPoint:2]).length();
-	p.z *= ([self projPoint:0] - [self projPoint:2]).length();
 	p += ofxPoint3f([self projPoint:0].x, 0, [self projPoint:0].y);
-
+	
 	return p;
+}
+
+-(ofxPoint3f) convertWorldToProjection:(ofxPoint3f) p{
+	ofxPoint2f p2 = [self convertWorldToFloor:p];
+	return [([GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0]) convertToProjection:p2];
+}
+
+
+-(ofxTrackedUser*) getDancer:(int)d{
+	ofxTrackedUser* u = users.getUserWithId(dancers[d].userId);
+	if(u != nil){
+		return u;
+	}
+	return nil;	
+}
+
+-(IBAction) storeCalibration:(id)sender{
+	int dancer;
+	if(sender == storeA){
+		dancer = 0;
+	}
+	if(sender == storeB){
+		dancer = 1;
+	}
+	if(sender == storeC){
+		dancer = 2;
+	}
+	
+	vector<ofxTrackedUser*> vusers = users.getTrackedUsers(); 			
+	for(int i=0;i<vusers.size();i++){
+		bool matchingUser = NO;
+		for(int j=0;j<3;j++){
+			if(vusers[i]->id == dancers[j].userId){
+				matchingUser = YES;
+			}
+		}
+		if(!matchingUser){
+			ofxTrackedUser * user = vusers[i];
+			if(user->is_tracked){
+				NSLog(@"Store calibration");
+				XnStatus status = users.getXnUserGenerator().GetSkeletonCap().SaveCalibrationData(user->id,dancer);
+				dancers[dancer].state = 2;
+				dancers[dancer].userId = user->id;
+			}
+			break;	
+		}
+	}
+	
+	
+	
 }
 
 -(void) controlMouseDragged:(float)x y:(float)y button:(int)button{
 	if(draggedPoint != -1){
 		ofxPoint2f mouse = ofPoint(2*x/640.0,2*y/480.0);
 		
-		if(draggedPoint <= 2){
-			
+		if(draggedPoint <= 2){			
 			xn::DepthMetaData dmd;
 			depth.getXnDepthGenerator().GetMetaData(dmd);
 			
@@ -392,7 +1026,7 @@
 			[self setPoint2:draggedPoint coord:mouse];
 		} else {
 			mouse.y -= 1;
-		float aspect = [self floorAspect];
+			float aspect = [self floorAspect];
 			if(aspect < 1){
 				mouse.x -= 0.5;
 				mouse.x += aspect/2.0;
@@ -403,6 +1037,13 @@
 			}
 			
 			[self setProjPoint:draggedPoint-3 coord:mouse];
+			
+			if(draggedPoint-3 <= 1){
+				ofxVec2f v = [self projPoint:1] - [self projPoint:0];
+				v = ofxVec2f(-v.y,v.x);
+				
+				[self setProjPoint:2 coord:[self projPoint:0]+v];
+			}
 		}
 	}
 	[self calculateMatrix];
@@ -428,14 +1069,22 @@
 			mouse.y += (1.0/aspect)/2.0;
 			mouse *= 1.0/aspect;
 		}
-
-		for(int i=0;i<3;i++){
+		
+		for(int i=0;i<2;i++){
 			if (mouse.distance([self projPoint:i]) < 0.035) {
 				draggedPoint = i+3;
 			}
 		}
 	}
-	NSLog(@"Mouse pressed %i  mouse: %fx%f",draggedPoint, mouse.x, mouse.y);
+	xn::DepthMetaData dmd;
+	depth.getXnDepthGenerator().GetMetaData(dmd);
+	
+	XnPoint3D pIn;
+	pIn.X = mouse.x*640;
+	pIn.Y = mouse.y*480;
+	
+	
+	NSLog(@"Mouse pressed %i  mouse: %fx%f   distance: %i",draggedPoint, mouse.x, mouse.y,dmd.Data()[(int)pIn.X+(int)pIn.Y*640]);
 }
 
 -(void) controlMouseReleased:(float)x y:(float)y{
@@ -443,7 +1092,7 @@
 }
 
 -(float) floorAspect{
-return 	[[([GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0]) aspect] floatValue];
+	return 	[[([GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0]) aspect] floatValue];
 }
 
 
@@ -471,7 +1120,9 @@ return 	[[([GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumbe
 	[customProperties setValue:[NSNumber numberWithFloat:coord.y] forKey:[NSString stringWithFormat:@"proj%iy",point]];
 }
 
-
+-(ofxUserGenerator*) getUserGenerator{
+	return &users;	
+}
 
 -(void) applicationWillTerminate:(NSNotification *)note{
 	stop = true;
@@ -480,4 +1131,161 @@ return 	[[([GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumbe
 	 delete &depth;
 	 delete &context;*/
 }
+
+
+
+//-----
+// Blob tracking
+//-----
+-(void) performBlobTracking:(id)param{
+	while(1){
+		
+		pthread_mutex_lock(&mutex);			
+		
+		if(threadUpdateContour){
+			/*		
+			 cout<<"ASIODJOIASD    "<<contourFinder->nBlobs<<endl;*/
+			
+			
+			/*for(int i=0;i<640*480;i++){
+			 pixelBuffer[i] = 0;
+			 }
+			 */
+			
+			int count = 0;
+			
+			int segmentSize = PropI(@"segmentSize");
+			
+			int lastSegment = 0;		
+			
+			//	memcpy(threadedPixelsSorted, threadedPixels, 640*480*sizeof(XnDepthPixel));
+			
+			//sort(threadedPixelsSorted,threadedPixelsSorted+640*480-1);
+			
+			
+			memset(threadHeatMap, 0, 1000);
+			for(int i=0;i<1000;i++){
+				threadHeatMap[i] = 0;
+			}
+			
+			for(int i=0;i<640*480;i++){				
+				int index = threadedPixels[i] / 10.0;
+				threadHeatMap[index] ++;
+			}
+			
+			
+			[threadBlobs removeAllObjects];
+			//cout<<"    ---   "<<endl;
+			while(count < NUM_SEGMENTS){
+				//				
+				//				cout<<count<<endl;
+				if(lastSegment < 9600){
+					memset(pixelBufferTmp, 0, 640*480);
+					
+					/*					for(int i=0;i<640*480;i++){
+					 pixelBufferTmp[i] = 0;
+					 }
+					 */					
+					int nearestPixel = -1;		
+					int start = ceil(lastSegment/10.0)+1;
+					for(int i=start;i<1000;i++){							
+						if(threadHeatMap[i] > 0 && (nearestPixel == -1)){
+							nearestPixel = i*10.0;
+							break;
+						}
+					}
+					
+					/*	for(int i=0;i<640*480;i++){
+					 if((nearestPixel == -1 || threadedPixels[i] < nearestPixel) && threadedPixels[i] > lastSegment){
+					 nearestPixel = threadedPixels[i];
+					 //break;
+					 }					
+					 }*/
+					
+					
+					if(nearestPixel != -1){					
+						int c = 0;
+						//Find s
+						int s = 0;
+						
+						int start = ceil(nearestPixel/10.0);
+						for(int i=start;i<1000;i++){							
+							if(threadHeatMap[i] > 0 && i * 10.0 <= nearestPixel + s + segmentSize){
+								s = i*10.0 - nearestPixel;								
+							}
+							/*
+							 if(threadedPixelsSorted[i] >= nearestPixel && threadedPixelsSorted[i] <= nearestPixel + s + segmentSize){
+							 s = threadedPixelsSorted[i] - nearestPixel;
+							 }*/
+						}
+						
+						
+						
+						if(nearestPixel > 9000){
+							s = 1000;
+						}
+						
+						if(s > 0){
+							for(int i=0;i<640*480;i++){
+								if(threadedPixels[i] >= nearestPixel && threadedPixels[i] < nearestPixel + s){
+									pixelBufferTmp[i] = 255;
+									//nearestPixel = threadedPixels[i];
+									//		pixelBuffer[i] = 255-nearestPixel/10000.0*255.0;
+									c++;
+								} else {
+									//							break;
+								}
+							}	
+						}
+						lastSegment = nearestPixel+s;
+						
+						threadGrayImage[count]->setFromPixels(pixelBufferTmp,640,480);			
+						if(c > 10){
+							contourFinder->findContours(*threadGrayImage[count], 20, (640*480)/10, 10, false, true);
+							
+							for(int i=0;i<contourFinder->nBlobs;i++){
+								ofxCvBlob * blob = &contourFinder->blobs[i];
+								Blob * blobObj = [[[Blob alloc] initWithBlob:blob] autorelease];
+								[blobObj setCameraId:0];
+								[blobObj normalize:640 height:480];
+								[blobObj setSegment:count];
+								
+								float avg = 0;
+								for( int i=0;i<blob->pts.size();i++){
+									avg += threadedPixels[int(blob->pts.at(i).y*640 + blob->pts.at(i).x)];
+								}
+								avg /= (float)blob->pts.size();
+								[blobObj setAvgDepth:avg];
+								
+								[threadBlobs addObject:blobObj];							
+							}
+							
+							//	if(count == 0)
+							//	cout<<"Segment "<<count<<" found "<<contourFinder->nBlobs<<" nearest pixel is "<<nearestPixel<<"    c  "<<c<<"    s: "<<s<<endl;
+							distanceNear[count] = nearestPixel;
+							distanceFar[count] = nearestPixel + s;
+						} else {
+							count --;
+						}
+						
+					} else {
+						threadGrayImage[count]->set(0);			
+						distanceNear[count] = 0;
+					}
+				}
+				count ++;				
+			}		
+			
+			//	threadGrayImage->setFromPixels(pixelBuffer,640,480);						
+		}
+		
+		threadUpdateContour = false;		
+		
+		pthread_mutex_unlock(&mutex);
+		
+		[NSThread sleepForTimeInterval:0.01];
+	}
+	
+}
+
 @end
