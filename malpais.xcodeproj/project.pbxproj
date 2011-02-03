@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		330CC3AB12FAEEB2000283DE /* TrackingElements.mm in Sources */ = {isa = PBXBuildFile; fileRef = 330CC3A912FAEEB2000283DE /* TrackingElements.mm */; };
-		330CC3AC12FAEEB2000283DE /* TrackingElements.xib in Resources */ = {isa = PBXBuildFile; fileRef = 330CC3AA12FAEEB2000283DE /* TrackingElements.xib */; };
 		33D7296412F85998009CD4A3 /* libOpenNI.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D7296312F85998009CD4A3 /* libOpenNI.dylib */; };
 		4BA258A61153B0800008D49C /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
 		4BA258F41153B1E80008D49C /* testApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BA258F31153B1E80008D49C /* testApp.mm */; };
@@ -211,10 +209,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		330CC33112FAC884000283DE /* Filter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filter.h; sourceTree = "<group>"; };
-		330CC3A812FAEEB2000283DE /* TrackingElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackingElements.h; sourceTree = "<group>"; };
-		330CC3A912FAEEB2000283DE /* TrackingElements.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TrackingElements.mm; sourceTree = "<group>"; };
-		330CC3AA12FAEEB2000283DE /* TrackingElements.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackingElements.xib; sourceTree = "<group>"; };
 		33D7296312F85998009CD4A3 /* libOpenNI.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libOpenNI.dylib; path = /usr/lib/libOpenNI.dylib; sourceTree = "<absolute>"; };
 		4BA2589D1153B0790008D49C /* GRAreaDataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRAreaDataSet.h; sourceTree = "<group>"; };
 		4BA2589E1153B0790008D49C /* GRAxes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRAxes.h; sourceTree = "<group>"; };
@@ -650,16 +644,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		330CC3A712FAEEB2000283DE /* TrackingElements */ = {
-			isa = PBXGroup;
-			children = (
-				330CC3A812FAEEB2000283DE /* TrackingElements.h */,
-				330CC3A912FAEEB2000283DE /* TrackingElements.mm */,
-				330CC3AA12FAEEB2000283DE /* TrackingElements.xib */,
-			);
-			path = TrackingElements;
-			sourceTree = "<group>";
-		};
 		4BA2589C1153B0790008D49C /* GraphKitHeaders */ = {
 			isa = PBXGroup;
 			children = (
@@ -688,9 +672,9 @@
 		DD2561D712F3267E00BD0498 /* FysiskeReaktioner */ = {
 			isa = PBXGroup;
 			children = (
-				DD2561DB12F3269700BD0498 /* FysiskeReaktioner.xib */,
 				DD2561D812F3268D00BD0498 /* FysiskeReaktioner.h */,
 				DD2561D912F3268D00BD0498 /* FysiskeReaktioner.mm */,
+				DD2561DB12F3269700BD0498 /* FysiskeReaktioner.xib */,
 			);
 			path = FysiskeReaktioner;
 			sourceTree = "<group>";
@@ -698,7 +682,6 @@
 		DD593CDC12E4A761005F2189 /* Kinect */ = {
 			isa = PBXGroup;
 			children = (
-				330CC33112FAC884000283DE /* Filter.h */,
 				DD593CDD12E4A777005F2189 /* Kinect.xib */,
 				DD593CDF12E4A78D005F2189 /* Kinect.h */,
 				DD593CE012E4A78D005F2189 /* Kinect.mm */,
@@ -1490,7 +1473,6 @@
 		DDC8EA5D113809B100574926 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				330CC3A712FAEEB2000283DE /* TrackingElements */,
 				DD9C01C512E8755600EF6F51 /* Wave */,
 				DD2561D712F3267E00BD0498 /* FysiskeReaktioner */,
 				DD593CDC12E4A761005F2189 /* Kinect */,
@@ -1904,11 +1886,7 @@
 				DD593DAF12E4A9A1005F2189 /* README in Resources */,
 				DD9C01CA12E8758A00EF6F51 /* Wave.xib in Resources */,
 				DD2561DC12F3269700BD0498 /* FysiskeReaktioner.xib in Resources */,
-<<<<<<< HEAD
 				7F521A7C12FB26AB00FEDF19 /* icon.icns in Resources */,
-=======
-				330CC3AC12FAEEB2000283DE /* TrackingElements.xib in Resources */,
->>>>>>> 2cdcadcd52a96b9a772c63f7d49cb06b642bff93
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2028,7 +2006,6 @@
 				DD0A21DD12EF0F6D0068DCF1 /* DCAudioRecorder.cpp in Sources */,
 				DD0A229D12EF1CA10068DCF1 /* CARingBuffer.cpp in Sources */,
 				DD2561DA12F3268D00BD0498 /* FysiskeReaktioner.mm in Sources */,
-				330CC3AB12FAEEB2000283DE /* TrackingElements.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
