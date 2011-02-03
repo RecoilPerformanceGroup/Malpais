@@ -3,6 +3,7 @@
 #include "Plugin.h"
 #include "ofxOpenNI.h"
 #include "ofxOpenCv.h"
+#include "Filter.h"
 
 #define NUM_SEGMENTS 6
 
@@ -10,6 +11,33 @@ struct Dancer {
 	int userId;
 	int state;
 };
+
+
+@interface PersistentBlob : NSObject
+{
+@public
+	long unsigned int pid;
+	ofxPoint2f * centroid;
+	ofxPoint2f * lastcentroid;
+	ofxVec2f   * centroidV;
+	
+	ofxPoint3f * centroidFiltered;
+
+	Filter * centroidFilter[3];
+	
+	int timeoutCounter;
+	NSMutableArray * blobs;
+	long age;
+	
+}
+@property (assign) NSMutableArray * blobs;
+
+-(ofxPoint2f) getLowestPoint;
+-(ofxPoint3f) centroidFiltered;
+-(void) dealloc;
+
+@end
+
 
 @interface Blob : NSObject
 {
@@ -31,8 +59,6 @@ struct Dancer {
 @property (readwrite) int avgDepth;
 
 -(void) normalize:(int)w height:(int)h;
--(void) lensCorrect;
--(void) warp;
 -(void) dealloc;
 
 -(id)initWithBlob:(ofxCvBlob*)_blob;
@@ -100,6 +126,7 @@ struct Dancer {
 	ofxCvContourFinder 	* contourFinder;
 	NSMutableArray * blobs;
 	NSMutableArray * threadBlobs;
+	NSMutableArray * persistentBlobs;
 
 	
 	NSThread * thread;
@@ -113,9 +140,14 @@ struct Dancer {
 	int distanceFar[NUM_SEGMENTS];
 	
 	int threadHeatMap[1000];
+	ofxPoint3f threadWorldPos[640*480];
+	
+	long unsigned int pidCounter;
+
 }
 
 @property (copy, readwrite) NSMutableArray * blobs;
+@property (readonly) NSMutableArray * persistentBlobs;
 
 -(ofxPoint2f) point2:(int)point;
 -(ofxPoint3f) point3:(int)point;
@@ -125,6 +157,7 @@ struct Dancer {
 -(void) setPoint2:(int) point coord:(ofxPoint2f)coord;
 -(void) setProjPoint:(int) point coord:(ofxPoint2f)coord;
 
+-(ofxPoint3f) convertKinectToWorld:(ofxPoint3f)p;
 -(ofxPoint3f) convertWorldToProjection:(ofxPoint3f) p;
 -(ofxPoint3f) convertWorldToFloor:(ofxPoint3f) p;
 

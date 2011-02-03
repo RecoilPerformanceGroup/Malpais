@@ -3,6 +3,66 @@
 #import "Keystoner.h"
 #include <algorithm>
 
+
+//--------------------
+//-- Persistent Blob --
+//--------------------
+
+
+
+@implementation PersistentBlob
+@synthesize blobs;
+-(id) init{
+	if([super init]){
+		timeoutCounter = 0;
+		centroid = new ofxPoint2f;
+		lastcentroid = new ofxPoint2f;
+		centroidV = new ofxVec2f;
+		centroidFiltered = new ofxPoint3f;
+		
+		centroidFilter[0] = new Filter();
+		centroidFilter[1] = new Filter();					
+		centroidFilter[2] = new Filter();					
+
+		centroidFilter[0]->setNl(9.413137469932821686e-04, 2.823941240979846506e-03, 2.823941240979846506e-03, 9.413137469932821686e-04);
+		centroidFilter[0]->setDl(1, -2.5818614306773719263, 2.2466666427559748864, -.65727470210265670262);
+		centroidFilter[1]->setNl(9.413137469932821686e-04, 2.823941240979846506e-03, 2.823941240979846506e-03, 9.413137469932821686e-04);
+		centroidFilter[1]->setDl(1, -2.5818614306773719263, 2.2466666427559748864, -.65727470210265670262);
+		centroidFilter[2]->setNl(9.413137469932821686e-04, 2.823941240979846506e-03, 2.823941240979846506e-03, 9.413137469932821686e-04);
+		centroidFilter[2]->setDl(1, -2.5818614306773719263, 2.2466666427559748864, -.65727470210265670262);
+		
+		blobs = [[NSMutableArray array] retain];
+	}
+	return self;
+}
+
+-(ofxPoint2f) getLowestPoint{
+	ofxPoint2f low;
+	Blob * blob;
+	for(blob in blobs){
+		if([blob getLowestPoint].y > low.y){
+			low = [blob getLowestPoint];
+		}
+	}
+	return low;
+}
+
+-(ofxPoint3f) centroidFiltered{
+	//return ofxPoint2f(centroidFiltered[0], centroidFiltered[1]);
+	return *centroidFiltered;
+}
+-(void) dealloc {
+	delete centroid;
+	delete lastcentroid;
+	delete centroidV;
+	[blobs removeAllObjects];
+	[blobs release];
+	[super dealloc];
+}
+
+@end
+
+
 //--------------------
 //-- Blob --
 //--------------------
@@ -126,8 +186,15 @@
 
 
 
+
+//--------------------
+//-- Kinect plugin --
+//--------------------
+
+
+
 @implementation Kinect
-@synthesize blobs;
+@synthesize blobs, persistentBlobs;
 
 -(void) initPlugin{
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-30 maxValue:30] named:@"angle1"];
@@ -139,6 +206,14 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:4] named:@"priority2"];
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:500] named:@"segmentSize"];
+	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:10000] named:@"minDistance"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10000 minValue:0 maxValue:10000] named:@"maxDistance"];	
+	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-10000 maxValue:10000] named:@"yMin"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1000 minValue:0 maxValue:10000] named:@"yMax"];	
+	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:0 maxValue:1] named:@"persistentDist"];	
 	
 	if([customProperties valueForKey:@"point0a"] == nil){
 		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0a"];
@@ -180,6 +255,8 @@
 	
 	blobs = [[NSMutableArray array] retain];
 	threadBlobs = [[NSMutableArray array] retain];
+	persistentBlobs = [[NSMutableArray array] retain];
+	
 }
 
 -(void) setup{
@@ -223,42 +300,140 @@
 		
 		//Blob tracking
 		{
+			xn::DepthMetaData dmd;
+			depth.getXnDepthGenerator().GetMetaData(dmd);	
+			const XnDepthPixel* pixels = dmd.Data();
+			
 			pthread_mutex_lock(&drawingMutex);
 			pthread_mutex_lock(&mutex);
-			if(!threadUpdateContour){
-				
-				xn::DepthMetaData dmd;
-				depth.getXnDepthGenerator().GetMetaData(dmd);	
-				
-				// get the pixels
-				const XnDepthPixel* pixels = dmd.Data();
+			if(!threadUpdateContour){				
 				
 				memcpy(threadedPixels, pixels, 640*480*sizeof(XnDepthPixel));
 				
-				
-				//Find segmenter
-				
-				
-				
-				//	
 				for(int i=0;i<NUM_SEGMENTS;i++){
 					*grayImage[i] = *threadGrayImage[i];
-					//	threadGrayImage[i]->set(0);					
 				}
 				
 				[self setBlobs:threadBlobs];
 				
-				threadUpdateContour = YES;
-				
-				
+				threadUpdateContour = YES;				
 			}
 			
 			pthread_mutex_unlock(&mutex);
+			
+			
+			
+			//Clear blobs
+			for(PersistentBlob * pblob in persistentBlobs){
+				ofxPoint2f p = pblob->centroid - pblob->lastcentroid;
+				pblob->centroidV->x = p.x;
+				pblob->centroidV->y = p.y;
+				pblob->lastcentroid = pblob->centroid ;
+				[pblob->blobs removeAllObjects];
+				pblob->age ++;
+			}
+			
+			for(Blob * blob in blobs){
+				bool blobFound = false;
+				float shortestDist = 0;
+				int bestId = -1;
+				
+				ofxPoint3f centroid = ofxPoint3f([blob centroid].x*640, [blob centroid].y*480, [blob avgDepth]);
+				ofxPoint3f floorCentroid3 = [self convertWorldToFloor:[self convertKinectToWorld:centroid]];
+				ofxPoint2f floorCentroid = ofxPoint2f(floorCentroid3.x, floorCentroid3.z);
+				
+				//Går igennem alle grupper for at finde den nærmeste gruppe som blobben kan tilhøre
+				//Magisk høj dist: 0.3
+				
+				/*for(int u=0;u<[persistentBlobs count];u++){
+				 //Giv forrang til døde persistent blobs
+				 if(((PersistentBlob*)[persistentBlobs objectAtIndex:u])->timeoutCounter > 5){
+				 float dist = centroid.distance(*((PersistentBlob*)[persistentBlobs objectAtIndex:u])->centroid);
+				 if(dist < [persistentSlider floatValue]*0.5 && (dist < shortestDist || bestId == -1)){
+				 bestId = u;
+				 shortestDist = dist;
+				 blobFound = true;
+				 }
+				 }
+				 }*/
+				if(!blobFound){						
+					for(int u=0;u<[persistentBlobs count];u++){
+						//						ofxPoint2f centroidPoint = [GetPlugin(ProjectionSurfaces) convertPoint:*((PersistentBlob*)[persistentBlobs objectAtIndex:u])->centroid fromProjection:"Front" surface:"Floor"];
+						ofxPoint2f centroidPoint = *((PersistentBlob*)[persistentBlobs objectAtIndex:u])->centroid;
+						float dist = floorCentroid.distance(centroidPoint);
+						if(dist < PropF(@"persistentDist") && (dist < shortestDist || bestId == -1)){
+							bestId = u;
+							shortestDist = dist;
+							blobFound = true;
+						}
+					}
+				}
+				
+				if(blobFound){	
+					//					[currrentPblobCounter setIntValue:[currrentPblobCounter intValue] +1];
+					
+					PersistentBlob * bestBlob = ((PersistentBlob*)[persistentBlobs objectAtIndex:bestId]);
+					
+					//					[bestBlob->blobs removeAllObjects];
+					
+					//Fandt en gruppe som den her blob kan tilhøre.. Pusher blobben ind
+					bestBlob->timeoutCounter = 0;
+					[bestBlob->blobs addObject:blob];
+					
+					//regner centroid ud fra alle blobs i den
+					bestBlob->centroid->set(0, 0);
+					for(int g=0;g<[bestBlob->blobs count];g++){
+						ofxPoint3f kinectCentroid = ofxPoint3f([[bestBlob->blobs objectAtIndex:g] centroid].x*640, [[bestBlob->blobs objectAtIndex:g] centroid].y*480, [[bestBlob->blobs objectAtIndex:g] avgDepth]);
+						ofxPoint3f blobCentroid3 = [self convertWorldToFloor:[self convertKinectToWorld:kinectCentroid]];
+						ofxPoint2f blobCentroid = ofxPoint2f(blobCentroid3.x, blobCentroid3.z);
+						*bestBlob->centroid += blobCentroid;					
+					}
+					*bestBlob->centroid /= (float)[bestBlob->blobs count];
+					
+					ofxPoint3f kinectLowestPoint = ofxPoint3f([bestBlob getLowestPoint].x*640, [bestBlob getLowestPoint].y*480, pixels[(int)([bestBlob getLowestPoint].x*640+[bestBlob getLowestPoint].y*480*640)]);
+					ofxPoint3f lowestPointFloor = [self convertWorldToFloor:[self convertKinectToWorld:kinectLowestPoint]];
+
+										
+					bestBlob->centroidFiltered->x = bestBlob->centroidFilter[0]->filter(bestBlob->centroid->x);
+					bestBlob->centroidFiltered->y = bestBlob->centroidFilter[1]->filter(lowestPointFloor.y);
+					bestBlob->centroidFiltered->y = bestBlob->centroidFilter[1]->filter(lowestPointFloor.y);
+					bestBlob->centroidFiltered->y = bestBlob->centroidFilter[1]->filter(lowestPointFloor.y);
+					bestBlob->centroidFiltered->z = bestBlob->centroidFilter[2]->filter(bestBlob->centroid->y);
+				}
+				
+				if(!blobFound){
+					//Der var ingen gruppe til den her blob, så vi laver en
+					PersistentBlob * newB = [[PersistentBlob alloc] init];
+					[newB->blobs addObject:blob];
+					*newB->centroid = floorCentroid;
+
+					ofxPoint3f kinectLowestPoint = ofxPoint3f([newB getLowestPoint].x*640, [newB getLowestPoint].y*480, pixels[(int)([newB getLowestPoint].x*640+[newB getLowestPoint].y*480*640)]);
+					ofxPoint3f lowestPointFloor = [self convertWorldToFloor:[self convertKinectToWorld:kinectLowestPoint]];
+					
+					newB->centroidFilter[0]->setStartValue(floorCentroid.x);
+					newB->centroidFilter[1]->setStartValue(lowestPointFloor.y);
+					newB->centroidFilter[2]->setStartValue(floorCentroid.y);
+
+					*newB->centroidFiltered = *newB->centroid;
+					newB->pid = pidCounter++;
+					newB->age = 0;
+					[persistentBlobs addObject:newB];		
+					
+					//[newestId setIntValue:pidCounter];
+				}
+			}		
+			
+			//Delete all the old pblobs
+			for(int i=0; i< [persistentBlobs count] ; i++){
+				PersistentBlob * blob = [persistentBlobs objectAtIndex:i];
+				blob->timeoutCounter ++;
+				if(blob->timeoutCounter > 10){
+					[persistentBlobs removeObject:blob];
+				}			
+			}
+			
 			pthread_mutex_unlock(&drawingMutex);
 		}
-		
-		
-		//cout<<"Depth max value: "<<depth.getXnDepthGenerator().GetDevice MaxDepth()<<endl;
 		
 		vector<ofxTrackedUser*> vusers = users.getFoundUsers(); 
 		
@@ -356,8 +531,12 @@
 		dispatch_async(dispatch_get_main_queue(), ^{			
 			if(numberNonstoredUsers == 1){
 				[storeA setEnabled:true];
+				[storeB setEnabled:true];
+				[storeC setEnabled:true];
 			} else {
 				[storeA setEnabled:false];	
+				[storeB setEnabled:false];	
+				[storeC setEnabled:false];	
 			}
 		});
 	}
@@ -388,6 +567,28 @@
 		ofLine(projHandles[0].x, projHandles[0].y, projHandles[2].x, projHandles[2].y);
 		
 		
+		
+		for(PersistentBlob * b in persistentBlobs){
+			/*	ofxPoint3f o = ofxPoint3f([b centroidFiltered].x*640, [b centroidFiltered].y*480, [b avgDepth]);
+			 cout<<o.x<<"  "<<o.y<<"  "<<o.z<<endl;
+			 ofxPoint3f foot = [self convertKinectToWorld:o];
+			 ofxPoint3f wfoot = [self convertWorldToFloor:foot];
+			 */	
+			ofxPoint3f p = [b centroidFiltered];
+
+			ofSetLineWidth(1);
+			ofFill();
+			ofSetColor(255, 255, 255);
+			ofNoFill();
+			ofCircle(p.x, p.z, 10.0/640);
+			
+			ofFill();
+			ofSetColor(255, 255, 255,255*(1-p.y/300.0));
+			ofCircle(p.x, p.z, 10.0/640);
+			
+			//			cout<<wfoot.x<<"  "<<wfoot.z<<endl;
+			
+		}
 		
 		ofxPoint3f kinect = [self convertWorldToFloor:ofxPoint3f(0,0,0)];
 		
@@ -850,41 +1051,85 @@
 				glScaled(0.5, 0.5, 1.0);
 				users.draw();
 				glPopMatrix();
-				
-				Blob * b;
-				for(b in blobs){
-					switch ([b segment]) {
+				/*
+				 Blob * b;
+				 for(b in blobs){
+				 switch ([b segment]) {
+				 case 0:
+				 ofSetColor(255, 0, 0);
+				 break;
+				 case 1:
+				 ofSetColor(0, 255, 0);
+				 break;
+				 case 2:
+				 ofSetColor(0, 0, 255);
+				 break;
+				 case 3:
+				 ofSetColor(255, 255, 0);
+				 break;
+				 case 4:
+				 ofSetColor(255, 0, 255);
+				 break;
+				 default:
+				 break;
+				 }
+				 glBegin(GL_LINE_STRIP);
+				 for(int i=0;i<[b nPts];i++){
+				 ofxVec2f p = [b pts][i];
+				 //				p = [GetPlugin(ProjectionSurfaces) convertPoint:[b pts][i] fromProjection:"Front" surface:"Floor"];
+				 p = [b originalblob]->pts[i];
+				 glVertex2f(p.x*320, p.y*240);
+				 
+				 //glVertex2f(w*3+p.x/640.0*w, p.y/480.0*h);
+				 //cout<<p.x<<"  "<<p.y<<endl;
+				 
+				 }
+				 glEnd();
+				 }*/
+				PersistentBlob * blob;				
+				for(blob in persistentBlobs){
+					int i=blob->pid%5;
+					switch (i) {
 						case 0:
-							ofSetColor(255, 0, 0);
+							ofSetColor(255, 0, 0,255);
 							break;
 						case 1:
-							ofSetColor(0, 255, 0);
+							ofSetColor(0, 255, 0,255);
 							break;
 						case 2:
-							ofSetColor(0, 0, 255);
+							ofSetColor(0, 0, 255,255);
 							break;
 						case 3:
-							ofSetColor(255, 255, 0);
+							ofSetColor(255, 255, 0,255);
 							break;
 						case 4:
-							ofSetColor(255, 0, 255);
+							ofSetColor(0, 255, 255,255);
 							break;
+						case 5:
+							ofSetColor(255, 0, 255,255);
+							break;
+							
 						default:
+							ofSetColor(255, 255, 255,255);
 							break;
 					}
-					glBegin(GL_LINE_STRIP);
-					for(int i=0;i<[b nPts];i++){
-						ofxVec2f p = [b pts][i];
-						//				p = [GetPlugin(ProjectionSurfaces) convertPoint:[b pts][i] fromProjection:"Front" surface:"Floor"];
-						p = [b originalblob]->pts[i];
-						glVertex2f(p.x*320, p.y*240);
-						
-						//glVertex2f(w*3+p.x/640.0*w, p.y/480.0*h);
-						//cout<<p.x<<"  "<<p.y<<endl;
-						
+					Blob * b;
+					for(b in [blob blobs]){
+						glBegin(GL_LINE_STRIP);
+						for(int i=0;i<[b nPts];i++){
+							ofxVec2f p = [b pts][i];
+							//				p = [GetPlugin(ProjectionSurfaces) convertPoint:[b pts][i] fromProjection:"Front" surface:"Floor"];
+							p = [b originalblob]->pts[i];
+							glVertex2f(320*p.x, 240*p.y);
+							
+							//glVertex2f(w*3+p.x/640.0*w, p.y/480.0*h);
+							//cout<<p.x<<"  "<<p.y<<endl;
+							
+						}
+						glEnd();
 					}
-					glEnd();
 				}
+				
 			}glPopMatrix();	
 		}
 	}
@@ -939,6 +1184,24 @@
 									  -PropF(@"angle2")*DEG_TO_RAD, ofxVec3f(0,0,1),
 									  PropF(@"angle3")*DEG_TO_RAD, ofxVec3f(1,0,0));
 	scale = 1.0/(points[1]-points[0]).length() ;
+	
+}
+
+-(ofxPoint3f) convertKinectToWorld:(ofxPoint3f)p{
+	if(!stop){
+		XnPoint3D pIn;
+		pIn.X = p.x;
+		pIn.Y = p.y;
+		pIn.Z = p.z;
+		XnPoint3D pOut;
+		
+		depth.getXnDepthGenerator().ConvertProjectiveToRealWorld(1, &pIn, &pOut);
+		
+		return ofxPoint3f(pOut.X, pOut.Y, pOut.Z);
+	} else {
+		return nil;
+	}
+	
 	
 }
 
@@ -1127,65 +1390,51 @@
 -(void) applicationWillTerminate:(NSNotification *)note{
 	stop = true;
 	context.getXnContext().Shutdown();
-	/*delete &users;
-	 delete &depth;
-	 delete &context;*/
 }
 
-
-
 //-----
-// Blob tracking
+// Blob tracking - the hard part
 //-----
 -(void) performBlobTracking:(id)param{
-	while(1){
-		
+	while(1){		
 		pthread_mutex_lock(&mutex);			
 		
 		if(threadUpdateContour){
-			/*		
-			 cout<<"ASIODJOIASD    "<<contourFinder->nBlobs<<endl;*/
-			
-			
-			/*for(int i=0;i<640*480;i++){
-			 pixelBuffer[i] = 0;
-			 }
-			 */
-			
 			int count = 0;
+			int lastSegment = 0;			
 			
-			int segmentSize = PropI(@"segmentSize");
+			int segmentSize = PropI(@"segmentSize");			
+			int min = PropI(@"minDistance");
+			int max = PropI(@"maxDistance");
 			
-			int lastSegment = 0;		
+			int ymin = PropF(@"yMin");
+			int ymax = PropF(@"yMax");
 			
-			//	memcpy(threadedPixelsSorted, threadedPixels, 640*480*sizeof(XnDepthPixel));
-			
-			//sort(threadedPixelsSorted,threadedPixelsSorted+640*480-1);
+			[threadBlobs removeAllObjects];
 			
 			
-			memset(threadHeatMap, 0, 1000);
+			
+			
+			
 			for(int i=0;i<1000;i++){
 				threadHeatMap[i] = 0;
 			}
 			
-			for(int i=0;i<640*480;i++){				
+			for(int i=0;i<640*480;i++){	
 				int index = threadedPixels[i] / 10.0;
 				threadHeatMap[index] ++;
 			}
 			
 			
-			[threadBlobs removeAllObjects];
-			//cout<<"    ---   "<<endl;
+			for(int i=0;i<1000;i++){
+				if(i*10.0 < min || i*10.0 > max)
+					threadHeatMap[i] = 0;
+			}
+			
 			while(count < NUM_SEGMENTS){
-				//				
-				//				cout<<count<<endl;
 				if(lastSegment < 9600){
 					memset(pixelBufferTmp, 0, 640*480);
 					
-					/*					for(int i=0;i<640*480;i++){
-					 pixelBufferTmp[i] = 0;
-					 }
-					 */					
 					int nearestPixel = -1;		
 					int start = ceil(lastSegment/10.0)+1;
 					for(int i=start;i<1000;i++){							
@@ -1195,46 +1444,27 @@
 						}
 					}
 					
-					/*	for(int i=0;i<640*480;i++){
-					 if((nearestPixel == -1 || threadedPixels[i] < nearestPixel) && threadedPixels[i] > lastSegment){
-					 nearestPixel = threadedPixels[i];
-					 //break;
-					 }					
-					 }*/
-					
-					
 					if(nearestPixel != -1){					
 						int c = 0;
-						//Find s
-						int s = 0;
-						
-						int start = ceil(nearestPixel/10.0);
-						for(int i=start;i<1000;i++){							
-							if(threadHeatMap[i] > 0 && i * 10.0 <= nearestPixel + s + segmentSize){
-								s = i*10.0 - nearestPixel;								
-							}
-							/*
-							 if(threadedPixelsSorted[i] >= nearestPixel && threadedPixelsSorted[i] <= nearestPixel + s + segmentSize){
-							 s = threadedPixelsSorted[i] - nearestPixel;
-							 }*/
-						}
-						
-						
-						
+						//Find s - the size of the segment
+						int s = 0;						
 						if(nearestPixel > 9000){
 							s = 1000;
+						} else {							
+							int start = ceil(nearestPixel/10.0);
+							for(int i=start;i<1000;i++){							
+								if(threadHeatMap[i] > 0 && i * 10.0 <= nearestPixel + s + segmentSize){
+									s = i*10.0 - nearestPixel;								
+								}
+							}
 						}
 						
 						if(s > 0){
 							for(int i=0;i<640*480;i++){
 								if(threadedPixels[i] >= nearestPixel && threadedPixels[i] < nearestPixel + s){
 									pixelBufferTmp[i] = 255;
-									//nearestPixel = threadedPixels[i];
-									//		pixelBuffer[i] = 255-nearestPixel/10000.0*255.0;
 									c++;
-								} else {
-									//							break;
-								}
+								} 
 							}	
 						}
 						lastSegment = nearestPixel+s;
@@ -1257,11 +1487,13 @@
 								avg /= (float)blob->pts.size();
 								[blobObj setAvgDepth:avg];
 								
-								[threadBlobs addObject:blobObj];							
+								ofxPoint2f p = [blobObj getLowestPoint];
+								ofxPoint3f p3 = [self convertWorldToFloor:[self convertKinectToWorld:ofxPoint3f(p.x*640,p.y*480,avg)]];
+								if(p3.y > ymin && p3.y < ymax){								
+									[threadBlobs addObject:blobObj];							
+								}
 							}
 							
-							//	if(count == 0)
-							//	cout<<"Segment "<<count<<" found "<<contourFinder->nBlobs<<" nearest pixel is "<<nearestPixel<<"    c  "<<c<<"    s: "<<s<<endl;
 							distanceNear[count] = nearestPixel;
 							distanceFar[count] = nearestPixel + s;
 						} else {
@@ -1275,8 +1507,6 @@
 				}
 				count ++;				
 			}		
-			
-			//	threadGrayImage->setFromPixels(pixelBuffer,640,480);						
 		}
 		
 		threadUpdateContour = false;		
@@ -1285,7 +1515,6 @@
 		
 		[NSThread sleepForTimeInterval:0.01];
 	}
-	
 }
 
 @end

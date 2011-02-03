@@ -48,7 +48,7 @@ extern ofAppBaseWindow * window;
 
 //	[pluginManagerController addPlugin:[[Wave alloc] init]];
 	[pluginManagerController addPlugin:[[FysiskeReaktioner alloc] init]];
-
+	[pluginManagerController addPlugin:[[TrackingElements alloc] init]];
 	//[pluginManagerController addPlugin:[[SamplePlugin alloc] init]];
 	//[pluginManagerController addPlugin:[[SamplePlugin2 alloc] init]];
 
