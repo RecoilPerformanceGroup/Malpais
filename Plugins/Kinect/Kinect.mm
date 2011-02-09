@@ -1135,7 +1135,26 @@
 	}
 }
 
-
+-(vector<ofxPoint3f>) getPointsInBoxXMin:(float)xMin xMax:(float)xMax yMin:(float)yMin yMax:(float)yMax zMin:(float)zMin zMax:(float)zMax res:(int)res{
+	xn::DepthMetaData dmd;
+	depth.getXnDepthGenerator().GetMetaData(dmd);	
+	const XnDepthPixel* pixels = dmd.Data();
+	
+	
+	vector<ofxPoint3f> points;
+	for(int i=0;i<640*480;i+=res){
+		int x = i % 640;
+		int y = floor(i / 640);
+		if(pixels[i] > 0){
+			ofxPoint3f p = [self convertWorldToFloor:[self convertKinectToWorld:ofxPoint3f(x,y, pixels[i])]];
+			if(p.x > xMin && p.x < xMax && p.y > yMin && p.y < yMax && p.z > zMin && p.z < zMax){
+				points.push_back(p);
+			}
+		}
+	}
+	
+	return points;	
+}
 
 -(void) calculateMatrix{
 	ofxVec2f v1, v2, v3;

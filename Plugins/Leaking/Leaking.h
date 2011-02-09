@@ -2,34 +2,49 @@
 
 #include "Plugin.h"
 #include "ofxVectorMath.h"
-#include "ofxOpenCv.h"
 
-#define IMGWIDTH 300.0
-#define IMGHEIGHT 600.0
-#define NUMIMAGES 5
+#define NUMPOINTS 40
 
-@interface Leaking : ofPlugin {
-	ofxCvFloatImage * images[NUMIMAGES];
-	ofxCvContourFinder * contourFinder[NUMIMAGES];
+struct RPoint {
+	ofxPoint2f pos;
+	ofxVec2f f;
+	ofxVec2f v;
+};
 
+@interface Rubber : NSObject
+{
+	vector<RPoint> points;
 	
-	ofxCvFloatImage * tmpImage;
+	NSNumber * elasticForce;
+	NSNumber * damping;
+	NSNumber * pullForce;
+	NSNumber * speed;
 	
-	float mousex,mousey,mouseh;
-	
-	vector<CvPoint> storedPoints;
-
-	bool clear;
-	
-	bool imageSelected;
-	int curImage;
-	int timeoutCounter[NUMIMAGES];
-	
-	float blurSpeed[NUMIMAGES];
-	float blurCounter[NUMIMAGES];
-	
+	vector<ofxPoint2f> lastPointsIn;
 
 }
 
--(float) percentage:(int)image;
+@property (readwrite, retain) NSNumber * elasticForce;
+@property (readwrite, retain) NSNumber * damping;
+@property (readwrite, retain) NSNumber * pullForce;
+@property (readwrite, retain) NSNumber * speed;
+
+-(void) updateWithPoints:(vector<ofxPoint2f>) points;
+
+-(void) updateWithTimestep:(float)time;
+
+@end
+
+
+@interface Leaking : ofPlugin {
+	float mousex,mousey,mouseh;
+	
+	bool clear;
+	
+	NSMutableArray * rubbers;
+	
+	int timeout;
+}
+
+-(float) aspect;
 @end
