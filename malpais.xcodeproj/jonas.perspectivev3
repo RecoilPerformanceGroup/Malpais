@@ -274,36 +274,21 @@
 								<string>E4B69B4A0A3A1720003C02F2</string>
 								<string>DDF87490114AB2D0004B2FE2</string>
 								<string>DDC8EA5D113809B100574926</string>
-								<string>DD9C01C512E8755600EF6F51</string>
-								<string>DD0A217F12EEFAB90068DCF1</string>
-								<string>DD6DCDED12E9B4FC00F2B664</string>
-								<string>DD2561D712F3267E00BD0498</string>
-								<string>DD593CDC12E4A761005F2189</string>
-								<string>DDB7C34B12AD221800197290</string>
-								<string>DDC8EA62113809C900574926</string>
+								<string>33ED1B0613015A520090E1EB</string>
 								<string>E4B69E1C0A3A1BDC003C02F2</string>
-								<string>E45BE0360E8CC5DE009D7055</string>
-								<string>DD7B144C11A3CF38000D9775</string>
-								<string>DD593CE212E4A9A1005F2189</string>
-								<string>DD593D6A12E4A9A1005F2189</string>
-								<string>DDB7C14A12AD16C000197290</string>
-								<string>DDB7C14B12AD16C000197290</string>
-								<string>DDB7C15E12AD16C000197290</string>
-								<string>DDB7C19612AD16C000197290</string>
-								<string>DDB7C1D012AD16C000197290</string>
-								<string>DDB7C1D712AD16C000197290</string>
 								<string>1C37FBAC04509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>40</integer>
+									<integer>13</integer>
+									<integer>11</integer>
 									<integer>7</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 1144}, {202, 696}}</string>
+							<string>{{0, 0}, {202, 696}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -338,7 +323,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>DDC8E5A71137309300574926</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>SharedContextLayer.mm</string>
+								<string>Leaking.mm</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -346,11 +331,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>DDC8E5A81137309300574926</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>SharedContextLayer.mm</string>
+										<string>Leaking.mm</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>DD3188B413048CB600877DC1</string>
+										<string>DD31894F13049F8000877DC1</string>
 										<key>history</key>
 										<array>
 											<string>DDC8EDC01138454100574926</string>
@@ -448,7 +433,6 @@
 											<string>DDB7C3BA12AD265A00197290</string>
 											<string>DDB7C44112AD2B8600197290</string>
 											<string>DD593E0812E4AF26005F2189</string>
-											<string>DD593E0912E4AF26005F2189</string>
 											<string>DD593E5B12E5A518005F2189</string>
 											<string>DD593EEA12E5ACBD005F2189</string>
 											<string>DD4714B012E5B20100A64EBE</string>
@@ -484,7 +468,6 @@
 											<string>DD0A226812EF19260068DCF1</string>
 											<string>DD0A228E12EF1A800068DCF1</string>
 											<string>DD0A22B812EF1EF80068DCF1</string>
-											<string>DD0A235C12EF290A0068DCF1</string>
 											<string>DD0A235F12EF290A0068DCF1</string>
 											<string>DD0A239812EF34220068DCF1</string>
 											<string>DD0A23D112EF5C500068DCF1</string>
@@ -518,16 +501,21 @@
 											<string>DD2561E612F330CF00BD0498</string>
 											<string>DD2561E712F330CF00BD0498</string>
 											<string>DD25620412F3323900BD0498</string>
-											<string>DD25622012F3348100BD0498</string>
 											<string>DD6524B612F43702007C339C</string>
 											<string>DD6524B812F43702007C339C</string>
 											<string>DD6525EA12F45D00007C339C</string>
 											<string>DD6525EB12F45D00007C339C</string>
 											<string>DD6525EC12F45D00007C339C</string>
 											<string>DD6525ED12F45D00007C339C</string>
-											<string>DD6525EE12F45D00007C339C</string>
-											<string>DD53144212F45ECC00E68CF6</string>
-											<string>DD53144512F616AA00E68CF6</string>
+											<string>DD3188C113048EBA00877DC1</string>
+											<string>DD3188C213048EBA00877DC1</string>
+											<string>DD3188C313048EBA00877DC1</string>
+											<string>DD3188C413048EBA00877DC1</string>
+											<string>DD31892613049D2D00877DC1</string>
+											<string>DD31892713049D2D00877DC1</string>
+											<string>DD31892813049D2D00877DC1</string>
+											<string>DD31892913049D2D00877DC1</string>
+											<string>DD31894A13049E7C00877DC1</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -583,8 +571,6 @@
 									<dict>
 										<key>Frame</key>
 										<string>{{10, 27}, {1216, 213}}</string>
-										<key>RubberWindowFrame</key>
-										<string>0 101 1440 777 0 0 1440 878 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXProjectFindModule</string>
@@ -622,7 +608,9 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {1216, 199}}</string>
+										<string>{{10, 27}, {1216, 213}}</string>
+										<key>RubberWindowFrame</key>
+										<string>0 101 1440 777 0 0 1440 878 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -802,13 +790,13 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>DD53143712F45E2800E68CF6</string>
+				<string>DD3188C813048EBB00877DC1</string>
 				<string>1CCC7628064C1048000F2A68</string>
 				<string>1CCC7629064C1048000F2A68</string>
-				<string>DD53143812F45E2800E68CF6</string>
-				<string>DD53143912F45E2800E68CF6</string>
-				<string>DD53143A12F45E2800E68CF6</string>
-				<string>DD53143B12F45E2800E68CF6</string>
+				<string>DD3188C913048EBB00877DC1</string>
+				<string>DD3188CA13048EBB00877DC1</string>
+				<string>DD3188CB13048EBB00877DC1</string>
+				<string>DD3188CC13048EBB00877DC1</string>
 				<string>DDC8E5A71137309300574926</string>
 			</array>
 			<key>ToolbarConfigUserDefaultsMinorVersion</key>
@@ -843,6 +831,8 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
+		<string>DD3188CE13048EBB00877DC1</string>
+		<string>DD3188CF13048EBB00877DC1</string>
 		<string>/Users/jonas/Documents/udvilking/of_preRelease_v0062_osxSL_FAT/apps/recoil/Malpais/malpais.xcodeproj</string>
 	</array>
 	<key>WindowString</key>

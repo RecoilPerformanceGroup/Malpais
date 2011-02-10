@@ -68,12 +68,9 @@
 	return c;
 }
 
--(void) updateWithPoints:(vector<ofxPoint2f>) pointsIn{
-	
-	int pointsJumper = 1;
-	
+-(void) updateWithPoints:(vector<ofxPoint2f>) pointsIn{	
 	vector<ofPoint> poly;
-	for(int i=0;i<points.size();i+=pointsJumper){
+	for(int i=0;i<points.size();i+=2){
 		poly.push_back(points[i].pos);
 	}
 	
@@ -88,23 +85,72 @@
 		}
 	}		
 	
+	float _pullForce = [[self pullForce] floatValue];
+	
 	for(int i=0;i<N;i++){
 		if(!inPoly[i]){
+			int pointsJumper = 19;
+			
 			//Find nærmeste punkt
 			float bestDist = -1;
 			RPoint * bestPoint;
+			int bestJ1;
+			
+			//Tager først en hurtig tur rundt og finder den bedste
 			for(int j=0;j<points.size();j+=pointsJumper){
-				//				ofxVec2f v = points[j].pos - pointsIn[i];
-				//				float d = v.lengthSquared();
 				float d = points[j].pos.distanceSquared(pointsIn[i]) ;
 				if(bestDist == -1 || bestDist > d){
 					bestPoint = &points[j];
 					bestDist = d;
-				}
+					bestJ1 = j;
+				} 
 			}
+			
+			pointsJumper = 5;
+			int searchDist = 20;
+			
+			int bestJ2 = bestJ1;
+			for(int s=0;s<2;s++){				
+				//Har nu en cirka punkt. Søger nu rundt om den
+				for(int j=bestJ1+1;j<bestJ1+searchDist;j+=pointsJumper){
+					int realJ = j;
+					if(realJ >= points.size())
+						realJ -= points.size();
+					
+					float d = points[j].pos.distanceSquared(pointsIn[i]) ;
+					if(bestDist > d){
+						bestPoint = &points[j];
+						bestDist = d;
+						bestJ2 = j;
+					} 
+				}
+				for(int j=bestJ1-1;j>bestJ1-searchDist;j-=pointsJumper){
+					int realJ = j;
+					if(realJ < 0)
+						realJ += points.size();
+					
+					float d = points[j].pos.distanceSquared(pointsIn[i]) ;
+					if(bestDist > d){
+						bestPoint = &points[j];
+						bestDist = d;
+						bestJ2 = j;
+					} 
+				}
+				bestJ1 = bestJ2;
+				pointsJumper = 1;
+				searchDist = 3;
+			}	
+			/*		
+			 for(int j=0;j<points.size();j+=1){
+			 float d = points[j].pos.distanceSquared(pointsIn[i]) ;
+			 if(bestDist == -1 || bestDist > d){
+			 bestPoint = &points[j];
+			 bestDist = d;
+			 } 
+			 }*/
 			if(bestPoint != nil){
 				ofxVec2f v = bestPoint->pos - pointsIn[i];
-				bestPoint->f += -0.01*v*[[self pullForce] floatValue]*1.0/(pointsIn.size()/100.0);
+				bestPoint->f += -0.01*v*_pullForce*1.0/(pointsIn.size()/100.0);
 			}
 		} 
 	}
@@ -127,15 +173,25 @@
 	
 	
 	for (Rubber * obj in array) {
-		if(obj != self){
+		bool isSelf = (obj == self);
+		
+		if(!isSelf){
+			ofxPoint2f center = [obj centroid];
+			bool centerInPoly = ofInsidePoly(center.x, center.y, poly);
+			
+			ofxVec2f centerGoal;
+			if(centerInPoly){
+				ofxVec2f v = center - [self centroid];
+				centerGoal = center + v;
+			}
+			
+			//Gå igennem alle punkter for at se om nogen er inde i en anden blob
 			for(int u=0;u<obj->points.size();u++){
-				ofxPoint2f center = [obj centroid];
 				RPoint * pThat = &obj->points[u];
-				bool centerInPoly = ofInsidePoly(center.x, center.y, poly);
 				if(ofInsidePoly(pThat->pos.x, pThat->pos.y, poly)){
 					ofxPoint2f goal;
 					if(centerInPoly){
-						goal = ofxPoint2f(aspect/2.0 , 0);
+						goal = centerGoal;
 					} else {
 						goal = center;
 					}
@@ -144,40 +200,67 @@
 			}
 		}
 		
-		for(int i=0;i<points.size();i++){
-			RPoint * pThis = &points[i];
-			for(int u=0;u<obj->points.size();u++){
-				RPoint * pThat = &obj->points[u];
-				if(pThis != pThat){
-					ofxVec2f v = pThis->pos - pThat->pos;
-					float d = v.length();
-					if(obj == self){
-						if(d < internalPushForceDist){
-							d *= 1.0/internalPushForceDist;
-							
-							float f = -d+1;
-							v.normalize();
-							float s = 0.00001;
-							pThat->f -= f*v*s*internalPushForce;		
-							
-						}
-						
-					} else {
-						if(d < externalPushForceDist){
-							d *= 1.0/externalPushForceDist;
-							
-							float f = -d+1;
-							v.normalize();
-							float s = 0.0001;
-							pThat->f -= f*v*s*externalPushForce;		
-							
-						}
-						
-						
+		bool proceed = false;
+		if(!isSelf){
+			//Laver en hurtig søgnin for at se om der er noget der ligner der er tæt på hinanden hvis det er et andet object
+			float shortestDist = -1;
+			int bestI, bestU;
+			for(int i=0;i<points.size();i+=10){
+				RPoint * pThis = &points[i];
+				
+				for(int u=0;u<obj->points.size();u+=10){
+					RPoint * pThat = &obj->points[u];
+					float d = pThat->pos.distanceSquared(pThis->pos);
+					if(shortestDist == -1 || d < shortestDist){
+						shortestDist = d;
+						bestI = i;
+						bestU = u;
 					}
-				}				
+				}
 			}
+
+			if(shortestDist < externalPushForceDist*externalPushForceDist ){
+				proceed = YES;
+			}
+		} else {
+			proceed = YES;
 		}
+		
+		
+		if(proceed){
+			for(int i=0;i<points.size();i++){
+				RPoint * pThis = &points[i];
+				for(int u=0;u<obj->points.size();u++){
+					RPoint * pThat = &obj->points[u];
+					if( i!=u || !isSelf ){
+						ofxVec2f v = pThis->pos - pThat->pos;
+						float d = v.length();
+						if(isSelf){
+							if(d < internalPushForceDist){
+								d *= 1.0/internalPushForceDist;
+								
+								float f = -d+1;
+								v.normalize();
+								float s = 0.00001;
+								pThat->f -= f*v*s*internalPushForce;		
+								
+							}
+							
+						} else {
+							if(d < externalPushForceDist){
+								d *= 1.0/externalPushForceDist;
+								
+								float f = -d+1;
+								v.normalize();
+								float s = 0.0001;
+								pThat->f -= f*v*s*externalPushForce;		
+								
+							}							
+						}
+					}				
+				}
+			}
+		}	
 	}
 }
 
@@ -244,12 +327,12 @@
 	glEnd();
 	
 	/*ofSetColor(255, 0, 0);
-	
-	glBegin(GL_POINTS);
-	for(int i=0;i<lastPointsIn.size();i++){
-		glVertex2d(lastPointsIn[i].x, lastPointsIn[i].y);
-	}
-	glEnd();*/
+	 
+	 glBegin(GL_POINTS);
+	 for(int i=0;i<lastPointsIn.size();i++){
+	 glVertex2d(lastPointsIn[i].x, lastPointsIn[i].y);
+	 }
+	 glEnd();*/
 }
 
 @end
@@ -261,7 +344,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2.0] named:@"state"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2000] named:@"yMax"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2000] named:@"goodPointMaxY"];	
-		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2.0] named:@"goodBadFactor"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2.0] named:@"goodBadFactor"];	
 	
 	
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"clear"];
@@ -303,7 +386,7 @@
 	badPoints.clear();
 	
 	if(clear){
-
+		
 		[rubbers removeAllObjects];
 		timeout = 100;
 		clear = NO;
@@ -341,12 +424,12 @@
 		for(int i=0;i<100;i++){
 			float r = TWO_PI*i/100.0;
 			float s = 0.09;
-		//	storedPoints.push_back(ofxPoint2f(mousex*[self aspect],mousey)+ ofxPoint2f(cos(r)*s,sin(r)*s));
+			//	storedPoints.push_back(ofxPoint2f(mousex*[self aspect],mousey)+ ofxPoint2f(cos(r)*s,sin(r)*s));
 		}
 		
 	}
 	
-
+	
 	
 	Rubber * updateRubber;
 	if(points.size() > 0){
