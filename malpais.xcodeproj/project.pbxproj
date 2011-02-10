@@ -2393,6 +2393,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
 				GCC_PREPROCESSOR_DEFINITIONS = "";
+				GCC_VERSION = 4.2;
 				HEADER_SEARCH_PATHS = (
 					"../../../libs/openFrameworks/**",
 					../../../libs/freetype/include/,
