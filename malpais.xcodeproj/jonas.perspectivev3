@@ -298,8 +298,7 @@
 							<array>
 								<array>
 									<integer>40</integer>
-									<integer>38</integer>
-									<integer>6</integer>
+									<integer>7</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -332,6 +331,8 @@
 					<key>Dock</key>
 					<array>
 						<dict>
+							<key>BecomeActive</key>
+							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -349,7 +350,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>DD53144512F616AA00E68CF6</string>
+										<string>DD3188B413048CB600877DC1</string>
 										<key>history</key>
 										<array>
 											<string>DDC8EDC01138454100574926</string>
@@ -526,7 +527,7 @@
 											<string>DD6525ED12F45D00007C339C</string>
 											<string>DD6525EE12F45D00007C339C</string>
 											<string>DD53144212F45ECC00E68CF6</string>
-											<string>DD53144312F45ECC00E68CF6</string>
+											<string>DD53144512F616AA00E68CF6</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -540,18 +541,18 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1216, 483}}</string>
+								<string>{{0, 0}, {1216, 469}}</string>
 								<key>RubberWindowFrame</key>
 								<string>0 101 1440 777 0 0 1440 878 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>483pt</string>
+							<string>469pt</string>
 						</dict>
 						<dict>
 							<key>Proportion</key>
-							<string>226pt</string>
+							<string>240pt</string>
 							<key>Tabs</key>
 							<array>
 								<dict>
@@ -565,14 +566,12 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {1216, 199}}</string>
+										<string>{{10, 27}, {360, -27}}</string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
 								</dict>
 								<dict>
-									<key>BecomeActive</key>
-									<true/>
 									<key>ContentConfiguration</key>
 									<dict>
 										<key>PBXProjectModuleGUID</key>
@@ -583,7 +582,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {1216, 199}}</string>
+										<string>{{10, 27}, {1216, 213}}</string>
 										<key>RubberWindowFrame</key>
 										<string>0 101 1440 777 0 0 1440 878 </string>
 									</dict>
@@ -651,11 +650,11 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>DD53143412F45E2800E68CF6</string>
+				<string>DD3188B513048CB600877DC1</string>
 				<string>1CA23ED40692098700951B8B</string>
-				<string>DD53143512F45E2800E68CF6</string>
+				<string>DD3188B613048CB600877DC1</string>
 				<string>DDC8E5A71137309300574926</string>
-				<string>DD53143612F45E2800E68CF6</string>
+				<string>DD3188B713048CB600877DC1</string>
 				<string>1CA23EDF0692099D00951B8B</string>
 				<string>1CA23EE00692099D00951B8B</string>
 				<string>1CA23EE10692099D00951B8B</string>
@@ -844,8 +843,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>DD53143C12F45E2800E68CF6</string>
-		<string>DD53143D12F45E2800E68CF6</string>
 		<string>/Users/jonas/Documents/udvilking/of_preRelease_v0062_osxSL_FAT/apps/recoil/Malpais/malpais.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
