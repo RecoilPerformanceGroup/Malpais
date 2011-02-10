@@ -49,6 +49,7 @@
 	 }*/
 	
 	//Call update on all waves
+	int waveNo = 0;
 	for(WaveObject * wave in waves){
 		[wave updateWithSpeed:1.0/ofGetFrameRate() * PropF(@"waveXSpeed")];
 	}
@@ -59,7 +60,8 @@
 			WaveObject * obj = [[WaveObject alloc] init];
 			if(PropI(@"mode") == 1){
 				//			[obj loadAudio:@"/Users/jonas/Documents/udvilking/of_preRelease_v0062_osxSL_FAT/apps/examples/soundPlayerWaveformExample/bin/data/voice2.wav"];
-				[obj loadAudio:[NSString stringWithFormat:@"/Users/jonas/Desktop/asdasd/STE-00%i.wav",[waves count]%10+1]];
+				
+				[obj loadAudio:[NSHomeDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"/Desktop/asdasd/STE-00%i.wav",[waves count]%10+1]]];
 			} else if(PropI(@"mode") == 0){
 				[obj loadMic];
 			}
@@ -78,7 +80,7 @@
 	ofEnableAlphaBlending();
 	for(WaveObject * wave in waves){
 		//[wave draw];
-		glTranslated(0, 0.2, 0);
+		glTranslated(0, 1.0/[waves count], 0);
 		ofSetColor(190,190,190,150);
 		
 		int numSamples = 10000*PropF(@"waveXScale");
@@ -90,7 +92,7 @@
 			for(int i=0;i<numSamples;i+=2){
 				float x = (float)i/(numSamples);
 				//	int o = (i%2 == 0)?1:-1;
-				glVertex2f(x, 0.0+PropF(@"waveYScale")*[wave getWaveData][-(i+j*(numSamples-2))]/1.0); //(3.4*10e38)				
+				glVertex2f(x*Aspect(@"Floor",0), 0.0+PropF(@"waveYScale")*[wave getWaveData][-(i+j*(numSamples-2))]); //(3.4*10e38)				
 			}
 			/*for(int i=0;i<numSamples;i++){
 				float x = (float)i/(numSamples);

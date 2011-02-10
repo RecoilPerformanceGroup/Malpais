@@ -23,6 +23,7 @@ Float64 kGraphSampleRate=44100.; // Our internal sample rate
 			segments[i].y = y+ofRandom(-0.01, 0.01);
 			segments[i].v = 0;
 		}
+		nBandsToGet = 128;
 	}
 	return self;
 }
@@ -52,7 +53,18 @@ Float64 kGraphSampleRate=44100.; // Our internal sample rate
 		simplifiedCurve.push_back([self getWaveData][-330]);
 		while(simplifiedCurve.size() > 1000)
 			simplifiedCurve.erase(simplifiedCurve.begin());
+	} else {
+		ofSoundUpdate();	
+
+		float * val = ofSoundGetSpectrum(nBandsToGet);		// request values for fft
+		for (int i = 0;i < nBandsToGet; i++){
+			
+			val[i];
+						
+		}
+		
 	}
+
 	
 	//	cout<<beginTime<<"  "<<endTime<<"   "<<status<<endl;
 	/*	i +=kGraphSampleRate*speed;

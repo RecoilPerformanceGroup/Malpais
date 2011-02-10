@@ -6,3 +6,6 @@
 #include "Kinect.h"
 #include "Wave.h"
 #include "FysiskeReaktioner.h"
+#include "TrackingElements.h"
+#include "Leaking.h"
+//#include "Tracking.h"
