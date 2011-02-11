@@ -386,8 +386,9 @@ double polygonArea(vector<RPoint> points) {
 	glEnd();
 }
 -(void) draw{	
-	ofSetColor(255, 255, 255);
-	glBegin(GL_LINE_STRIP);
+	ofSetColor(255, 0, 255);
+	ofFill();
+	glBegin(GL_POLYGON);
 	for(int i=0;i<points.size();i++){
 		glVertex2d(points[i].filteredPos.x, points[i].filteredPos.y);
 	}
@@ -402,6 +403,8 @@ double polygonArea(vector<RPoint> points) {
 -(void) initPlugin{
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2.0] named:@"state"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2000] named:@"yMax"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"zMin"];	
+
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2000] named:@"goodPointMaxY"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2.0] named:@"goodBadFactor"];	
 	
@@ -459,7 +462,7 @@ double polygonArea(vector<RPoint> points) {
 	
 	
 	if(PropB(@"enableKinect")){
-		vector<ofxPoint3f> pointsKinect = [GetPlugin(Kinect) getPointsInBoxXMin:0 xMax:[self aspect] yMin:0 yMax:PropI(@"yMax") zMin:0 zMax:0.8 res:PropI(@"KinectRes")];
+		vector<ofxPoint3f> pointsKinect = [GetPlugin(Kinect) getPointsInBoxXMin:0 xMax:[self aspect] yMin:0 yMax:PropI(@"yMax") zMin:0 zMax:PropF(@"zMin") res:PropI(@"KinectRes")];
 		if(pointsKinect.size() > 0){
 			for(int i=0;i<pointsKinect.size();i++){				
 				if(pointsKinect[i].y > PropF(@"goodPointMaxY"))
@@ -591,8 +594,12 @@ double polygonArea(vector<RPoint> points) {
 }
 
 -(void) draw:(NSDictionary *)drawingInformation{
-	
+	ofSetColor(255, 255, 255);
+//	ofFill();
 	ApplySurface(@"Floor");
+//	ofRect(0, 0, [self aspect], 1);
+
+	
 	for(Rubber * r in rubbers){		
 		[r draw];
 	}

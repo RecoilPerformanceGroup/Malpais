@@ -297,7 +297,7 @@
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 0}, {338, 1582}}</string>
+							<string>{{0, 0}, {338, 1727}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -307,14 +307,14 @@
 					<key>GeometryConfiguration</key>
 					<dict>
 						<key>Frame</key>
-						<string>{{0, 0}, {355, 1600}}</string>
+						<string>{{0, 0}, {355, 1745}}</string>
 						<key>GroupTreeTableConfiguration</key>
 						<array>
 							<string>MainColumn</string>
 							<real>338</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>1 257 1187 1641 0 0 1200 1898 </string>
+						<string>1 112 1204 1786 0 0 1200 1898 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -344,7 +344,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>333C01771305613400ACD5DF</string>
+										<string>333C01AA13058EC300ACD5DF</string>
 										<key>history</key>
 										<array>
 											<string>339BA9D012F6ED9200DCB104</string>
@@ -439,7 +439,7 @@
 											<string>33049E0013044C660046635A</string>
 											<string>333C014813055BF200ACD5DF</string>
 											<string>333C016313055F0F00ACD5DF</string>
-											<string>333C016C13055F7700ACD5DF</string>
+											<string>333C018413057F3B00ACD5DF</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -453,14 +453,14 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {827, 1045}}</string>
+								<string>{{0, 0}, {844, 1190}}</string>
 								<key>RubberWindowFrame</key>
-								<string>1 257 1187 1641 0 0 1200 1898 </string>
+								<string>1 112 1204 1786 0 0 1200 1898 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>1045pt</string>
+							<string>1190pt</string>
 						</dict>
 						<dict>
 							<key>Proportion</key>
@@ -478,9 +478,9 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {827, 523}}</string>
+										<string>{{10, 27}, {844, 523}}</string>
 										<key>RubberWindowFrame</key>
-										<string>1 257 1187 1641 0 0 1200 1898 </string>
+										<string>1 112 1204 1786 0 0 1200 1898 </string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
@@ -543,7 +543,7 @@
 						</dict>
 					</array>
 					<key>Proportion</key>
-					<string>827pt</string>
+					<string>844pt</string>
 				</dict>
 			</array>
 			<key>Name</key>
@@ -762,7 +762,7 @@
 		<string>/Users/malpais/Udvikling/of_preRelease_v0062_osxSL_FAT/apps/recoil/Malpais/malpais.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>1 257 1187 1641 0 0 1200 1898 </string>
+	<string>1 112 1204 1786 0 0 1200 1898 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>
