@@ -3,10 +3,22 @@
 #import "Keystoner.h"
 #include <dispatch/dispatch.h>
 
+double polygonArea(vector<RPoint> points) {	
+	double  area=0. ;
+	int     i, j=points.size()-1  ;
+	
+	for (i=0; i<points.size(); i++) {
+		area+=(points[j].pos.x+points[i].pos.x)*(points[j].pos.y-points[i].pos.y); j=i; }
+	
+	return area*.5; 
+}
+
+
+
 
 @implementation Rubber
 
-@synthesize elasticForce, damping, pullForce, speed, border, pushForceInternal, pushForceExternal, pushForceInternalDist, pushForceExternalDist;;
+@synthesize elasticForce, damping, pullForce, speed, border, pushForceInternal, pushForceExternal, pushForceInternalDist, pushForceExternalDist, percentageForce;;
 
 -(id) initWithPoints:(vector<ofxPoint2f>) _points{
 	if([self init]){
@@ -68,9 +80,18 @@
 	return c;
 }
 
+-(bool) pointInsidePoly:(ofxPoint2f)p{
+	vector<ofPoint> poly;
+	for(int i=0;i<points.size();i++){
+		poly.push_back(points[i].pos);
+	}
+	
+	return ofInsidePoly(p.x, p.y, poly);
+}
+
 -(void) updateWithPoints:(vector<ofxPoint2f>) pointsIn{	
 	vector<ofPoint> poly;
-	for(int i=0;i<points.size();i+=2){
+	for(int i=0;i<points.size();i++){
 		poly.push_back(points[i].pos);
 	}
 	
@@ -140,14 +161,15 @@
 				pointsJumper = 1;
 				searchDist = 3;
 			}	
-			/*		
+			/*
 			 for(int j=0;j<points.size();j+=1){
 			 float d = points[j].pos.distanceSquared(pointsIn[i]) ;
 			 if(bestDist == -1 || bestDist > d){
 			 bestPoint = &points[j];
 			 bestDist = d;
 			 } 
-			 }*/
+			 }
+			 */
 			if(bestPoint != nil){
 				ofxVec2f v = bestPoint->pos - pointsIn[i];
 				bestPoint->f += -0.01*v*_pullForce*1.0/(pointsIn.size()/100.0);
@@ -182,7 +204,7 @@
 			ofxVec2f centerGoal;
 			if(centerInPoly){
 				ofxVec2f v = center - [self centroid];
-				centerGoal = center + v;
+				centerGoal = center + v*10.0;
 			}
 			
 			//Gå igennem alle punkter for at se om nogen er inde i en anden blob
@@ -218,7 +240,7 @@
 					}
 				}
 			}
-
+			
 			if(shortestDist < externalPushForceDist*externalPushForceDist ){
 				proceed = YES;
 			}
@@ -264,6 +286,34 @@
 	}
 }
 
+
+-(void) updateWithPercentage:(float) percentage{
+	float currentArea = polygonArea(points);
+	currentArea /= aspect;
+	currentArea = fabs(currentArea);
+	cout<<currentArea<<endl;
+	
+	ofxPoint2f center = [self centroid];
+	float force = [[self percentageForce] floatValue];
+	float dir = -1;
+	if(currentArea < percentage){
+		dir = 1;
+	}
+	for(int i=0;i<points.size();i++){
+		ofxVec2f v = points[i].pos - center;
+		
+		float d = v.length();
+		//			d *= 1.0/internalPushForceDist;
+		
+		float f = -d+1;
+		v.normalize();
+		float s = 0.01;
+		points[i].f += dir*f*v*s*force;		
+		
+	}
+	//}
+}
+
 -(void) updateWithTimestep:(float)time{
 	
 	RPoint * prevPoint = &points[points.size()-1];
@@ -286,7 +336,7 @@
 		point->v *= [[self damping] floatValue];
 		point->v += point->f*[[self speed] floatValue];
 		
-		point->v.limit(0.01);
+		point->v.limit(0.001);
 		
 		ofxPoint2f p = point->pos + point->v*time;
 		p.x = ofClamp(p.x, 0, aspect);
@@ -302,6 +352,7 @@
 	
 }	
 
+
 -(void) calculateFilteredPos{
 	for(int i=0;i<points.size();i++){
 		RPoint * point = &points[i];
@@ -311,7 +362,7 @@
 	}	
 }
 
--(void) draw{
+-(void) debugDraw{
 	ofSetColor(0, 100, 0);
 	glBegin(GL_LINE_STRIP);
 	for(int i=0;i<points.size();i++){
@@ -326,13 +377,21 @@
 	}
 	glEnd();
 	
-	/*ofSetColor(255, 0, 0);
-	 
-	 glBegin(GL_POINTS);
-	 for(int i=0;i<lastPointsIn.size();i++){
-	 glVertex2d(lastPointsIn[i].x, lastPointsIn[i].y);
-	 }
-	 glEnd();*/
+	ofSetColor(255, 0, 0);
+	
+	glBegin(GL_POINTS);
+	for(int i=0;i<lastPointsIn.size();i++){
+		glVertex2d(lastPointsIn[i].x, lastPointsIn[i].y);
+	}
+	glEnd();
+}
+-(void) draw{	
+	ofSetColor(255, 255, 255);
+	glBegin(GL_LINE_STRIP);
+	for(int i=0;i<points.size();i++){
+		glVertex2d(points[i].filteredPos.x, points[i].filteredPos.y);
+	}
+	glEnd();	
 }
 
 @end
@@ -352,17 +411,21 @@
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:5.0 minValue:0.0 maxValue:0.2] named:@"elasticForce"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0 maxValue:1.0] named:@"damping"];	
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.03 minValue:0.0 maxValue:0.1] named:@"pullForce"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.03 minValue:0.0 maxValue:1] named:@"pullForce"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.03 minValue:0.0 maxValue:10] named:@"speed"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:0.0 maxValue:10] named:@"border"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:0.2] named:@"pushForceInternal"];			
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:2] named:@"pushForceExternal"];			
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.2 minValue:0.01 maxValue:1.0] named:@"pushForceInternalDist"];			
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.2 minValue:0.01 maxValue:1.0] named:@"pushForceExternalDist"];			
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.2 minValue:0.01 maxValue:1.0] named:@"pushForceExternalDist"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0.0 maxValue:1.0] named:@"percentageForce"];			
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:1.0 maxValue:500] named:@"iterations"];		
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:100 minValue:1.0 maxValue:500] named:@"KinectRes"];			
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:1.0 maxValue:10] named:@"filterPasses"];			
+	
+	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"percentage1"];			
 	
 	
 	mouseh = -1;
@@ -400,15 +463,23 @@
 		if(pointsKinect.size() > 0){
 			for(int i=0;i<pointsKinect.size();i++){				
 				if(pointsKinect[i].y > PropF(@"goodPointMaxY"))
-					badPoints.push_back(ofxPoint2f(pointsKinect[i].x, pointsKinect[i].z));
+					badPoints.push_back(ofxPoint3f(pointsKinect[i].x,pointsKinect[i].y, pointsKinect[i].z));
 				else {
 					
-					goodPoints.push_back(ofxPoint2f(pointsKinect[i].x, pointsKinect[i].z));	
+					goodPoints.push_back(ofxPoint3f(pointsKinect[i].x, pointsKinect[i].y, pointsKinect[i].z));	
 				}
 				
 				points.push_back(ofxPoint2f(pointsKinect[i].x, pointsKinect[i].z));
 			}		
-			if(badPoints.size() / (float) goodPoints.size() > PropF(@"goodBadFactor"))
+			
+			if((float) goodPoints.size() > 0){
+				goodBadFactor += ((badPoints.size() / (float) goodPoints.size()) - goodBadFactor)*0.1;
+			}
+			else {
+				goodBadFactor += (0 - goodBadFactor)*0.1;	
+			}
+			
+			if(goodBadFactor > PropF(@"goodBadFactor"))
 				points.clear();
 		}
 	}
@@ -431,30 +502,47 @@
 	
 	
 	
-	Rubber * updateRubber;
+	Rubber * updateRubber = nil;
 	if(points.size() > 0){
 		if(timeout > 30){
-			updateRubber = [[Rubber alloc] initWithPoints:points];
-			[updateRubber bind:@"elasticForce" toObject:self withKeyPath:@"properties.elasticForce" options:nil];
-			[updateRubber bind:@"damping" toObject:self withKeyPath:@"properties.damping" options:nil];
-			[updateRubber bind:@"pullForce" toObject:self withKeyPath:@"properties.pullForce" options:nil];
-			[updateRubber bind:@"speed" toObject:self withKeyPath:@"properties.speed" options:nil];
-			[updateRubber bind:@"border" toObject:self withKeyPath:@"properties.border" options:nil];
-			[updateRubber bind:@"pushForceInternal" toObject:self withKeyPath:@"properties.pushForceInternal" options:nil];
-			[updateRubber bind:@"pushForceExternal" toObject:self withKeyPath:@"properties.pushForceExternal" options:nil];			
-			[updateRubber bind:@"pushForceInternalDist" toObject:self withKeyPath:@"properties.pushForceInternalDist" options:nil];
-			[updateRubber bind:@"pushForceExternalDist" toObject:self withKeyPath:@"properties.pushForceExternalDist" options:nil];			
-			updateRubber->aspect = [self aspect];
+			ofxPoint2f c;
+			for(int i=0;i<points.size();i++){
+				c += points[i];	
+			}
+			c /= points.size();
 			
-			
-			for(int i=0;i<500;i++){
-				[updateRubber updateWithPoints:points];
-				[updateRubber updateWithTimestep:60.0/ofGetFrameRate()];				
-				[updateRubber calculateFilteredPos];
-				
+			for(Rubber * r in rubbers){
+				if([r pointInsidePoly:c]){
+					updateRubber = r;
+					break;
+				}	
 			}
 			
-			[rubbers addObject:updateRubber];
+			if(updateRubber == nil){
+				updateRubber = [[Rubber alloc] initWithPoints:points];
+				[updateRubber bind:@"elasticForce" toObject:self withKeyPath:@"properties.elasticForce" options:nil];
+				[updateRubber bind:@"damping" toObject:self withKeyPath:@"properties.damping" options:nil];
+				[updateRubber bind:@"pullForce" toObject:self withKeyPath:@"properties.pullForce" options:nil];
+				[updateRubber bind:@"speed" toObject:self withKeyPath:@"properties.speed" options:nil];
+				[updateRubber bind:@"border" toObject:self withKeyPath:@"properties.border" options:nil];
+				[updateRubber bind:@"pushForceInternal" toObject:self withKeyPath:@"properties.pushForceInternal" options:nil];
+				[updateRubber bind:@"pushForceExternal" toObject:self withKeyPath:@"properties.pushForceExternal" options:nil];			
+				[updateRubber bind:@"pushForceInternalDist" toObject:self withKeyPath:@"properties.pushForceInternalDist" options:nil];
+				[updateRubber bind:@"pushForceExternalDist" toObject:self withKeyPath:@"properties.pushForceExternalDist" options:nil];			
+				[updateRubber bind:@"percentageForce" toObject:self withKeyPath:@"properties.percentageForce" options:nil];			
+				
+				updateRubber->aspect = [self aspect];
+				
+				
+				/*	for(int i=0;i<500;i++){
+				 [updateRubber updateWithPoints:points];
+				 [updateRubber updateWithTimestep:60.0/ofGetFrameRate()];				
+				 [updateRubber calculateFilteredPos];
+				 
+				 }*/
+				
+				[rubbers addObject:updateRubber];
+			}
 		} else {
 			updateRubber = [rubbers lastObject];
 		}
@@ -466,6 +554,9 @@
 	if(points.size() > 150){
 		points.erase(points.begin(),points.begin()+points.size()-150);
 	}
+	
+	
+	[[rubbers lastObject] updateWithPercentage:PropF(@"percentage1")];
 	
 	for(Rubber * r in rubbers){
 		[r updateForceToOtherObjects:rubbers];
@@ -506,16 +597,16 @@
 		[r draw];
 	}
 	
-	ofSetColor(0, 255, 0);
-	for(int i=0;i<goodPoints.size();i++){
-		ofRect(goodPoints[i].x, goodPoints[i].y, 0.01, 0.01);
-	}
-	
-	ofSetColor(255, 0, 0);
-	for(int i=0;i<badPoints.size();i++){
-		ofRect(badPoints[i].x, badPoints[i].y, 0.01, 0.01);
-	}
-	
+	/*ofSetColor(0, 255, 0);
+	 for(int i=0;i<goodPoints.size();i++){
+	 ofRect(goodPoints[i].x, goodPoints[i].z, 0.01, 0.01);
+	 }
+	 
+	 ofSetColor(255, 0, 0);
+	 for(int i=0;i<badPoints.size();i++){
+	 ofRect(badPoints[i].x, badPoints[i].z, 0.01, 0.01);
+	 }
+	 */	
 	PopSurface();
 	
 }
@@ -540,14 +631,53 @@
 	
 	glPushMatrix();
 	glScaled(200*1.0/[self aspect], 400, 1);
-	for(Rubber * r in rubbers){
-		
-		[r draw];
+	for(Rubber * r in rubbers){		
+		[r debugDraw];
 	}
+	
+	ofSetColor(0, 255, 0);
+	for(int i=0;i<goodPoints.size();i++){
+		ofRect(goodPoints[i].x, goodPoints[i].z, 0.01, 0.01);
+	}
+	
+	ofSetColor(255, 0, 0);
+	for(int i=0;i<badPoints.size();i++){
+		ofRect(badPoints[i].x, badPoints[i].z, 0.01, 0.01);
+	}
+	
+	
 	glPopMatrix();
 	
 	ofSetColor(255, 255,0);
 	ofDrawBitmapString("Number rubbers: "+ofToString([rubbers count], 0), 10, 10);
+	
+	ofSetColor(255,255,255);
+	ofLine(200, 0, 200, 400);
+	ofLine(200, 200, 400, 200);
+	
+	glTranslated(200, 0, 0);
+	glPushMatrix();
+	glScaled(200*1.0/[self aspect], 200, 1);
+	
+	
+	ofSetColor(0, 255, 0);
+	ofNoFill();
+	for(int i=0;i<goodPoints.size();i++){
+		ofRect(goodPoints[i].x, (1-goodPoints[i].y/2000.0), 0.005, 0.01);
+	}
+	
+	ofSetColor(255, 0, 0);
+	for(int i=0;i<badPoints.size();i++){
+		ofRect(badPoints[i].x,(1-badPoints[i].y/2000.0), 0.005, 0.01);
+	}
+	
+	ofSetColor(100, 100, 0);
+	ofLine(0, 1-PropF(@"goodPointMaxY")/2000.0, 1, 1-PropF(@"goodPointMaxY")/2000.0);
+	ofSetColor(255, 255, 255);
+	ofDrawBitmapString("Factor: "+ofToString(goodBadFactor, 1)+" > "+ofToString(PropF(@"goodBadFactor"), 1), 0.01, 0.05);
+	
+	glPopMatrix();
+	
 	
 }
 

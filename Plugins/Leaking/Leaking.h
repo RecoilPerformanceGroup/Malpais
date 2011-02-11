@@ -29,7 +29,9 @@ struct RPoint {
 	NSNumber * pushForceInternal;
 	NSNumber * pushForceExternal;	
 	NSNumber * pushForceInternalDist;
-	NSNumber * pushForceExternalDist;	
+	NSNumber * pushForceExternalDist;
+	
+	NSNumber * percentageForce;
 	
 	float aspect;
 	
@@ -45,6 +47,7 @@ struct RPoint {
 @property (readwrite, retain) NSNumber * pushForceExternal;
 @property (readwrite, retain) NSNumber * pushForceInternalDist;
 @property (readwrite, retain) NSNumber * pushForceExternalDist;
+@property (readwrite, retain) NSNumber * percentageForce;
 
 -(id) initWithPoints:(vector<ofxPoint2f>) points;
 -(void) updateWithPoints:(vector<ofxPoint2f>) points;
@@ -53,6 +56,9 @@ struct RPoint {
 -(void) calculateFilteredPos;
 -(ofxPoint2f) centroid;
 -(ofxPoint2f) innerPoint:(int)point;
+-(void) debugDraw;
+
+-(bool) pointInsidePoly:(ofxPoint2f)p;
 
 @end
 
@@ -66,8 +72,10 @@ struct RPoint {
 	
 	int timeout;
 	
-	vector<ofxPoint2f> goodPoints;
-	vector<ofxPoint2f> badPoints;
+	float goodBadFactor;
+	
+	vector<ofxPoint3f> goodPoints;
+	vector<ofxPoint3f> badPoints;
 }
 
 -(float) aspect;
