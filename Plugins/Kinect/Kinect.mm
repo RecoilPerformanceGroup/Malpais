@@ -23,7 +23,7 @@
 		centroidFilter[0] = new Filter();
 		centroidFilter[1] = new Filter();					
 		centroidFilter[2] = new Filter();					
-
+		
 		centroidFilter[0]->setNl(9.413137469932821686e-04, 2.823941240979846506e-03, 2.823941240979846506e-03, 9.413137469932821686e-04);
 		centroidFilter[0]->setDl(1, -2.5818614306773719263, 2.2466666427559748864, -.65727470210265670262);
 		centroidFilter[1]->setNl(9.413137469932821686e-04, 2.823941240979846506e-03, 2.823941240979846506e-03, 9.413137469932821686e-04);
@@ -392,8 +392,8 @@
 					
 					ofxPoint3f kinectLowestPoint = ofxPoint3f([bestBlob getLowestPoint].x*640, [bestBlob getLowestPoint].y*480, pixels[(int)([bestBlob getLowestPoint].x*640+[bestBlob getLowestPoint].y*480*640)]);
 					ofxPoint3f lowestPointFloor = [self convertWorldToFloor:[self convertKinectToWorld:kinectLowestPoint]];
-
-										
+					
+					
 					bestBlob->centroidFiltered->x = bestBlob->centroidFilter[0]->filter(bestBlob->centroid->x);
 					bestBlob->centroidFiltered->y = bestBlob->centroidFilter[1]->filter(lowestPointFloor.y);
 					bestBlob->centroidFiltered->y = bestBlob->centroidFilter[1]->filter(lowestPointFloor.y);
@@ -406,14 +406,14 @@
 					PersistentBlob * newB = [[PersistentBlob alloc] init];
 					[newB->blobs addObject:blob];
 					*newB->centroid = floorCentroid;
-
+					
 					ofxPoint3f kinectLowestPoint = ofxPoint3f([newB getLowestPoint].x*640, [newB getLowestPoint].y*480, pixels[(int)([newB getLowestPoint].x*640+[newB getLowestPoint].y*480*640)]);
 					ofxPoint3f lowestPointFloor = [self convertWorldToFloor:[self convertKinectToWorld:kinectLowestPoint]];
 					
 					newB->centroidFilter[0]->setStartValue(floorCentroid.x);
 					newB->centroidFilter[1]->setStartValue(lowestPointFloor.y);
 					newB->centroidFilter[2]->setStartValue(floorCentroid.y);
-
+					
 					*newB->centroidFiltered = *newB->centroid;
 					newB->pid = pidCounter++;
 					newB->age = 0;
@@ -575,7 +575,7 @@
 			 ofxPoint3f wfoot = [self convertWorldToFloor:foot];
 			 */	
 			ofxPoint3f p = [b centroidFiltered];
-
+			
 			ofSetLineWidth(1);
 			ofFill();
 			ofSetColor(255, 255, 255);
@@ -1135,7 +1135,30 @@
 	}
 }
 
-
+-(vector<ofxPoint3f>) getPointsInBoxXMin:(float)xMin xMax:(float)xMax yMin:(float)yMin yMax:(float)yMax zMin:(float)zMin zMax:(float)zMax res:(int)res{
+	vector<ofxPoint3f> points;
+	
+	if(kinectConnected){
+		xn::DepthMetaData dmd;
+		depth.getXnDepthGenerator().GetMetaData(dmd);	
+		const XnDepthPixel* pixels = dmd.Data();
+		
+		
+		for(int i=0;i<640*480;i+=res){
+			int x = i % 640;
+			int y = floor(i / 640);
+			if(pixels[i] > 0){
+				ofxPoint3f p = [self convertWorldToFloor:[self convertKinectToWorld:ofxPoint3f(x,y, pixels[i])]];
+				if(p.x > xMin && p.x < xMax && p.y > yMin && p.y < yMax && p.z > zMin && p.z < zMax){
+					points.push_back(p);
+				}
+			}
+		}
+		
+	}
+	return points;	
+	
+}
 
 -(void) calculateMatrix{
 	ofxVec2f v1, v2, v3;

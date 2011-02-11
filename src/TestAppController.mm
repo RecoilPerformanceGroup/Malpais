@@ -42,12 +42,13 @@ extern ofAppBaseWindow * window;
 	NSLog(@"Setup plugins");
 	
 	[pluginManagerController addHeader:@"Input"];
-//	[pluginManagerController addPlugin:[[Kinect alloc] init]];
+	[pluginManagerController addPlugin:[[Kinect alloc] init]];
 //	[pluginManagerController addPlugin:[[Tracking alloc] init]];
 
 
-	[pluginManagerController addPlugin:[[Wave alloc] init]];
-//	[pluginManagerController addPlugin:[[FysiskeReaktioner alloc] init]];
+	//	[pluginManagerController addPlugin:[[FysiskeReaktioner alloc] init]];
+
+	//
 
 	//[pluginManagerController addPlugin:[[SamplePlugin alloc] init]];
 	//[pluginManagerController addPlugin:[[SamplePlugin2 alloc] init]];
@@ -55,7 +56,10 @@ extern ofAppBaseWindow * window;
 	[pluginManagerController addHeader:@"Core Plugins"];
 	[pluginManagerController addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Floor", @"Wall", nil]]];
 
-	
+	[pluginManagerController addHeader:@"Scener"];
+	[pluginManagerController addPlugin:[[Wave alloc] init]];
+	[pluginManagerController addPlugin:[[Leaking alloc] init]];
+	[pluginManagerController addPlugin:[[TrackingElements alloc] init]];
 	//[pluginManagerController addPlugin:[[Cameras alloc] initWithNumberCameras:1]];
 	
 					  

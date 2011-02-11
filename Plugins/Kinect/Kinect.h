@@ -161,6 +161,7 @@ struct Dancer {
 -(ofxPoint3f) convertWorldToProjection:(ofxPoint3f) p;
 -(ofxPoint3f) convertWorldToFloor:(ofxPoint3f) p;
 
+-(vector<ofxPoint3f>) getPointsInBoxXMin:(float)xMin xMax:(float)xMax yMin:(float)yMin yMax:(float)yMax zMin:(float)zMin zMax:(float)zMax res:(int)res;
 
 -(void) calculateMatrix;
 

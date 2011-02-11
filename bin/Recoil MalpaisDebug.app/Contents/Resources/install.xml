@@ -1,39 +1,31 @@
 <install>
-	<name>ofxVectorMath</name>
-	<version>0.01</version>
-	<author>chris sugrue, stefan hechenberger</author>
-	<url></url>
+
+	<version>1.1</version>
+	<author>Mehmet Akten</author>
+	<url>http://www.msalibs.org</url>
 	
-	<add>
-		
-		<!-- 	=====================================================================	-->
-		<!--	========================== add per project using this addon =========	-->
-		<!-- 	=====================================================================	-->
-	
+    <requires>
+	</requires>
+    
+	<add>	
 		<src>
-			<folder name="addons/ofxVectorMath/src">
-				<file>../../../addons/ofxVectorMath/src/ofxMatrix3x3.h</file>
-				<file>../../../addons/ofxVectorMath/src/ofxVec2f.h</file>
-				<file>../../../addons/ofxVectorMath/src/ofxVec3f.h</file>
-				<file>../../../addons/ofxVectorMath/src/ofxVec4f.h</file>
-				<file>../../../addons/ofxVectorMath/src/ofxMatrix3x3.h</file>
-				<file>../../../addons/ofxVectorMath/src/ofxMatrix3x3.cpp</file>
-				<file>../../../addons/ofxVectorMath/src/ofxMatrix4x4.h</file>
-				<file>../../../addons/ofxVectorMath/src/ofxMatrix4x4.cpp</file>
-				<file>../../../addons/ofxVectorMath/src/ofxQuaternion.cpp</file>
-				<file>../../../addons/ofxVectorMath/src/ofxQuaternion.h</file>
-				<file>../../../addons/ofxVectorMath/src/ofxVectorMath.h</file>
+			<folder name="addons/MSAInterpolator/src">			
+				<file>../../../addons/MSAInterpolator/src/MSAInterpolator.h</file>
+				<file>../../../addons/MSAInterpolator/src/MSAInterpolator1D.h</file>
+				<file>../../../addons/MSAInterpolator/src/MSAInterpolator2D.h</file>
+				<file>../../../addons/MSAInterpolator/src/MSAInterpolator3D.h</file>
+				<file>../../../addons/MSAInterpolator/src/MSAInterpolatorInterpolationTypes.h</file>
+				<file>../../../addons/MSAInterpolator/src/MSAInterpolatorT.h</file>
 			</folder>
 		</src>
-		
+
 		<include>
-			<path>../../../addons/ofxVectorMath/src</path>
+			<path>../../../addons/MSAInterpolator/src</path>
 		</include>
 		
+		<link>
+		</link>
+
 	</add>
-	 
+	
 </install>
-
-
-
-
