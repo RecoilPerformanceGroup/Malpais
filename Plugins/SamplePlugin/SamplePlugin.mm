@@ -25,7 +25,7 @@
 		if([[properties objectForKey:@"green"] boolValue]){
 			ofSetColor(0, 255, 0,255);		
 		}
-		
+
 		ofRect(0.5, 0, [[properties objectForKey:@"width"] floatValue]*0.5, [[properties objectForKey:@"height"] floatValue]);
 		ofSetColor(255,255,255);
 		glScaled(1.0/640, 1.0/480, 1);
