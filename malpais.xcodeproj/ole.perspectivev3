@@ -319,7 +319,7 @@
 							<real>284</real>
 						</array>
 						<key>RubberWindowFrame</key>
-						<string>161 165 1191 898 0 0 1920 1178 </string>
+						<string>87 120 1191 898 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -349,7 +349,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7FD2E9851306D84700B274C9</string>
+										<string>7FD2E98D1306E24300B274C9</string>
 										<key>history</key>
 										<array>
 											<string>7FBF1B3F12E49996009E32EF</string>
@@ -454,7 +454,7 @@
 								<key>Frame</key>
 								<string>{{0, 0}, {885, 435}}</string>
 								<key>RubberWindowFrame</key>
-								<string>161 165 1191 898 0 0 1920 1178 </string>
+								<string>87 120 1191 898 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -533,7 +533,7 @@
 										<key>Frame</key>
 										<string>{{10, 27}, {885, 390}}</string>
 										<key>RubberWindowFrame</key>
-										<string>161 165 1191 898 0 0 1920 1178 </string>
+										<string>87 120 1191 898 0 0 1920 1178 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -755,13 +755,13 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7FD2E9861306D84700B274C9</string>
+		<string>7FD2E98C1306DF3400B274C9</string>
 		<string>7FD2E8CA1306CD7200B274C9</string>
 		<string>7FD2E8CB1306CD7200B274C9</string>
 		<string>/Users/ole/Development/openFrameworks/apps/recoil/Malpais/malpais.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
-	<string>161 165 1191 898 0 0 1920 1178 </string>
+	<string>87 120 1191 898 0 0 1920 1178 </string>
 	<key>WindowToolsV3</key>
 	<array>
 		<dict>

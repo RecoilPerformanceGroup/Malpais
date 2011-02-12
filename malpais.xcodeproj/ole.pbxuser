@@ -345,9 +345,9 @@
 	};
 	7F8F6BA4130565580097D302 /* Wave.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1020, 4069}}";
-			sepNavSelRange = "{5376, 0}";
-			sepNavVisRange = "{4498, 541}";
+			sepNavIntBoundsRect = "{{0, 0}, {1020, 3835}}";
+			sepNavSelRange = "{3788, 0}";
+			sepNavVisRange = "{3606, 973}";
 		};
 	};
 	7F8F6BC7130578F00097D302 /* PBXTextBookmark */ = {
@@ -1039,7 +1039,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 246";
 		rLen = 0;
-		rLoc = 7923;
+		rLoc = 8008;
 		rType = 0;
 		vrLen = 939;
 		vrLoc = 5799;
@@ -1203,7 +1203,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 229";
 		rLen = 0;
-		rLoc = 7103;
+		rLoc = 7188;
 		rType = 0;
 		vrLen = 1355;
 		vrLoc = 0;
@@ -1390,7 +1390,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 198";
 		rLen = 0;
-		rLoc = 5686;
+		rLoc = 5771;
 		rType = 0;
 		vrLen = 525;
 		vrLoc = 5185;
@@ -1400,10 +1400,30 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 180";
 		rLen = 0;
-		rLoc = 5376;
+		rLoc = 5461;
 		rType = 0;
 		vrLen = 541;
 		vrLoc = 4498;
+	};
+	7FD2E98B1306DF3400B274C9 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
+		name = "Wave.mm: 103";
+		rLen = 0;
+		rLoc = 3788;
+		rType = 0;
+		vrLen = 882;
+		vrLoc = 3280;
+	};
+	7FD2E98D1306E24300B274C9 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
+		name = "Wave.mm: 103";
+		rLen = 0;
+		rLoc = 3788;
+		rType = 0;
+		vrLen = 973;
+		vrLoc = 3606;
 	};
 	DD0A21DB12EF0F6D0068DCF1 /* DCAudioRecorder.cpp */ = {
 		uiCtxt = {
@@ -2051,6 +2071,8 @@
 			7FD2E9801306D7F900B274C9 /* PBXTextBookmark */ = 7FD2E9801306D7F900B274C9 /* PBXTextBookmark */;
 			7FD2E9811306D7F900B274C9 /* PBXTextBookmark */ = 7FD2E9811306D7F900B274C9 /* PBXTextBookmark */;
 			7FD2E9851306D84700B274C9 /* PBXTextBookmark */ = 7FD2E9851306D84700B274C9 /* PBXTextBookmark */;
+			7FD2E98B1306DF3400B274C9 /* PBXTextBookmark */ = 7FD2E98B1306DF3400B274C9 /* PBXTextBookmark */;
+			7FD2E98D1306E24300B274C9 /* PBXTextBookmark */ = 7FD2E98D1306E24300B274C9 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 7FBF1B3A12E49900009E32EF /* Source Control */;
 		userBuildSettings = {
