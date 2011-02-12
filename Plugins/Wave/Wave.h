@@ -7,6 +7,8 @@
 //
 
 #include "Plugin.h"
+#include "AudioDeviceList.h"
+#include "WaveObject.h"
 
 #define NUM_VOICES 8
 #define NUM_BANDS 7
@@ -16,8 +18,16 @@
 
 @interface Wave : ofPlugin {
 
+	WaveObject * liveVoice;
+	
 	NSMutableArray * voiceWaveForms;
+	
+	IBOutlet NSPopUpButton *		mInputDevices;
+//	AudioDeviceList *				mInputDeviceList;
+//	AudioDeviceID					inputDevice;
 
 }
+
+- (IBAction)inputDeviceSelected:(id)sender;
 
 @end
