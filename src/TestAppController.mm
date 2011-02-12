@@ -44,6 +44,7 @@ extern ofAppBaseWindow * window;
 	[pluginManagerController addHeader:@"Input"];
 	[pluginManagerController addPlugin:[[Kinect alloc] init]];
 //	[pluginManagerController addPlugin:[[Tracking alloc] init]];
+	[pluginManagerController addPlugin:[[Midi alloc] init]];
 
 
 	//	[pluginManagerController addPlugin:[[FysiskeReaktioner alloc] init]];
@@ -66,7 +67,6 @@ extern ofAppBaseWindow * window;
 	/*[pluginManagerController addHeader:@"Input"];
 	 [pluginManagerController addPlugin:[[Cameras alloc] initWithMidiChannel:1]];
 	 [pluginManagerController addPlugin:[[Lenses alloc] init]];
-	 [pluginManagerController addPlugin:[[Midi alloc] init]];
 	 
 	 [pluginManagerController addHeader:@"Calculation"];
 	 [pluginManagerController addPlugin:[[Tracking alloc] initWithMidiChannel:1]];
