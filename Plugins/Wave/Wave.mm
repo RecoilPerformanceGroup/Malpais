@@ -99,7 +99,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 
 			float bandValue = PropF(propStr);
 			
-			double drift = PropF(@"drift speed")*ofGetElapsedTimef()*(2.0*((iBand-(NUM_BANDS/2))+1.0));
+//			double drift = PropF(@"drift speed")*ofGetElapsedTimef()*(2.0*((iBand-(NUM_BANDS/2))+1.0));
+			double drift = PropF(@"drift speed")*ofGetElapsedTimef()*(iBand+1.0/NUM_BANDS);
 			
 			double smoothing = PropF(@"smoothing factor");
 			
