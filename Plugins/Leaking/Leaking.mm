@@ -362,7 +362,7 @@ double polygonArea(vector<RPoint> points) {
 			v3 = ofxVec2f(-v3.y, v3.x);
 			
 			
-			point->f += v3*_stiffness*0.000001*angle;
+			point->f += -v3*_stiffness*0.000001*angle;
 			
 			/*ofxVec2f n = v.normalized()*_elasticLength*0.1;
 			 
@@ -372,8 +372,8 @@ double polygonArea(vector<RPoint> points) {
 			 
 			 point->f += v;
 			 prevPoint->f -= v;
-			 
-			 prevPoint = point;*/
+			 */
+			 prevPoint = point;
 			
 		}	
 	}
@@ -394,6 +394,40 @@ double polygonArea(vector<RPoint> points) {
 		
 		point->pos = p;		
 	}	
+	
+	//Find intersections
+	RPoint * prevPoint1 = &points[points.size()-1];
+	for(int i=0;i<points.size();i++){
+		RPoint * point1 = &points[i];
+		
+		RPoint * prevPoint2 = &points[i+1];
+		for(int u=i+1+1;u<points.size()-1;u++){
+			RPoint * point2 = &points[u];			
+			
+			ofPoint intersection;
+			if(ofLineSegmentIntersection(point1->pos, prevPoint1->pos, point2->pos, prevPoint2->pos, intersection)){
+				vector<RPoint> buffer;				
+				
+				buffer.insert(buffer.begin(), points.begin()+i, points.begin()+u);
+				cout<<buffer.size()<<" points skal bytte plads"<<endl;
+				
+				points.erase(points.begin()+i, points.begin()+u);
+				
+				
+				int q = i;
+				for(int j=buffer.size()-1;j>=0;j--){
+					points.insert(points.begin()+q, buffer[j]);
+					q++;
+				}
+				
+			}
+			
+			prevPoint2 = point2;
+		}
+		
+		
+		prevPoint1 = point1;
+	}
 	
 	//Reset
 	for(int i=0;i<points.size();i++){
@@ -437,7 +471,9 @@ double polygonArea(vector<RPoint> points) {
 	glEnd();
 	
 	ofSetColor(0, 255, 255);
-	//Stiffness 
+
+	
+	/*//Stiffness 
 	RPoint * prevPoint = &points[points.size()-1];
 	RPoint * nextPoint;;
 	float _stiffness = [[self stiffness] floatValue];
@@ -462,23 +498,42 @@ double polygonArea(vector<RPoint> points) {
 			v3.normalize();
 			v3 = ofxVec2f(v3.y, -v3.x);
 			
-			ofxVec3f v = v3*_stiffness*0.01*angle;
-			ofLine(point->pos.x, point->pos.y, point->pos.x+v3.x, point->pos.y +v3.y);
+			ofxVec3f v = -v3*_stiffness*0.01*angle;
+			ofLine(point->pos.x, point->pos.y, point->pos.x+v.x, point->pos.y +v.y);
 
 			
-			/*ofxVec2f n = v.normalized()*_elasticLength*0.1;
-			 
-			 v-= n;
-			 
-			 v *= _elasticForce*1.0/20.0;
-			 
-			 point->f += v;
-			 prevPoint->f -= v;
-			 
-			 prevPoint = point;*/
+			 prevPoint = point;
 			
 		}	
 	}
+	 */
+	
+	
+	//Find intersections
+	ofFill();
+	RPoint * prevPoint1 = &points[points.size()-1];
+	for(int i=0;i<points.size();i++){
+		RPoint * point1 = &points[i];
+		
+		RPoint * prevPoint2 = &points[i+1];
+		for(int u=i+1+1;u<points.size()-1;u++){
+			RPoint * point2 = &points[u];			
+			
+			ofPoint intersection;
+			if(ofLineSegmentIntersection(point1->pos, prevPoint1->pos, point2->pos, prevPoint2->pos, intersection)){
+				ofSetColor(255, 0, 0);
+				ofCircle(point1->pos.x, point1->pos.y, 0.01);
+				ofSetColor(255, 255, 0);
+				ofCircle(intersection.x, intersection.y, 0.01);
+			}
+			
+			prevPoint2 = point2;
+		}
+		
+		
+		prevPoint1 = point1;
+	}
+	
 	
 }
 -(void) draw{	
@@ -694,9 +749,9 @@ double polygonArea(vector<RPoint> points) {
 	
 	//[[rubbers lastObject] updateWithPercentage:PropF(@"percentage1")];
 	
-	/*for(Rubber * r in rubbers){
+	for(Rubber * r in rubbers){
 	 [r updateForceToOtherObjects:rubbers];
-	 }*/
+	 }
 	for(int i=0;i<PropI(@"iterations");i++){
 		for(Rubber * r in rubbers){
 			if(r == updateRubber){

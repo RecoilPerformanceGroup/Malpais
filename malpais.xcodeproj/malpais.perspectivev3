@@ -325,14 +325,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>339BA97F12F6E75E00DCB104</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>Leaking.mm</string>
+								<string>Leaking.h</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -340,11 +338,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>339BA98012F6E75E00DCB104</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>Leaking.mm</string>
+										<string>Leaking.h</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>330DCB8E1306D8600033529D</string>
+										<string>330DCC181306F43A0033529D</string>
 										<key>history</key>
 										<array>
 											<string>339BA9D012F6ED9200DCB104</string>
@@ -381,7 +379,6 @@
 											<string>33546AD712F97BE90072289C</string>
 											<string>33546AF612F97CDD0072289C</string>
 											<string>33546B1A12F97FEA0072289C</string>
-											<string>33546B1B12F97FEA0072289C</string>
 											<string>33546B3112F980A40072289C</string>
 											<string>33FCFBA512F98128008D740B</string>
 											<string>33E4E0F012F994EF0055C3D3</string>
@@ -437,10 +434,14 @@
 											<string>33049D3D13042BEC0046635A</string>
 											<string>33049D3E13042BEC0046635A</string>
 											<string>33049E0013044C660046635A</string>
-											<string>333C014813055BF200ACD5DF</string>
 											<string>330DCB161306B7BF0033529D</string>
-											<string>330DCB841306D7F60033529D</string>
-											<string>330DCB851306D7F60033529D</string>
+											<string>330DCBB81306EC240033529D</string>
+											<string>330DCBB91306EC240033529D</string>
+											<string>330DCBBA1306EC240033529D</string>
+											<string>330DCBBC1306EC240033529D</string>
+											<string>330DCC121306F4390033529D</string>
+											<string>330DCC171306F43A0033529D</string>
+											<string>330DCC161306F4390033529D</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -454,18 +455,18 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {841, 1183}}</string>
+								<string>{{0, 0}, {841, 1176}}</string>
 								<key>RubberWindowFrame</key>
 								<string>0 112 1204 1786 0 0 1200 1898 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>1183pt</string>
+							<string>1176pt</string>
 						</dict>
 						<dict>
 							<key>Proportion</key>
-							<string>557pt</string>
+							<string>564pt</string>
 							<key>Tabs</key>
 							<array>
 								<dict>
@@ -479,7 +480,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {841, 530}}</string>
+										<string>{{10, 27}, {841, 537}}</string>
 										<key>RubberWindowFrame</key>
 										<string>0 112 1204 1786 0 0 1200 1898 </string>
 									</dict>
@@ -535,7 +536,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {841, 530}}</string>
+										<string>{{10, 27}, {841, 537}}</string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -563,11 +564,11 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>330DCAED1306B4270033529D</string>
+				<string>330DCB9C1306DA640033529D</string>
 				<string>1CA23ED40692098700951B8B</string>
-				<string>330DCAEE1306B4270033529D</string>
+				<string>330DCB9D1306DA640033529D</string>
 				<string>339BA97F12F6E75E00DCB104</string>
-				<string>330DCAEF1306B4270033529D</string>
+				<string>330DCB9E1306DA640033529D</string>
 				<string>1CA23EDF0692099D00951B8B</string>
 				<string>1CA23EE00692099D00951B8B</string>
 				<string>1CA23EE10692099D00951B8B</string>
@@ -716,13 +717,13 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>330DCAF01306B4270033529D</string>
+				<string>330DCBC21306EC340033529D</string>
 				<string>1CCC7628064C1048000F2A68</string>
 				<string>1CCC7629064C1048000F2A68</string>
-				<string>330DCAF11306B4270033529D</string>
-				<string>330DCAF21306B4270033529D</string>
-				<string>330DCAF31306B4270033529D</string>
-				<string>330DCAF41306B4270033529D</string>
+				<string>330DCBC31306EC340033529D</string>
+				<string>330DCBC41306EC340033529D</string>
+				<string>330DCBC51306EC340033529D</string>
+				<string>330DCBC61306EC340033529D</string>
 				<string>339BA97F12F6E75E00DCB104</string>
 			</array>
 			<key>ToolbarConfigUserDefaultsMinorVersion</key>
@@ -757,9 +758,8 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>330DCB8F1306D8600033529D</string>
-		<string>330DCAF61306B4270033529D</string>
-		<string>330DCAF71306B4270033529D</string>
+		<string>330DCBC81306EC340033529D</string>
+		<string>330DCBC91306EC340033529D</string>
 		<string>33E4E2E312F9BCE20055C3D3</string>
 		<string>/Users/malpais/Udvikling/of_preRelease_v0062_osxSL_FAT/apps/recoil/Malpais/malpais.xcodeproj</string>
 	</array>
@@ -1542,7 +1542,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>33E4E2E312F9BCE20055C3D3</string>
-				<string>330DCAF51306B4270033529D</string>
+				<string>330DCB9F1306DA640033529D</string>
 				<string>1CA6456E063B45B4001379D8</string>
 			</array>
 			<key>ToolbarConfiguration</key>
