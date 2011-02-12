@@ -4,7 +4,7 @@
 #include "ofxVectorMath.h"
 #include "Filter.h"
 
-#define NUMPOINTS 100
+#define NUMPOINTS 30
 
 struct RPoint {
 	ofxPoint2f pos;
@@ -22,6 +22,7 @@ struct RPoint {
 	vector<RPoint> points;
 	
 	NSNumber * elasticForce;
+	NSNumber * elasticLength;
 	NSNumber * damping;
 	NSNumber * pullForce;
 	NSNumber * speed;
@@ -30,6 +31,8 @@ struct RPoint {
 	NSNumber * pushForceExternal;	
 	NSNumber * pushForceInternalDist;
 	NSNumber * pushForceExternalDist;
+
+	NSNumber * stiffness;
 	
 	NSNumber * percentageForce;
 	
@@ -39,6 +42,7 @@ struct RPoint {
 }
 
 @property (readwrite, retain) NSNumber * elasticForce;
+@property (readwrite, retain) NSNumber * elasticLength;
 @property (readwrite, retain) NSNumber * damping;
 @property (readwrite, retain) NSNumber * pullForce;
 @property (readwrite, retain) NSNumber * speed;
@@ -48,6 +52,8 @@ struct RPoint {
 @property (readwrite, retain) NSNumber * pushForceInternalDist;
 @property (readwrite, retain) NSNumber * pushForceExternalDist;
 @property (readwrite, retain) NSNumber * percentageForce;
+
+@property (readwrite, retain) NSNumber * stiffness;
 
 -(id) initWithPoints:(vector<ofxPoint2f>) points;
 -(void) updateWithPoints:(vector<ofxPoint2f>) points;
