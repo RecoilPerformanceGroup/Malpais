@@ -279,7 +279,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			glTranslated(iVoice*(levelsWidth*1.0/NUM_VOICES), 0, 0);
 			ofSetColor(0, 0, 0);
 			
-			ofDrawBitmapString(ofToString(iVoice+1,0), ofPoint(0.0001,bandHeight*0.75));
+//			ofDrawBitmapString(ofToString(iVoice+1,0), ofPoint(0.0001,bandHeight*0.75));
 			
 			glPushMatrix(); {
 				for (int iBand = 0; iBand < NUM_BANDS; iBand++) {

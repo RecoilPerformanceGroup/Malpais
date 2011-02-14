@@ -4,7 +4,7 @@
 #include "ofxVectorMath.h"
 #include "Filter.h"
 
-#define NUMPOINTS 30
+#define NUMPOINTS 150
 
 struct RPoint {
 	ofxPoint2f pos;
