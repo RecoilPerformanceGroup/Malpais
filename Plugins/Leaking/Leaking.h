@@ -2,9 +2,12 @@
 
 #include "Plugin.h"
 #include "ofxVectorMath.h"
+#include "ofxOpenCv.h"
 #include "Filter.h"
 
-#define NUMPOINTS 150
+#define NUMPOINTS 50
+#define IMGWIDTH 300.0
+#define IMGHEIGHT 600.0
 
 struct RPoint {
 	ofxPoint2f pos;
@@ -31,6 +34,7 @@ struct RPoint {
 	NSNumber * pushForceExternal;	
 	NSNumber * pushForceInternalDist;
 	NSNumber * pushForceExternalDist;
+	NSNumber * gravity;
 
 	NSNumber * stiffness;
 	
@@ -52,6 +56,7 @@ struct RPoint {
 @property (readwrite, retain) NSNumber * pushForceInternalDist;
 @property (readwrite, retain) NSNumber * pushForceExternalDist;
 @property (readwrite, retain) NSNumber * percentageForce;
+@property (readwrite, retain) NSNumber * gravity;
 
 @property (readwrite, retain) NSNumber * stiffness;
 
@@ -65,7 +70,7 @@ struct RPoint {
 -(void) debugDraw;
 
 -(bool) pointInsidePoly:(ofxPoint2f)p;
-
+-(void) bindTo:(id)obj;
 @end
 
 
@@ -80,8 +85,14 @@ struct RPoint {
 	
 	float goodBadFactor;
 	
+	float avgDist;
+	
 	vector<ofxPoint3f> goodPoints;
 	vector<ofxPoint3f> badPoints;
+	
+	ofxCvFloatImage * image;
+	ofxCvFloatImage * tmpimage;
+	ofxCvContourFinder * contourFinder;
 }
 
 -(float) aspect;

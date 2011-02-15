@@ -32,6 +32,7 @@
 		centroidFilter[2]->setDl(1, -2.5818614306773719263, 2.2466666427559748864, -.65727470210265670262);
 		
 		blobs = [[NSMutableArray array] retain];
+		
 	}
 	return self;
 }
@@ -215,6 +216,8 @@
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:0 maxValue:1] named:@"persistentDist"];	
 	
+	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:1.0] named:@"blobTracking"];
+	
 	if([customProperties valueForKey:@"point0a"] == nil){
 		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0a"];
 		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0b"];
@@ -257,6 +260,19 @@
 	threadBlobs = [[NSMutableArray array] retain];
 	persistentBlobs = [[NSMutableArray array] retain];
 	
+	projPointCache[0] = nil;
+	projPointCache[1] = nil;
+	projPointCache[2] = nil;
+
+	point2Cache[0] = nil;
+	point2Cache[1] = nil;
+	point2Cache[2] = nil;
+
+	point3Cache[0] = nil;
+	point3Cache[1] = nil;
+	point3Cache[2] = nil;
+	
+	
 }
 
 -(void) setup{
@@ -265,7 +281,7 @@
 	kinectConnected = depth.setup(&context);
 	
 	if(kinectConnected){
-		users.setup(&context, &depth);		
+	//	users.setup(&context, &depth);		
 		[self calculateMatrix];	 
 	}
 	
@@ -296,10 +312,10 @@
 	if(!stop && kinectConnected){
 		context.update();
 		depth.update();
-		users.update();		
+		//users.update();		
 		
 		//Blob tracking
-		{
+		if(PropB(@"blobTracking")){
 			xn::DepthMetaData dmd;
 			depth.getXnDepthGenerator().GetMetaData(dmd);	
 			const XnDepthPixel* pixels = dmd.Data();
@@ -708,7 +724,7 @@
 			
 			glPushMatrix();{
 				glScaled(0.5, 0.5, 1.0);
-				users.draw();
+				depth.draw();
 			}glPopMatrix();
 			
 			
@@ -1291,7 +1307,7 @@
 	
 	
 }
-
+ 
 -(void) controlMouseDragged:(float)x y:(float)y button:(int)button{
 	if(draggedPoint != -1){
 		ofxPoint2f mouse = ofPoint(2*x/640.0,2*y/480.0);
@@ -1382,28 +1398,39 @@
 }
 
 
--(ofxPoint3f) point3:(int)point{
-	return ofxPoint3f([[customProperties valueForKey:[NSString stringWithFormat:@"point%ix",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%iy",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%iz",point]] floatValue]);
+-(ofxPoint3f) point3:(int)point{	
+	if(point3Cache[point] == nil)
+		point3Cache[point] = ofxPoint3f([[customProperties valueForKey:[NSString stringWithFormat:@"point%ix",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%iy",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%iz",point]] floatValue]);
+	
+	return point3Cache[point];	
 }
 -(ofxPoint2f) point2:(int)point{
-	return ofxPoint2f([[customProperties valueForKey:[NSString stringWithFormat:@"point%ia",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%ib",point]] floatValue]);
+	if(point2Cache[point] == nil)
+		point2Cache[point] = ofxPoint2f([[customProperties valueForKey:[NSString stringWithFormat:@"point%ia",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%ib",point]] floatValue]);
+
+	return point2Cache[point];
 }
 -(ofxPoint2f) projPoint:(int)point{
-	return ofxPoint2f([[customProperties valueForKey:[NSString stringWithFormat:@"proj%ix",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"proj%iy",point]] floatValue]);
+	if(projPointCache[point] == nil)
+		projPointCache[point] = ofxPoint2f([[customProperties valueForKey:[NSString stringWithFormat:@"proj%ix",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"proj%iy",point]] floatValue]);
+	return projPointCache[point];
 }
 
 -(void) setPoint3:(int) point coord:(ofxPoint3f)coord{
 	[customProperties setValue:[NSNumber numberWithFloat:coord.x] forKey:[NSString stringWithFormat:@"point%ix",point]];
 	[customProperties setValue:[NSNumber numberWithFloat:coord.y] forKey:[NSString stringWithFormat:@"point%iy",point]];
 	[customProperties setValue:[NSNumber numberWithFloat:coord.z] forKey:[NSString stringWithFormat:@"point%iz",point]];
+	point3Cache[point] = nil;
 }
 -(void) setPoint2:(int) point coord:(ofxPoint2f)coord{
 	[customProperties setValue:[NSNumber numberWithFloat:coord.x] forKey:[NSString stringWithFormat:@"point%ia",point]];
 	[customProperties setValue:[NSNumber numberWithFloat:coord.y] forKey:[NSString stringWithFormat:@"point%ib",point]];
+		point2Cache[point] = nil;
 }
 -(void) setProjPoint:(int) point coord:(ofxPoint2f)coord{
 	[customProperties setValue:[NSNumber numberWithFloat:coord.x] forKey:[NSString stringWithFormat:@"proj%ix",point]];
 	[customProperties setValue:[NSNumber numberWithFloat:coord.y] forKey:[NSString stringWithFormat:@"proj%iy",point]];
+	projPointCache[point] = nil;
 }
 
 -(ofxUserGenerator*) getUserGenerator{

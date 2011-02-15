@@ -37,20 +37,6 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		[voiceWaveForms addObject:aVoice];
 	}
 	
-//	mInputDeviceList = new AudioDeviceList(true);
-
-}
-
--(void) setup{
-	
-//	UInt32 propsize=0;
-//	propsize = sizeof(AudioDeviceID);
-//	verify_noerr (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &propsize, &inputDevice));
-//	BuildDeviceMenu(mInputDeviceList, mInputDevices, inputDevice);
-	
-	
-	// bind midi channels and controlnumbers
-	
 	int midiControlNumber;
 	
 	for(int iVoice = 0; iVoice < NUM_VOICES; iVoice++){
@@ -67,7 +53,23 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		}
 	}
 	
-	liveVoice = [[WaveObject alloc] init];
+	
+	
+//	mInputDeviceList = new AudioDeviceList(true);
+
+}
+
+-(void) setup{
+	
+//	UInt32 propsize=0;
+//	propsize = sizeof(AudioDeviceID);
+//	verify_noerr (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &propsize, &inputDevice));
+//	BuildDeviceMenu(mInputDeviceList, mInputDevices, inputDevice);
+	
+	
+	// bind midi channels and controlnumbers
+	
+		liveVoice = [[WaveObject alloc] init];
 	[liveVoice loadMic];
 	
 }
