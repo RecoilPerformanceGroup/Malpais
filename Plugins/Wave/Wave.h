@@ -22,10 +22,17 @@
 	WaveObject * liveVoice;
 	
 	NSMutableArray * voiceWaveForms;
+
+	float voiceSourceWaves[NUM_VOICES+1][NUM_BANDS][MAX_RESOLUTION];
+
+	float voiceUpdateTimes[NUM_VOICES+1];
+	
+	float frameRateDeltaTime;
+	float lastUpdateTime;
 	
 	fft		liveFFT;
 	int liveSamples;
-	
+		
 	float magnitude[2048];
 	float phase[2048];
 	float power[2048];
@@ -38,5 +45,19 @@
 }
 
 - (IBAction)inputDeviceSelected:(id)sender;
+- (NSMutableArray*) getWaveFormWithIndex:(int)index 
+							   amplitude:(float)amplitude 
+							  driftSpeed:(float)driftSpeed
+							   smoothing:(float)smoothing
+							   freqeuncy:(float)frequency
+								  random:(float)randomFactor;
+
+- (NSMutableArray*) getWaveFormsWithIndex:(int)index 
+							   amplitude:(float)amplitude 
+							  driftSpeed:(float)driftSpeed
+							   smoothing:(float)smoothing
+							   freqeuncy:(float)frequency
+								  random:(float)randomFactor;
+
 
 @end
