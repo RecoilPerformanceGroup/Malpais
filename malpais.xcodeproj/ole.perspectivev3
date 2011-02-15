@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>ActivePerspectiveName</key>
-	<string>Debug</string>
+	<string>Project</string>
 	<key>AllowedModules</key>
 	<array>
 		<dict>
@@ -231,6 +231,8 @@
 			<key>Layout</key>
 			<array>
 				<dict>
+					<key>BecomeActive</key>
+					<true/>
 					<key>ContentConfiguration</key>
 					<dict>
 						<key>PBXBottomSmartGroupGIDs</key>
@@ -325,6 +327,8 @@
 							<string>MainColumn</string>
 							<real>284</real>
 						</array>
+						<key>RubberWindowFrame</key>
+						<string>86 169 1561 935 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -352,7 +356,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7FD2F067130AE58400B274C9</string>
+										<string>7F0F76EC130C0F70009A31C0</string>
 										<key>history</key>
 										<array>
 											<string>7FBF1BBD12E49CC3009E32EF</string>
@@ -466,7 +470,7 @@
 											<string>7FD2F013130ADD7C00B274C9</string>
 											<string>7FD2F014130ADD7C00B274C9</string>
 											<string>7FD2F015130ADD7C00B274C9</string>
-											<string>7FD2F016130ADD7C00B274C9</string>
+											<string>7F0F76EB130C0F6C009A31C0</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -480,16 +484,18 @@
 							<key>GeometryConfiguration</key>
 							<dict>
 								<key>Frame</key>
-								<string>{{0, 0}, {1255, 452}}</string>
+								<string>{{0, 0}, {1255, 442}}</string>
+								<key>RubberWindowFrame</key>
+								<string>86 169 1561 935 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
 							<key>Proportion</key>
-							<string>452pt</string>
+							<string>442pt</string>
 						</dict>
 						<dict>
 							<key>Proportion</key>
-							<string>437pt</string>
+							<string>447pt</string>
 							<key>Tabs</key>
 							<array>
 								<dict>
@@ -503,7 +509,9 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {1255, 410}}</string>
+										<string>{{10, 27}, {1255, 420}}</string>
+										<key>RubberWindowFrame</key>
+										<string>86 169 1561 935 0 0 1920 1178 </string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
@@ -585,11 +593,11 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7FD2EF84130AC2E400B274C9</string>
+				<string>7F0F73EB130BEEBB009A31C0</string>
 				<string>1CA23ED40692098700951B8B</string>
-				<string>7FD2EF85130AC2E400B274C9</string>
+				<string>7F0F73EC130BEEBB009A31C0</string>
 				<string>7FBF1B3D12E49996009E32EF</string>
-				<string>7FD2EF86130AC2E400B274C9</string>
+				<string>7F0F73ED130BEEBB009A31C0</string>
 				<string>1CA23EDF0692099D00951B8B</string>
 				<string>1CA23EE00692099D00951B8B</string>
 				<string>1CA23EE10692099D00951B8B</string>
@@ -640,14 +648,12 @@
 					<key>GeometryConfiguration</key>
 					<dict>
 						<key>Frame</key>
-						<string>{{0, 0}, {1561, 270}}</string>
-						<key>RubberWindowFrame</key>
-						<string>86 169 1561 935 0 0 1920 1178 </string>
+						<string>{{0, 0}, {1561, 240}}</string>
 					</dict>
 					<key>Module</key>
 					<string>PBXDebugCLIModule</string>
 					<key>Proportion</key>
-					<string>270pt</string>
+					<string>240pt</string>
 				</dict>
 				<dict>
 					<key>ContentConfiguration</key>
@@ -666,8 +672,8 @@
 								<string>yes</string>
 								<key>sizes</key>
 								<array>
-									<string>{{0, 0}, {762, 264}}</string>
-									<string>{{762, 0}, {799, 264}}</string>
+									<string>{{0, 0}, {762, 276}}</string>
+									<string>{{762, 0}, {799, 276}}</string>
 								</array>
 							</dict>
 							<key>VerticalSplitView</key>
@@ -682,8 +688,8 @@
 								<string>yes</string>
 								<key>sizes</key>
 								<array>
-									<string>{{0, 0}, {1561, 264}}</string>
-									<string>{{0, 264}, {1561, 355}}</string>
+									<string>{{0, 0}, {1561, 276}}</string>
+									<string>{{0, 276}, {1561, 373}}</string>
 								</array>
 							</dict>
 						</dict>
@@ -703,7 +709,7 @@
 						<key>DebugSTDIOWindowFrame</key>
 						<string>{{200, 200}, {500, 300}}</string>
 						<key>Frame</key>
-						<string>{{0, 275}, {1561, 619}}</string>
+						<string>{{0, 245}, {1561, 649}}</string>
 						<key>PBXDebugSessionStackFrameViewKey</key>
 						<dict>
 							<key>DebugVariablesTableConfiguration</key>
@@ -716,17 +722,13 @@
 								<real>569</real>
 							</array>
 							<key>Frame</key>
-							<string>{{762, 0}, {799, 264}}</string>
-							<key>RubberWindowFrame</key>
-							<string>86 169 1561 935 0 0 1920 1178 </string>
+							<string>{{762, 0}, {799, 276}}</string>
 						</dict>
-						<key>RubberWindowFrame</key>
-						<string>86 169 1561 935 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXDebugSessionModule</string>
 					<key>Proportion</key>
-					<string>619pt</string>
+					<string>649pt</string>
 				</dict>
 			</array>
 			<key>Name</key>
@@ -744,13 +746,13 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>7FD2EFA3130ACEA800B274C9</string>
+				<string>7F0F73EE130BEEBB009A31C0</string>
 				<string>1CCC7628064C1048000F2A68</string>
 				<string>1CCC7629064C1048000F2A68</string>
-				<string>7FD2EFA4130ACEA800B274C9</string>
-				<string>7FD2EFA5130ACEA800B274C9</string>
-				<string>7FD2EFA6130ACEA800B274C9</string>
-				<string>7FD2EFA7130ACEA800B274C9</string>
+				<string>7F0F73EF130BEEBB009A31C0</string>
+				<string>7F0F73F0130BEEBB009A31C0</string>
+				<string>7F0F73F1130BEEBB009A31C0</string>
+				<string>7F0F73F2130BEEBB009A31C0</string>
 				<string>7FBF1B3D12E49996009E32EF</string>
 			</array>
 			<key>ToolbarConfigUserDefaultsMinorVersion</key>
@@ -785,8 +787,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7FD2EFA9130ACEA800B274C9</string>
-		<string>7FD2EFAA130ACEA800B274C9</string>
 		<string>/Users/ole/Development/openFrameworks/apps/recoil/Malpais/malpais.xcodeproj</string>
 	</array>
 	<key>WindowString</key>

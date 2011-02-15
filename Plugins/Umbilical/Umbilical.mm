@@ -4,6 +4,29 @@
 
 @implementation Umbilical
 
+
+
+-(float) falloff:(float)p{
+	if(p >= 1)
+		return 1;
+	if(p<=0)
+		return 0;
+	p *= 6;
+	p -= 3;
+	
+	return 1.0/(1.0+pow(5,-p));
+}
+
+-(float) offset:(float)x{
+	float xScale = 50.0;
+	x *= xScale;
+	float u = endPos.y*xScale;
+	float s = 5;
+	float e = 2.71828182845904523536;
+	return 20 * (pow(e , -(x-u)/s) )/ pow(s*(1+pow(e , -(x-u)/s)) , 2);
+	
+}
+
 -(void) initPlugin{
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"amplitude"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1000.0] named:@"resolution"];
@@ -26,6 +49,8 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"weighLiveOrBuffer"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:@"numberOfFixedStrings"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"stretch"];
+	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"endpointPushForce"];
 }
 
 -(void) setup{	
@@ -35,6 +60,18 @@
 		distortion[i]->reserve((int)roundf(PropF(@"resolution")));
 		waveForm[i] =  new MSA::Interpolator1D;
 		waveForm[i]->reserve((int)roundf(PropF(@"resolution")));
+		
+		bool notOk = true;
+		while(notOk){
+			notOk = false;
+			waveX[i] = ofRandom(0, [self aspect]);
+			for(int j=0;j<i;j++){
+				if(fabs(waveX[i] - waveX[j]) < 0.02){
+					notOk = true;
+					cout<<"Damn "<<waveX[i]<<"  "<<waveX[j]<<endl;
+				}
+			}
+		}		
 	}
 	
 	mousex = 0.5;
@@ -46,7 +83,41 @@
 	int resolution = (int)roundf(PropF(@"resolution"));
 	
 	for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
+		//Offsets
+		{
+			while(offsets[iVoice].size() < PropI(@"resolution"))
+				offsets[iVoice].push_back(0);
+			
+			float midDist =  fabs(0.5*[self aspect] - waveX[iVoice]);
+			for(int i=0;i<PropI(@"resolution");i++){
+				float x = (float)i/PropI(@"resolution");
+				float offset = 0;			
+				if(PropF(@"endpointPushForce") > 0){
+					//Ved det er snyd, men skal finde afstand til endpoint, og snyder
+					ofxPoint2f thisPoint = ofxPoint2f(waveX[iVoice], x);
+					float dir = 1;
+					if(thisPoint.x < 0.5*[self aspect])
+						dir = -1;
+					
+					float xDist = dir*(endPos.x - thisPoint.x)+0.1;
+					
+					float d = fabs(0.5*[self aspect] - endPos.x)+0.05;
+					
+					if(xDist > 0){
+						offset = -dir*PropF(@"endpointPushForce") * 100 * [self offset:x] * d * xDist;
+					} else {
+						offset = -dir*PropF(@"endpointPushForce") * 100 * [self offset:x] * d * (xDist)*0.8;
+						//offset = xDist;
+					}
+					
+				}
+				
 
+				offsets[iVoice][i] += (offset - offsets[iVoice][i]) * pow([self aspect]*0.5 - midDist,2)*9;
+			}
+		}
+		
+		
 		NSString * waveOnStr = [NSString stringWithFormat:@"wave%iOn",iVoice];
 		
 		if (iVoice > 0) {
@@ -55,11 +126,11 @@
 			} else {
 				[[properties objectForKey:waveOnStr] setBoolValue:NO];
 			}
-
+			
 		}
 		
 		if (PropB(waveOnStr)) {
-
+			
 			NSString * waveChannelStr = [NSString stringWithFormat:@"wave%iChannel",iVoice];
 			
 			wave = [GetPlugin(Wave)
@@ -113,7 +184,16 @@
 				distortion[iVoice] = newDistortion;
 			}
 			
-		}
+		} else {
+			//Tøm bufferen forfra hvis den er slået fra
+			MSA::Interpolator1D * newDistortion = new MSA::Interpolator1D;
+			newDistortion->reserve(resolution);
+			for (int i=1; i < distortion[iVoice]->size() ; i++) {
+				newDistortion->push_back(distortion[iVoice]->getData()[i]);
+			}
+			distortion[iVoice]->clear();
+			distortion[iVoice] = newDistortion;			
+		}	
 		
 	}
 	
@@ -144,17 +224,6 @@
 }
 
 
--(float) falloff:(float)p{
-	if(p >= 1)
-		return 1;
-	if(p<=0)
-		return 0;
-	p *= 6;
-	p -= 3;
-	
-	return 1.0/(1.0+pow(5,-p));
-}
-
 -(void) drawWave:(int)iVoice from:(ofxPoint2f)begin to:(ofxPoint2f)end{
 	ofxVec2f v1 = end-begin;
 	ofxVec2f v2 = ofxVec2f(0,1.0);
@@ -175,7 +244,7 @@
 		int resolution = PropF(@"resolution");
 		float amplitude = PropF(@"amplitude");
 		float weighLiveOrBuffer = PropF(@"weighLiveOrBuffer");
-
+		
 		int startSegment, endSegment;
 		
 		if (PropB(@"stretch")) {
@@ -185,14 +254,20 @@
 			startSegment = resolution*begin.y;
 			endSegment = resolution*end.y;
 		}
-
+		
 		glBegin(GL_LINE_STRIP);
 		
 		for (int i = startSegment;i< endSegment; i++) {
 			float x = 1.0/(endSegment-startSegment)*(i-startSegment);
+			
 			if (i < segments) {
 				float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
-				glVertex2f(x*length, ((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
+				
+				
+				
+				
+				
+				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
 			}
 		}
 		glEnd();
@@ -202,13 +277,13 @@
 
 -(void) draw:(NSDictionary*)drawingInformation{
 	ApplySurface(@"Floor");{
-	//	glScaled([self aspect], 1, 1);
+		//	glScaled([self aspect], 1, 1);
 		
 		[self drawWave:0 from:startPos to:endPos];
 		
 		for (int iVoice = 1; iVoice < NUM_VOICES+1; iVoice++) {
-			ofxVec2f start = ofxVec2f([self aspect]/NUM_VOICES*(iVoice-0.5), 0.0);
-			ofxVec2f end = ofxVec2f([self aspect]/NUM_VOICES*(iVoice-0.5), 1.0);
+			ofxVec2f start = ofxVec2f(waveX[iVoice], 0.0);
+			ofxVec2f end = ofxVec2f(waveX[iVoice], 1.0);
 			[self drawWave:iVoice from:start to:end];
 		}
 		
@@ -263,13 +338,13 @@
 	
 	
 	glPushMatrix();{
-
+		
 		glScaled(200*1.0/[self aspect], 400, 1);
 		[self drawWave:0 from:startPos to:endPos];
 		
 		for (int iVoice = 1; iVoice < NUM_VOICES+1; iVoice++) {
-			ofxVec2f start = ofxVec2f([self aspect]/NUM_VOICES*(iVoice-0.5), 0.0);
-			ofxVec2f end = ofxVec2f([self aspect]/NUM_VOICES*(iVoice-0.5), 1.0);
+			ofxVec2f start = ofxVec2f(waveX[iVoice], 0.0);
+			ofxVec2f end = ofxVec2f(waveX[iVoice], 1.0);
 			[self drawWave:iVoice from:start to:end];
 		}
 		
