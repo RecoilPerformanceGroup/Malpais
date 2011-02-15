@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Plugin.h"
 #import <AudioToolbox/AudioToolbox.h>
 #include "CAXException.h"

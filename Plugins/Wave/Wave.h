@@ -5,6 +5,7 @@
 //  Created by ole kristensen on 11/02/11.
 //  Copyright 2011 Recoil Performance Group. All rights reserved.
 //
+#pragma once
 
 #include "Plugin.h"
 #include "AudioDeviceList.h"
