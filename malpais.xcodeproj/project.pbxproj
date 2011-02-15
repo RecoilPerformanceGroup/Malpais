@@ -26,6 +26,8 @@
 		7FBF1BAA12E49AD2009E32EF /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C1C512AD16C000197290 /* BWToolkitFramework.framework */; };
 		7FBF1BD212E49E6F009E32EF /* libdc1394.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C19412AD16C000197290 /* libdc1394.a */; };
 		7FD2E9661306D51600B274C9 /* fft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FD2E9641306D51600B274C9 /* fft.cpp */; };
+		7FD2EC4D130982E600B274C9 /* Umbilical.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7FD2EC4C130982E600B274C9 /* Umbilical.mm */; };
+		7FD2EC7013098D9D00B274C9 /* Umbilical.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7FD2EC6F13098D9D00B274C9 /* Umbilical.xib */; };
 		DD0A21DD12EF0F6D0068DCF1 /* DCAudioRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0A21DB12EF0F6D0068DCF1 /* DCAudioRecorder.cpp */; };
 		DD0A229D12EF1CA10068DCF1 /* CARingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0A229B12EF1CA10068DCF1 /* CARingBuffer.cpp */; };
 		DD2561DA12F3268D00BD0498 /* FysiskeReaktioner.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD2561D912F3268D00BD0498 /* FysiskeReaktioner.mm */; };
@@ -155,7 +157,7 @@
 		E45BE9810E8CC7DD009D7055 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9770E8CC7DD009D7055 /* CoreServices.framework */; };
 		E45BE9830E8CC7DD009D7055 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9790E8CC7DD009D7055 /* OpenGL.framework */; };
 		E45BE9840E8CC7DD009D7055 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */; };
-		E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */; };
+		E4C2422B10CC554B004149E2 /* openFrameworks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2421E10CC549C004149E2 /* openFrameworks.a */; };
 		E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424410CC5A17004149E2 /* AppKit.framework */; };
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
@@ -270,6 +272,9 @@
 		7FD2E9251306D0FB00B274C9 /* AudioDeviceList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDeviceList.h; sourceTree = "<group>"; };
 		7FD2E9641306D51600B274C9 /* fft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fft.cpp; sourceTree = "<group>"; };
 		7FD2E9651306D51600B274C9 /* fft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fft.h; sourceTree = "<group>"; };
+		7FD2EC4B130982E600B274C9 /* Umbilical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Umbilical.h; path = Umbilical/Umbilical.h; sourceTree = "<group>"; };
+		7FD2EC4C130982E600B274C9 /* Umbilical.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Umbilical.mm; path = Umbilical/Umbilical.mm; sourceTree = "<group>"; };
+		7FD2EC6F13098D9D00B274C9 /* Umbilical.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Umbilical.xib; path = Umbilical/Umbilical.xib; sourceTree = "<group>"; };
 		DD0A21DB12EF0F6D0068DCF1 /* DCAudioRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DCAudioRecorder.cpp; sourceTree = "<group>"; };
 		DD0A21DC12EF0F6D0068DCF1 /* DCAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAudioRecorder.h; sourceTree = "<group>"; };
 		DD0A229B12EF1CA10068DCF1 /* CARingBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CARingBuffer.cpp; path = Extras/CoreAudio/PublicUtility/CARingBuffer.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
@@ -648,7 +653,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */,
+				E4C2422B10CC554B004149E2 /* openFrameworks.a in Frameworks */,
 				E45BE0AA0E8CC67C009D7055 /* GLee.a in Frameworks */,
 				E45BE2E40E8CC69C009D7055 /* rtAudio.a in Frameworks */,
 				E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */,
@@ -788,6 +793,16 @@
 			);
 			name = GraphKitHeaders;
 			path = ../../../addons/ofxCocoaPlugins/src/Libs/GraphKitHeaders;
+			sourceTree = "<group>";
+		};
+		7FD2EC491309824700B274C9 /* Umbilical */ = {
+			isa = PBXGroup;
+			children = (
+				7FD2EC4B130982E600B274C9 /* Umbilical.h */,
+				7FD2EC4C130982E600B274C9 /* Umbilical.mm */,
+				7FD2EC6F13098D9D00B274C9 /* Umbilical.xib */,
+			);
+			name = Umbilical;
 			sourceTree = "<group>";
 		};
 		DD0A217F12EEFAB90068DCF1 /* Audio */ = {
@@ -1613,6 +1628,7 @@
 		DDC8EA5D113809B100574926 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				7FD2EC491309824700B274C9 /* Umbilical */,
 				330CC62012FB3067000283DE /* TrackingElements */,
 				DD9C01C512E8755600EF6F51 /* Wave */,
 				DD2561D712F3267E00BD0498 /* FysiskeReaktioner */,
@@ -1861,7 +1877,7 @@
 		E4C2421710CC549C004149E2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */,
+				E4C2421E10CC549C004149E2 /* openFrameworks.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1998,10 +2014,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */ = {
+		E4C2421E10CC549C004149E2 /* openFrameworks.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = openFrameworksDebug.a;
+			path = openFrameworks.a;
 			remoteRef = E4C2421D10CC549C004149E2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -2035,6 +2051,7 @@
 				33ED1C5813018EC20090E1EB /* install.xml in Resources */,
 				33ED1C5913018EC20090E1EB /* LICENSE.txt in Resources */,
 				33ED1C821301900F0090E1EB /* install.xml in Resources */,
+				7FD2EC7013098D9D00B274C9 /* Umbilical.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2160,6 +2177,7 @@
 				33ED1C8B130190210090E1EB /* Color.cpp in Sources */,
 				7F8F6BA5130565580097D302 /* Wave.mm in Sources */,
 				7FD2E9661306D51600B274C9 /* fft.cpp in Sources */,
+				7FD2EC4D130982E600B274C9 /* Umbilical.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
