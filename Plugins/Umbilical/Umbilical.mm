@@ -125,8 +125,8 @@
 			
 			for (int i = 0;i< segments; i++) {
 				float x = 1.0/segments*i;
-				float scaling = 1.0-powf((1.0-sqrt(x)),5.0);
-				glVertex2f(x*length, distortion->getData()[i]*amplitude*scaling);
+				float envelope = (1.0-powf((1.0-sqrt(x)),5.0))*(1.0-powf((1.0-sqrt(-x+1)),5.0));
+				glVertex2f(x*length, distortion->getData()[i]*amplitude*envelope);
 			}
 			glEnd();
 			
@@ -206,8 +206,8 @@
 		
 		for (int i = 0;i< segments; i++) {
 			float x = 1.0/segments*i;
-			float scaling = 1.0-powf((1.0-sqrt(x)),5.0);
-			glVertex2f(x*length, distortion->getData()[i]*amplitude*scaling);
+			float envelope = (1.0-powf((1.0-sqrt(x)),5.0))*(1.0-powf((1.0-sqrt(-x+1)),5.0));
+			glVertex2f(x*length, distortion->getData()[i]*amplitude*envelope);
 		}
 		glEnd();
 		
