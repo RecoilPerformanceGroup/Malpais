@@ -15,10 +15,12 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:8.0] named:@"waveChannel"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0.0 maxValue:1.0] named:@"startPosX"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"startPosY"];
+	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.01 minValue:0.01 maxValue:1.0] named:@"falloffStart"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.01 minValue:0.01 maxValue:1.0] named:@"falloffEnd"];
 }
 
--(void) setup{
-	
+-(void) setup{	
 	distortion = new MSA::Interpolator1D;
 	distortion->reserve((int)roundf(PropF(@"resolution")));
 	mousex = 0.5;
@@ -85,11 +87,11 @@
 		if([pblobs count] >= 1){
 			PersistentBlob * oldest = nil;
 			for(PersistentBlob * b in pblobs){
-				if(oldest == nil || b->age > oldest->age)
+				if((oldest == nil || b->age > oldest->age) && [b centroidFiltered].x > 0 && [b centroidFiltered].x < [self aspect])
 					oldest = b;
 			}
 			if(oldest != nil){
-				endPos = ofxVec2f(oldest->centroidFiltered->x,oldest->centroidFiltered->y);
+				endPos = ofxVec2f([oldest centroidFiltered].x,[oldest centroidFiltered].z);
 			}
 		}
 		
@@ -97,41 +99,60 @@
 		endPos = ofxVec2f(mousex,mousey);
 	}
 	
+	
+	
+}
+
+
+-(float) falloff:(float)p{
+	if(p >= 1)
+		return 1;
+	if(p<=0)
+		return 0;
+	p *= 6;
+	p -= 3;
+	
+	return 1.0/(1.0+pow(5,-p));
+}
+
+-(void) drawWaveFrom:(ofxPoint2f)begin to:(ofxPoint2f)end{
+	ofxVec2f v1 = end-begin;
+	ofxVec2f v2 = ofxVec2f(0,1.0);
+	
+	float length = v1.length();
+	
+	glPushMatrix();{
+		
+		ofNoFill();
+		ofSetLineWidth(4);
+		
+		ofSetColor(255, 255, 255, 255);
+		
+		glTranslated(begin.x,begin.y, 0);
+		glRotated(-v1.angle(v2)+90, 0, 0, 1);
+		
+		int segments = distortion->size();
+		float amplitude = PropF(@"amplitude");
+		
+		glBegin(GL_LINE_STRIP);
+		
+		for (int i = 0;i< segments; i++) {
+			float p = (float)i/segments;
+			float f = [self falloff:(float)p/PropF(@"falloffStart")] * [self falloff:(1-p)/PropF(@"falloffEnd")];
+			float x = 1.0/segments*i;
+			float scaling = 1.0-powf((1.0-sqrt(x)),5.0);
+			glVertex2f(x*length, distortion->getData()[i]*amplitude*scaling*f);
+		}
+		glEnd();
+		
+	} glPopMatrix();
 }
 
 -(void) draw:(NSDictionary*)drawingInformation{
 	ApplySurface(@"Floor");{
+	//	glScaled([self aspect], 1, 1);
 		
-		ofxVec2f v1 = endPos-startPos;
-		v1.x *=[self aspect];
-		ofxVec2f v2 = ofxVec2f(0,1.0*[self aspect]);
-		
-		float length = v1.length();
-		
-		glPushMatrix();{
-			
-			ofNoFill();
-			ofSetLineWidth(1.5);
-			
-			ofSetColor(255, 255, 255, 255);
-			
-			glTranslated(startPos.x*[self aspect],startPos.y, 0);
-			glRotated(-v1.angle(v2)+90, 0, 0, 1);
-						
-			int segments = distortion->size();
-			float amplitude = PropF(@"amplitude");
-			
-			glBegin(GL_LINE_STRIP);
-			
-			for (int i = 0;i< segments; i++) {
-				float x = 1.0/segments*i;
-				float scaling = 1.0-powf((1.0-sqrt(x)),5.0);
-				glVertex2f(x*length, distortion->getData()[i]*amplitude*scaling);
-			}
-			glEnd();
-			
-		} glPopMatrix();
-		
+		[self drawWaveFrom:startPos to:endPos];		
 		/** interpolation nonsense
 		 
 		 ofNoFill();
@@ -174,56 +195,28 @@
 			ofFill();
 		}
 		ofSetColor(255, 255, 0,100);
-		ofEllipse(mousex*200.0, mousey*400.0, 15, 15);
+		ofEllipse(mousex*200.0*(1.0/[self aspect]), mousey*400.0, 15, 15);
 	}
-
-	ofSetColor(255, 0, 255,100);
-	ofEllipse(startPos.x*200, startPos.y*400, 15, 15);
-	ofEllipse(endPos.x*200, endPos.y*400, 15, 15);
-
-	ofxVec2f v1 = endPos-startPos;
-	v1.x *=[self aspect];
-	ofxVec2f v2 = ofxVec2f(0,1.0*[self aspect]);
 	
-	float length = v1.length();
+	ofSetColor(255, 0, 255,100);
+	ofEllipse(startPos.x*200*(1.0/[self aspect]), startPos.y*400, 15, 15);
+	ofEllipse(endPos.x*200*(1.0/[self aspect]), endPos.y*400, 15, 15);
+	
 	
 	glPushMatrix();{
-	
-		ofNoFill();
-		ofSetLineWidth(1.5);
-		
-		ofSetColor(255, 255, 255, 255);
-		
-		glScaled(400, 400, 0);
-		
-		glTranslated(0.5*[self aspect],0, 0);
-		glRotated(-v1.angle(v2)+90, 0, 0, 1);
-				
-		int segments = distortion->size();
-		float amplitude = PropF(@"amplitude");
-		
-		glBegin(GL_LINE_STRIP);
-		
-		for (int i = 0;i< segments; i++) {
-			float x = 1.0/segments*i;
-			float scaling = 1.0-powf((1.0-sqrt(x)),5.0);
-			glVertex2f(x*length, distortion->getData()[i]*amplitude*scaling);
-		}
-		glEnd();
-		
-	} glPopMatrix();
-	
-	
+		glScaled(200*1.0/[self aspect], 400, 1);
+		[self drawWaveFrom:startPos to:endPos];
+	}glPopMatrix();
 }
 
 -(void) controlMousePressed:(float)x y:(float)y button:(int)button{
-	mousex = x / 200.0;
+	mousex = [self aspect] * x / 200.0;
 	mousey = y / 400.0;
 	mouseh = (controlMouseFlags & NSShiftKeyMask)?0.0:10.0;	
 }
 
 -(void) controlMouseDragged:(float)x y:(float)y button:(int)button{
-	mousex = x / 200.0;
+	mousex = [self aspect] * x / 200.0;
 	mousey = y / 400.0;
 	mouseh = (controlMouseFlags & NSShiftKeyMask)?0.0:10.0;	
 }
