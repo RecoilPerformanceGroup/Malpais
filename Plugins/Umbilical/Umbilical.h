@@ -9,6 +9,7 @@
 	float mousex,mousey,mouseh;
 
 	MSA::Interpolator1D		* distortion;
+	MSA::Interpolator1D		* waveForm;
 	
 	NSMutableArray * wave;
 	
