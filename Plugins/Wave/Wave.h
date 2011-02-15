@@ -9,6 +9,7 @@
 #include "Plugin.h"
 #include "AudioDeviceList.h"
 #include "WaveObject.h"
+#include "fft.h"
 
 #define NUM_VOICES 8
 #define NUM_BANDS 7
@@ -21,6 +22,14 @@
 	WaveObject * liveVoice;
 	
 	NSMutableArray * voiceWaveForms;
+	
+	fft		liveFFT;
+	int liveSamples;
+	
+	float magnitude[2048];
+	float phase[2048];
+	float power[2048];
+	float avg_power;		
 	
 	IBOutlet NSPopUpButton *		mInputDevices;
 //	AudioDeviceList *				mInputDeviceList;
