@@ -15,12 +15,17 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:8.0] named:@"waveChannel"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0.0 maxValue:1.0] named:@"startPosX"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"startPosY"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"weighLiveOrBuffer"];
 }
 
 -(void) setup{
 	
 	distortion = new MSA::Interpolator1D;
 	distortion->reserve((int)roundf(PropF(@"resolution")));
+	
+	waveForm =  new MSA::Interpolator1D;
+	waveForm->reserve((int)roundf(PropF(@"resolution")));
+	
 	mousex = 0.5;
 	mousey = 0.0;
 }
@@ -53,6 +58,10 @@
 	if ([wave count] > 0) {
 		for (int i=0; i < fabs(direction); i++) {
 			distortion->push_back([[wave objectAtIndex:0] floatValue]);
+		}
+		waveForm->clear();
+		for (int i=0; i < [wave count]; i++) {
+			waveForm->push_back([[wave objectAtIndex:i] floatValue]);
 		}
 	}
 	
@@ -120,13 +129,14 @@
 						
 			int segments = distortion->size();
 			float amplitude = PropF(@"amplitude");
+			float weighLiveOrBuffer = PropF(@"weighLiveOrBuffer");
 			
 			glBegin(GL_LINE_STRIP);
 			
 			for (int i = 0;i< segments; i++) {
 				float x = 1.0/segments*i;
 				float envelope = (1.0-powf((1.0-sqrt(x)),5.0))*(1.0-powf((1.0-sqrt(-x+1)),5.0));
-				glVertex2f(x*length, distortion->getData()[i]*amplitude*envelope);
+				glVertex2f(x*length, ((distortion->getData()[i]*weighLiveOrBuffer)+(waveForm->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*envelope);
 			}
 			glEnd();
 			
