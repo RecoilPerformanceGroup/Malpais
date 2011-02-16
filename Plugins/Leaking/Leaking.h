@@ -37,7 +37,7 @@ struct RPoint {
 	NSNumber * gravity;
 
 	NSNumber * stiffness;
-	
+	NSNumber * massForce;
 	NSNumber * percentageForce;
 	
 	float aspect;
@@ -57,6 +57,7 @@ struct RPoint {
 @property (readwrite, retain) NSNumber * pushForceExternalDist;
 @property (readwrite, retain) NSNumber * percentageForce;
 @property (readwrite, retain) NSNumber * gravity;
+@property (readwrite, retain) NSNumber * massForce;
 
 @property (readwrite, retain) NSNumber * stiffness;
 

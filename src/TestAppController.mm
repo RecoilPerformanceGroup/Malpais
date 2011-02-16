@@ -47,14 +47,6 @@ extern ofAppBaseWindow * window;
 	[pluginManagerController addPlugin:[[Midi alloc] init]];
 	[pluginManagerController addPlugin:[[Wave alloc] init]];
 
-
-	//	[pluginManagerController addPlugin:[[FysiskeReaktioner alloc] init]];
-
-	//
-
-	//[pluginManagerController addPlugin:[[SamplePlugin alloc] init]];
-	//[pluginManagerController addPlugin:[[SamplePlugin2 alloc] init]];
-
 	[pluginManagerController addHeader:@"Core Plugins"];
 	[pluginManagerController addPlugin:[[Keystoner alloc] initWithSurfaces:[NSArray arrayWithObjects:@"Floor", @"Wall", nil]]];
 
@@ -62,6 +54,7 @@ extern ofAppBaseWindow * window;
 	[pluginManagerController addPlugin:[[Leaking alloc] init]];
 	[pluginManagerController addPlugin:[[TrackingElements alloc] init]];
 	[pluginManagerController addPlugin:[[Umbilical alloc] init]];
+	[pluginManagerController addPlugin:[[VideoPlayer alloc] init]];
 	
 	//[pluginManagerController addPlugin:[[Cameras alloc] initWithNumberCameras:1]];
 	

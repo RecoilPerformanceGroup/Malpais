@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		330CC62412FB3067000283DE /* TrackingElements.mm in Sources */ = {isa = PBXBuildFile; fileRef = 330CC62212FB3067000283DE /* TrackingElements.mm */; };
 		330CC62512FB3067000283DE /* TrackingElements.xib in Resources */ = {isa = PBXBuildFile; fileRef = 330CC62312FB3067000283DE /* TrackingElements.xib */; };
+		331E2668130C17A500696D49 /* VideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 331E265E130C17A500696D49 /* VideoPlayer.mm */; };
+		331E2669130C17A500696D49 /* VideoPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 331E265F130C17A500696D49 /* VideoPlayer.xib */; };
 		33D7296412F85998009CD4A3 /* libOpenNI.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D7296312F85998009CD4A3 /* libOpenNI.dylib */; };
 		33ED1B0A13015A520090E1EB /* Leaking.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33ED1B0813015A520090E1EB /* Leaking.mm */; };
 		33ED1B0B13015A520090E1EB /* Leaking.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33ED1B0913015A520090E1EB /* Leaking.xib */; };
@@ -222,6 +224,9 @@
 		330CC62112FB3067000283DE /* TrackingElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackingElements.h; sourceTree = "<group>"; };
 		330CC62212FB3067000283DE /* TrackingElements.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TrackingElements.mm; sourceTree = "<group>"; };
 		330CC62312FB3067000283DE /* TrackingElements.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackingElements.xib; sourceTree = "<group>"; };
+		331E265D130C17A500696D49 /* VideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayer.h; sourceTree = "<group>"; };
+		331E265E130C17A500696D49 /* VideoPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoPlayer.mm; sourceTree = "<group>"; };
+		331E265F130C17A500696D49 /* VideoPlayer.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoPlayer.xib; sourceTree = "<group>"; };
 		33D7296312F85998009CD4A3 /* libOpenNI.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libOpenNI.dylib; path = /usr/lib/libOpenNI.dylib; sourceTree = "<absolute>"; };
 		33ED1B0713015A520090E1EB /* Leaking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Leaking.h; sourceTree = "<group>"; };
 		33ED1B0813015A520090E1EB /* Leaking.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Leaking.mm; sourceTree = "<group>"; };
@@ -695,6 +700,16 @@
 				330CC62312FB3067000283DE /* TrackingElements.xib */,
 			);
 			path = TrackingElements;
+			sourceTree = "<group>";
+		};
+		331E264C130C17A500696D49 /* VideoPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				331E265D130C17A500696D49 /* VideoPlayer.h */,
+				331E265E130C17A500696D49 /* VideoPlayer.mm */,
+				331E265F130C17A500696D49 /* VideoPlayer.xib */,
+			);
+			path = VideoPlayer;
 			sourceTree = "<group>";
 		};
 		33ED1B0613015A520090E1EB /* Leaking */ = {
@@ -1608,6 +1623,7 @@
 		DDC8EA5D113809B100574926 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				331E264C130C17A500696D49 /* VideoPlayer */,
 				7FD2EC491309824700B274C9 /* Umbilical */,
 				330CC62012FB3067000283DE /* TrackingElements */,
 				DD9C01C512E8755600EF6F51 /* Wave */,
@@ -2018,6 +2034,7 @@
 				33ED1C5913018EC20090E1EB /* LICENSE.txt in Resources */,
 				33ED1C821301900F0090E1EB /* install.xml in Resources */,
 				7FD2EC7013098D9D00B274C9 /* Umbilical.xib in Resources */,
+				331E2669130C17A500696D49 /* VideoPlayer.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2142,6 +2159,7 @@
 				7F8F6BA5130565580097D302 /* Wave.mm in Sources */,
 				7FD2E9661306D51600B274C9 /* fft.cpp in Sources */,
 				7FD2EC4D130982E600B274C9 /* Umbilical.mm in Sources */,
+				331E2668130C17A500696D49 /* VideoPlayer.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

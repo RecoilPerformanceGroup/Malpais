@@ -9,5 +9,6 @@
 #include "TrackingElements.h"
 #include "Leaking.h"
 #include "Umbilical.h"
+#include "VideoPlayer.h"
 
 //#include "Tracking.h"

@@ -18,7 +18,7 @@ double polygonArea(vector<RPoint> points) {
 
 @implementation Rubber
 
-@synthesize elasticForce, elasticLength, damping, pullForce, speed, border, pushForceInternal, pushForceExternal, pushForceInternalDist, pushForceExternalDist, percentageForce, stiffness, gravity;
+@synthesize elasticForce, elasticLength, damping, pullForce, speed, border, pushForceInternal, pushForceExternal, pushForceInternalDist, pushForceExternalDist, percentageForce, stiffness, gravity, massForce;
 
 -(id) initWithPoints:(vector<ofxPoint2f>) _points{
 	if([self init]){
@@ -297,14 +297,14 @@ double polygonArea(vector<RPoint> points) {
 	currentArea /= aspect;
 	currentArea = fabs(currentArea);
 	//cout<<currentArea<<endl;
-
+	
 	
 	ofxPoint2f center = [self centroid];
 	float force = [[self percentageForce] floatValue];
 	float dir = 1;
 	/*if(currentArea < percentage){
-		dir = 1;
-	}*/
+	 dir = 1;
+	 }*/
 	for(int i=0;i<points.size();i++){
 		ofxVec2f v = points[i].pos - center;
 		
@@ -348,6 +348,32 @@ double polygonArea(vector<RPoint> points) {
 		RPoint * point = &points[i];	
 		point->f += ofxVec2f(0,1)*0.0001*_gravity;
 	}
+	
+	//MassForce
+	{
+		prevPoint = &points[points.size()-1];
+		RPoint * nextPoint;;
+		float _mass = [[self massForce] floatValue];
+		if(_mass > 0){
+			for(int i=0;i<points.size();i++){
+				RPoint * point = &points[i];
+				if(i < points.size() - 2)
+					nextPoint = &points[i+1];
+				else {
+					nextPoint = &points[0];
+				}
+				ofxVec2f v3 = nextPoint->pos - prevPoint->pos;
+				v3 = ofxVec2f(-v3.y, v3.x);
+				
+				
+				point->f += -v3*_mass*0.001;
+				
+				prevPoint = point;
+				
+			}	
+		}
+	}
+	
 	
 	//Stiffness 
 	prevPoint = &points[points.size()-1];
@@ -520,31 +546,31 @@ double polygonArea(vector<RPoint> points) {
 	 }
 	 */
 	//
-//	
-//	//Find intersections
-//	ofFill();
-//	RPoint * prevPoint1 = &points[points.size()-1];
-//	for(int i=0;i<points.size();i++){
-//		RPoint * point1 = &points[i];
-//		
-//		RPoint * prevPoint2 = &points[i+1];
-//		for(int u=i+1+1;u<points.size()-1;u++){
-//			RPoint * point2 = &points[u];			
-//			
-//			ofPoint intersection;
-//			if(ofLineSegmentIntersection(point1->pos, prevPoint1->pos, point2->pos, prevPoint2->pos, intersection)){
-//				ofSetColor(255, 0, 0);
-//				ofCircle(point1->pos.x, point1->pos.y, 0.01);
-//				ofSetColor(255, 255, 0);
-//				ofCircle(intersection.x, intersection.y, 0.01);
-//			}
-//			
-//			prevPoint2 = point2;
-//		}
-//		
-//		
-//		prevPoint1 = point1;
-//	}
+	//	
+	//	//Find intersections
+	//	ofFill();
+	//	RPoint * prevPoint1 = &points[points.size()-1];
+	//	for(int i=0;i<points.size();i++){
+	//		RPoint * point1 = &points[i];
+	//		
+	//		RPoint * prevPoint2 = &points[i+1];
+	//		for(int u=i+1+1;u<points.size()-1;u++){
+	//			RPoint * point2 = &points[u];			
+	//			
+	//			ofPoint intersection;
+	//			if(ofLineSegmentIntersection(point1->pos, prevPoint1->pos, point2->pos, prevPoint2->pos, intersection)){
+	//				ofSetColor(255, 0, 0);
+	//				ofCircle(point1->pos.x, point1->pos.y, 0.01);
+	//				ofSetColor(255, 255, 0);
+	//				ofCircle(intersection.x, intersection.y, 0.01);
+	//			}
+	//			
+	//			prevPoint2 = point2;
+	//		}
+	//		
+	//		
+	//		prevPoint1 = point1;
+	//	}
 	
 	
 }
@@ -574,7 +600,9 @@ double polygonArea(vector<RPoint> points) {
 	[self bind:@"pushForceExternalDist" toObject:obj withKeyPath:@"properties.pushForceExternalDist" options:nil];			
 	[self bind:@"percentageForce" toObject:obj withKeyPath:@"properties.percentageForce" options:nil];			
 	[self bind:@"stiffness" toObject:obj withKeyPath:@"properties.stiffness" options:nil];			
-	[self bind:@"gravity" toObject:obj withKeyPath:@"properties.gravity" options:nil];			
+	[self bind:@"gravity" toObject:obj withKeyPath:@"properties.gravity" options:nil];		
+	[self bind:@"massForce" toObject:obj withKeyPath:@"properties.massForce" options:nil];			
+	
 	aspect = [obj aspect];
 }
 
@@ -610,6 +638,7 @@ double polygonArea(vector<RPoint> points) {
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0.0 maxValue:1.0] named:@"percentageForce"];			
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0.0 maxValue:1.0] named:@"stiffness"];			
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:-1 maxValue:1] named:@"gravity"];			
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"massForce"];			
 	
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:1.0 maxValue:100] named:@"iterations"];		
@@ -656,8 +685,8 @@ double polygonArea(vector<RPoint> points) {
 	[Prop(@"percentage1") setIntValue:0];
 	[Prop(@"percentage2") setIntValue:0];
 	[Prop(@"percentage3") setIntValue:0];
-		[Prop(@"percentage4") setIntValue:0];
-		[Prop(@"percentage5") setIntValue:0];
+	[Prop(@"percentage4") setIntValue:0];
+	[Prop(@"percentage5") setIntValue:0];
 	[Prop(@"percentage6") setIntValue:0];
 }
 
@@ -783,7 +812,7 @@ double polygonArea(vector<RPoint> points) {
 				for(int i=0;i<200;i++){
 					[updateRubber updateWithPoints:points];
 					[updateRubber updateWithTimestep:1.0/ofGetFrameRate()];				
-			
+					
 				}
 				[updateRubber calculateFilteredPos];
 				
