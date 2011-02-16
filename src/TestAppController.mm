@@ -62,6 +62,7 @@ extern ofAppBaseWindow * window;
 	[pluginManagerController addPlugin:[[Leaking alloc] init]];
 	[pluginManagerController addPlugin:[[TrackingElements alloc] init]];
 	[pluginManagerController addPlugin:[[Umbilical alloc] init]];
+	[pluginManagerController addPlugin:[[Ocean alloc] init]];
 	
 	//[pluginManagerController addPlugin:[[Cameras alloc] initWithNumberCameras:1]];
 	

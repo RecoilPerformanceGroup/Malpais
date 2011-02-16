@@ -24,7 +24,7 @@
 
 -(void) setup{
 	font = new ofTrueTypeFont();
-	font->loadFont("/Users/malpais/Udvikling/of_preRelease_v0062_osxSL_FAT/apps/recoil/Malpais/bin/data/LucidaGrande.ttc", 20, true, true, true);
+	font->loadFont([[[NSBundle mainBundle] pathForResource:@"LucidaGrande" ofType:@"ttc" inDirectory:@""] cString], 20, true, true, true);
 }
 
 -(void) update:(NSDictionary *)drawingInformation{
