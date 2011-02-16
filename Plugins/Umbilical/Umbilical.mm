@@ -254,20 +254,38 @@
 			startSegment = resolution*begin.y;
 			endSegment = resolution*end.y;
 		}
+<<<<<<< HEAD
 		
 		glBegin(GL_LINE_STRIP);
+=======
+>>>>>>> 37daf15c7e2414281a4cdc9d0fe0b90e895f9d41
 		
+		//glBegin(GL_LINE_STRIP);
+		glBegin(GL_QUAD_STRIP);
+		ofxPoint2f lastPoint = ofxPoint2f(0,0);		
 		for (int i = startSegment;i< endSegment; i++) {
 			float x = 1.0/(endSegment-startSegment)*(i-startSegment);
 			
 			if (i < segments) {
 				float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
+<<<<<<< HEAD
 				
 				
 				
 				
 				
 				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
+=======
+				ofxPoint2f p = ofxPoint2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
+				ofxVec2f v = p - lastPoint;
+				ofxVec2f h = ofxVec2f(-v.y,v.x);
+				h.normalize();
+				h *= 0.003;
+				glVertex2f((p+h).x, (p+h).y);
+				glVertex2f((p-h).x, (p-h).y);				
+//				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
+				lastPoint = p;
+>>>>>>> 37daf15c7e2414281a4cdc9d0fe0b90e895f9d41
 			}
 		}
 		glEnd();

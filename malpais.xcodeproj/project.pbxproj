@@ -134,14 +134,10 @@
 		DDB7C23112AD16C100197290 /* PluginEnabledCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C1EF12AD16C100197290 /* PluginEnabledCell.m */; };
 		DDB7C23212AD16C100197290 /* PluginListMeterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C1F112AD16C100197290 /* PluginListMeterCell.m */; };
 		DDB7C23312AD16C100197290 /* PropertiesValueCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C1F312AD16C100197290 /* PropertiesValueCell.m */; };
-		DDB7C34E12AD222900197290 /* SamplePlugin2.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C34D12AD222900197290 /* SamplePlugin2.mm */; };
-		DDB7C35012AD224000197290 /* SamplePlugin2.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDB7C34F12AD224000197290 /* SamplePlugin2.xib */; };
-		DDB7C3D712AD27F000197290 /* SamplePlugin.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDB7C3D612AD27F000197290 /* SamplePlugin.xib */; };
 		DDC8E6961137323900574926 /* TestAppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDC8E6931137323900574926 /* TestAppController.mm */; };
 		DDC8E7931137338900574926 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC8E7911137338900574926 /* AppKit.framework */; };
 		DDC8E7941137338900574926 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC8E7921137338900574926 /* Cocoa.framework */; };
 		DDC8E7BA113733E600574926 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC8E7B9113733E600574926 /* QuartzCore.framework */; };
-		DDC8EA65113809D800574926 /* SamplePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDC8EA64113809D800574926 /* SamplePlugin.mm */; };
 		DDD2A30E114EB48500F4FEE6 /* GraphKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDD2A30D114EB48400F4FEE6 /* GraphKit.framework */; };
 		DDE0386B12E9B2CA0068E569 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDE0386A12E9B2CA0068E569 /* AudioUnit.framework */; };
 		DDF874DB114AB393004B2FE2 /* GraphIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF874DA114AB393004B2FE2 /* GraphIcon.png */; };
@@ -157,7 +153,7 @@
 		E45BE9810E8CC7DD009D7055 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9770E8CC7DD009D7055 /* CoreServices.framework */; };
 		E45BE9830E8CC7DD009D7055 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9790E8CC7DD009D7055 /* OpenGL.framework */; };
 		E45BE9840E8CC7DD009D7055 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */; };
-		E4C2422B10CC554B004149E2 /* openFrameworks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2421E10CC549C004149E2 /* openFrameworks.a */; };
+		E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */; };
 		E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424410CC5A17004149E2 /* AppKit.framework */; };
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
@@ -594,10 +590,6 @@
 		DDB7C1F212AD16C100197290 /* PropertiesValueCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PropertiesValueCell.h; sourceTree = "<group>"; };
 		DDB7C1F312AD16C100197290 /* PropertiesValueCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PropertiesValueCell.m; sourceTree = "<group>"; };
 		DDB7C23B12AD17CA00197290 /* OscTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OscTypes.h; path = ../src/OscTypes.h; sourceTree = SOURCE_ROOT; };
-		DDB7C34C12AD222900197290 /* SamplePlugin2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamplePlugin2.h; sourceTree = "<group>"; };
-		DDB7C34D12AD222900197290 /* SamplePlugin2.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SamplePlugin2.mm; sourceTree = "<group>"; };
-		DDB7C34F12AD224000197290 /* SamplePlugin2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SamplePlugin2.xib; sourceTree = "<group>"; };
-		DDB7C3D612AD27F000197290 /* SamplePlugin.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SamplePlugin.xib; sourceTree = "<group>"; };
 		DDC8E6921137323900574926 /* TestAppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestAppController.h; sourceTree = "<group>"; };
 		DDC8E6931137323900574926 /* TestAppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TestAppController.mm; sourceTree = "<group>"; };
 		DDC8E7911137338900574926 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = ../../../../../../../../System/Library/Frameworks/AppKit.framework; sourceTree = "<group>"; };
@@ -605,8 +597,6 @@
 		DDC8E7B9113733E600574926 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = ../../../../../../../../System/Library/Frameworks/QuartzCore.framework; sourceTree = "<group>"; };
 		DDC8E87B1137360D00574926 /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
 		DDC8EA5E113809B100574926 /* PluginIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginIncludes.h; sourceTree = "<group>"; };
-		DDC8EA63113809D800574926 /* SamplePlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SamplePlugin.h; sourceTree = "<group>"; };
-		DDC8EA64113809D800574926 /* SamplePlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SamplePlugin.mm; sourceTree = "<group>"; };
 		DDD2A30D114EB48400F4FEE6 /* GraphKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GraphKit.framework; path = /System/Library/PrivateFrameworks/GraphKit.framework; sourceTree = "<absolute>"; };
 		DDE0386A12E9B2CA0068E569 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		DDF874DA114AB393004B2FE2 /* GraphIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GraphIcon.png; sourceTree = "<group>"; };
@@ -653,7 +643,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C2422B10CC554B004149E2 /* openFrameworks.a in Frameworks */,
+				E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */,
 				E45BE0AA0E8CC67C009D7055 /* GLee.a in Frameworks */,
 				E45BE2E40E8CC69C009D7055 /* rtAudio.a in Frameworks */,
 				E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */,
@@ -1615,16 +1605,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		DDB7C34B12AD221800197290 /* SamplePlugin2 */ = {
-			isa = PBXGroup;
-			children = (
-				DDB7C34C12AD222900197290 /* SamplePlugin2.h */,
-				DDB7C34D12AD222900197290 /* SamplePlugin2.mm */,
-				DDB7C34F12AD224000197290 /* SamplePlugin2.xib */,
-			);
-			name = SamplePlugin2;
-			sourceTree = "<group>";
-		};
 		DDC8EA5D113809B100574926 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
@@ -1634,21 +1614,9 @@
 				DD2561D712F3267E00BD0498 /* FysiskeReaktioner */,
 				33ED1B0613015A520090E1EB /* Leaking */,
 				DD593CDC12E4A761005F2189 /* Kinect */,
-				DDB7C34B12AD221800197290 /* SamplePlugin2 */,
-				DDC8EA62113809C900574926 /* SamplePlugin */,
 				DDC8EA5E113809B100574926 /* PluginIncludes.h */,
 			);
 			path = Plugins;
-			sourceTree = "<group>";
-		};
-		DDC8EA62113809C900574926 /* SamplePlugin */ = {
-			isa = PBXGroup;
-			children = (
-				DDC8EA63113809D800574926 /* SamplePlugin.h */,
-				DDC8EA64113809D800574926 /* SamplePlugin.mm */,
-				DDB7C3D612AD27F000197290 /* SamplePlugin.xib */,
-			);
-			path = SamplePlugin;
 			sourceTree = "<group>";
 		};
 		DDF87490114AB2D0004B2FE2 /* Resources */ = {
@@ -1877,7 +1845,7 @@
 		E4C2421710CC549C004149E2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4C2421E10CC549C004149E2 /* openFrameworks.a */,
+				E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2014,10 +1982,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E4C2421E10CC549C004149E2 /* openFrameworks.a */ = {
+		E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = openFrameworks.a;
+			path = openFrameworksDebug.a;
 			remoteRef = E4C2421D10CC549C004149E2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -2038,8 +2006,6 @@
 				DDB7C21512AD16C100197290 /* Midi.xib in Resources */,
 				DDB7C22B12AD16C100197290 /* GraphIcoMarked.png in Resources */,
 				DDB7C22C12AD16C100197290 /* GraphIcon.png in Resources */,
-				DDB7C35012AD224000197290 /* SamplePlugin2.xib in Resources */,
-				DDB7C3D712AD27F000197290 /* SamplePlugin.xib in Resources */,
 				DD593CDE12E4A777005F2189 /* Kinect.xib in Resources */,
 				DD593DAF12E4A9A1005F2189 /* README in Resources */,
 				DD9C01CA12E8758A00EF6F51 /* Wave.xib in Resources */,
@@ -2079,7 +2045,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDC8E6961137323900574926 /* TestAppController.mm in Sources */,
-				DDC8EA65113809D800574926 /* SamplePlugin.mm in Sources */,
 				4BA258F41153B1E80008D49C /* testApp.mm in Sources */,
 				DD7B14AF11A3CF38000D9775 /* ofxOscBundle.cpp in Sources */,
 				DD7B14B011A3CF38000D9775 /* ofxOscMessage.cpp in Sources */,
@@ -2150,7 +2115,6 @@
 				DDB7C23112AD16C100197290 /* PluginEnabledCell.m in Sources */,
 				DDB7C23212AD16C100197290 /* PluginListMeterCell.m in Sources */,
 				DDB7C23312AD16C100197290 /* PropertiesValueCell.m in Sources */,
-				DDB7C34E12AD222900197290 /* SamplePlugin2.mm in Sources */,
 				DD593CE112E4A78D005F2189 /* Kinect.mm in Sources */,
 				DD593DB012E4A9A1005F2189 /* ofxDepthGenerator.cpp in Sources */,
 				DD593DB112E4A9A1005F2189 /* ofxImageGenerator.cpp in Sources */,
