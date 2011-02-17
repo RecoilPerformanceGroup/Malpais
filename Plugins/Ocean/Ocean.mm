@@ -67,9 +67,9 @@
 			delete _particles;
 		}
 		_particles = new ofxParticle*[grid];
-		for(int x = 0 ; x < grid ;x++)
+		for(int x = 0 ; x < grid+1 ;x++)
 		{
-			_particles[x] = new ofxParticle[(int)(grid/[self aspect])];
+			_particles[x] = new ofxParticle[(int)(grid/[self aspect])+1];
 		}
 		[self makeSpringWidth:[self aspect]*400.0 height:1.0*400.0];
 
@@ -182,9 +182,9 @@
 	
 	glEnable(GL_DEPTH_TEST);
 	ref->bind();
-	for (int i = 0; i < grid-1; i++)
+	for (int i = 0; i < grid; i++)
 	{
-		for (int j = 0; j < ((int)(grid/[self aspect]))-1; j++)
+		for (int j = 0; j < ((int)(grid/[self aspect])); j++)
 		{
 			float texCoorX = ref->getWidth()/grid*1.0f;
 			float texCoorY = ref->getHeight()/grid*1.0f*[self aspect];
@@ -262,8 +262,8 @@
 }
 
 - (void)makeSpringWidth:(float) _width height:(float) _height{
-	gridSizeX = _width/((grid-1)*1.0);
-	gridSizeY = (_height/((grid-1)*1.0))*[self aspect];
+	gridSizeX = _width/((grid)*1.0);
+	gridSizeY = ((_height*[self aspect])/((grid)*1.0));
 	
 	//	gridSizeX = img.getWidth()/grid;
 	//	gridSizeY = img.getHeight()/grid;
@@ -273,9 +273,9 @@
 	
 	pSize = gridSizeX *0.1;
 	
-	for(int x = 0 ; x < grid  ;x++)
+	for(int x = 0 ; x <= grid  ;x++)
 	{
-		for(int y = 0 ; y < (int)grid/[self aspect]  ;y++)
+		for(int y = 0 ; y <= (int)grid/[self aspect]  ;y++)
 		{
 			ofPoint particlePos = ofPoint(gridPosX+x*gridSizeX,gridPosY+y*gridSizeY);
 			ofxParticle* p = new ofxParticle(particlePos, pSize);
@@ -285,9 +285,9 @@
 			
 		}
 	}
-	for (int i = 0; i < grid; i++)
+	for (int i = 0; i <= grid; i++)
     {
-        for (int j = 0; j < (int)grid/[self aspect]; j++)
+        for (int j = 0; j <= (int)grid/[self aspect]; j++)
         {
 			
             if (j > 0)
@@ -295,8 +295,15 @@
                 ofxParticle *p1 = &_particles[i][j - 1];
                 ofxParticle *p2 = &_particles[i][j];
 				float rest = p1->distanceTo(p2);
-				ofxSpring* s = new ofxSpring(p1, p2, gridSizeY, strength);
+				ofxSpring* s = new ofxSpring(p1, p2, rest, strength);
 				physics->add(s);
+				if (i>0) {
+					 p1 = &_particles[i-1][j-1];
+					 p2 = &_particles[i][j];
+					rest = p1->distanceTo(p2);
+					ofxSpring* s = new ofxSpring(p1, p2, rest, strength*0.5);
+					physics->add(s);
+				}
             }
             if (i > 0)
             {
@@ -304,8 +311,15 @@
                 ofxParticle *p2 = &_particles[i][j];
 				
 				float rest = p1->distanceTo(p2);
-				ofxSpring* s = new ofxSpring(p1, p2, gridSizeX, strength);
+				ofxSpring* s = new ofxSpring(p1, p2, rest, strength);
 				physics->add(s);
+				if (j>0) {
+					p1 = &_particles[i-1][j];
+					p2 = &_particles[i][j-1];
+					rest = p1->distanceTo(p2);
+					ofxSpring* s = new ofxSpring(p1, p2, rest, strength*0.5);
+					physics->add(s);
+				}
             }
         }
     }
