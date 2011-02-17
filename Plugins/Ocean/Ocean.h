@@ -9,6 +9,10 @@
 #pragma once
 #include "Plugin.h"
 #include "ofxPhysics2d.h"
+#include "ofxFbo.h"
+
+#define kFBOWidth			1000
+#define kFBOHeight			2000
 
 @interface Ocean : ofPlugin {
 
@@ -24,6 +28,7 @@
 	
 	vector<ofxParticle*>wallParticles;
 
+	ofxFbo fbo;
 	
 	bool bCreateParticleString;
 	ofxParticle* beginParticleString;

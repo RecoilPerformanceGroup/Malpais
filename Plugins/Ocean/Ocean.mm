@@ -30,6 +30,8 @@
 	stillImg.setUseTexture(true);
 	stillImg.loadImage([[[NSBundle mainBundle] pathForImageResource:@"floortest.jpg"] cString]);
 	[[properties objectForKey:@"reset"] setBoolValue:YES];
+	
+	fbo.setup(kFBOWidth, kFBOHeight, GL_RGBA, 0);
 
 }
 
@@ -143,20 +145,40 @@
 
 -(void) draw:(NSDictionary *)drawingInformation{
 	
+	fbo.begin();
+
+	ofBackground(0,0,0);
+	glScaled(kFBOHeight, kFBOHeight, 0);
+	
+	ofFill();
+	
+	for(int i = 0; i < 200; i++){
+		ofSetColor(255-i, 0,i);
+		ofRect(0, (1.0/200)*i, [self aspect], 1.0/200);
+	}
+	
+	float t = sinf(ofGetElapsedTimef());
+	
+	ofSetColor(t*255,t*255,0);
+	ofCircle([self aspect]*.5, 0.5, 0.1);
+	
+	
+	fbo.end();
+	
 	ApplySurface(@"Floor");{
 		
 		ofSetColor(255, 255, 255, 255);
-		
+
+//		fbo.draw(0, 0, [self aspect], 1.0);
 		glScaled(1.0/400.0, 1.0/400.0,0);
-		[self drawCloth:&stillImg showGrid:NO];
+
+		[self drawCloth:&fbo.getTexture(0) showGrid:NO];
 		
 	} PopSurface();
 	
 }
 
-- (void) drawCloth:(ofImage*)img showGrid:(bool) showGrid{
-	ofTexture *ref;
-	ref = &img->getTextureReference();
+- (void) drawCloth:(ofTexture*)ref showGrid:(bool) showGrid{
 	
 	glEnable(GL_DEPTH_TEST);
 	ref->bind();
@@ -164,8 +186,8 @@
 	{
 		for (int j = 0; j < ((int)(grid/[self aspect]))-1; j++)
 		{
-			float texCoorX = img->getWidth()/grid*1.0f;
-			float texCoorY = img->getHeight()/grid*1.0f*[self aspect];
+			float texCoorX = ref->getWidth()/grid*1.0f;
+			float texCoorY = ref->getHeight()/grid*1.0f*[self aspect];
 			ofxParticle *p1 = &_particles[i][j];
 			ofxParticle *p2 = &_particles[i+1][j];
 			ofxParticle *p3 = &_particles[i+1][j+1];
@@ -219,7 +241,7 @@
 	
 	ofSetColor(255, 255, 255,127);
 
-		[self drawCloth:&stillImg showGrid:YES];
+		[self drawCloth:&fbo.getTexture(0) showGrid:YES];
 
 	glPushMatrix();{
 
