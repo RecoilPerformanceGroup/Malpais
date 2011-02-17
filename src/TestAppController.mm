@@ -22,7 +22,7 @@ extern ofAppBaseWindow * window;
 
 
 -(void) setupApp{
-	[pluginManagerController setNumberOutputViews:1];	
+	[pluginManagerController setNumberOutputViews:2];	
 }
 
 

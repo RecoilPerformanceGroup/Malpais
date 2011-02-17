@@ -20,8 +20,11 @@ double polygonArea(vector<RPoint> points) {
 
 @synthesize elasticForce, elasticLength, damping, pullForce, speed, border, pushForceInternal, pushForceExternal, pushForceInternalDist, pushForceExternalDist, percentageForce, stiffness, gravity, massForce;
 
--(id) initWithPoints:(vector<ofxPoint2f>) _points{
+-(id) initWithPoints:(vector<ofxPoint2f>) _points radius:(float)radius{
 	if([self init]){
+		r = 0;
+		g = 0;
+		b = 0;
 		//Find center
 		ofxPoint2f center;
 		for(int i=0;i<_points.size();i++){
@@ -31,7 +34,7 @@ double polygonArea(vector<RPoint> points) {
 		
 		for(int i=0;i<NUMPOINTS;i++){
 			float r = TWO_PI*(float)i/NUMPOINTS;
-			ofxPoint2f p = 	center + ofxPoint2f(sin(r), cos(r))*0.01;
+			ofxPoint2f p = 	center + ofxPoint2f(sin(r), cos(r))*radius;
 			RPoint newP;
 			newP.pos = p;
 			
@@ -172,7 +175,7 @@ double polygonArea(vector<RPoint> points) {
 			 */
 			if(bestPoint != nil){
 				ofxVec2f v = bestPoint->pos - pointsIn[i];
-				bestPoint->f += -0.01*v*_pullForce*1.0/(pointsIn.size()/100.0);
+				bestPoint->f += -0.01*v*_pullForce;
 			}
 		} 
 	}
@@ -355,6 +358,8 @@ double polygonArea(vector<RPoint> points) {
 		RPoint * nextPoint;;
 		float _mass = [[self massForce] floatValue];
 		if(_mass > 0){
+			ofxPoint2f center = [self centroid];
+			
 			for(int i=0;i<points.size();i++){
 				RPoint * point = &points[i];
 				if(i < points.size() - 2)
@@ -365,8 +370,12 @@ double polygonArea(vector<RPoint> points) {
 				ofxVec2f v3 = nextPoint->pos - prevPoint->pos;
 				v3 = ofxVec2f(-v3.y, v3.x);
 				
+				if((point->pos + v3).distanceSquared(center) < (point->pos - v3).distanceSquared(center))
+					v3 *= -1;
 				
-				point->f += -v3*_mass*0.001;
+				
+				
+				point->f += v3*_mass*0.001;
 				
 				prevPoint = point;
 				
@@ -428,7 +437,7 @@ double polygonArea(vector<RPoint> points) {
 		
 		ofxPoint2f p = point->pos + point->v*time;
 		p.x = ofClamp(p.x, 0, aspect);
-		p.y = ofClamp(p.y, 0, 1);
+		p.y = ofClamp(p.y, -0.1, 1);
 		
 		point->pos = p;		
 	}	
@@ -575,7 +584,7 @@ double polygonArea(vector<RPoint> points) {
 	
 }
 -(void) draw{	
-	ofSetColor(0, 0, 0);
+	ofSetColor(r, g, b,255);
 	ofFill();
 	ofBeginShape();
 	//	glBegin(GL_POLYGON);
@@ -610,6 +619,7 @@ double polygonArea(vector<RPoint> points) {
 
 
 @implementation Leaking
+@synthesize surveyData;
 
 -(void) initPlugin{
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2.0] named:@"state"];	
@@ -652,6 +662,11 @@ double polygonArea(vector<RPoint> points) {
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"percentage4"];			
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"percentage5"];			
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"percentage6"];			
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"percentage7"];			
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"percentage8"];			
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"percentage9"];			
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"percentage10"];			
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"percentage11"];			
 	
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"bindBox"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"allowNewRubbers"];
@@ -665,13 +680,61 @@ double polygonArea(vector<RPoint> points) {
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:5] named:@"fade"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"threshold"];	
 	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:127] named:@"applyPercentageNumber"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:-1 minValue:-1 maxValue:100] named:@"displayPercent"];	
 	
+	[self assignMidiChannel:5];
 	
 	mouseh = -1;
 	rubbers = [NSMutableArray array];
 	timeout = 100;
 	avgDist = -1;
+	
+	[self addObserver:self forKeyPath:@"customProperties" options:nil context:@"customProperties"];		
+	
+	
+	NSMutableArray * data = [NSMutableArray array];
+	for(int i=0;i<12;i++){
+		[data addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:i+1],@"number",[NSNumber numberWithInt:10],@"percent",[NSNumber numberWithInt:i],@"bobbel",nil]];
+	}
+	
+	[self setSurveyData:data];
 }
+
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	if(object == Prop(@"clear") && [object boolValue]){
+		clear = true;
+		[object setBoolValue:NO];		
+	}
+	if(object == Prop(@"applyPercentageNumber") ){
+		if(PropI(@"applyPercentageNumber") >= 1){
+			NSDictionary * dict = [surveyData objectAtIndex:PropI(@"applyPercentageNumber")-1];
+			//	Rubber * obj = [rubbers objectAtIndex:[dict valueForKey:@"bobbel"]];
+			[Prop(([NSString stringWithFormat:@"percentage%i",PropI(@"applyPercentageNumber")])) setFloatValue:[[dict valueForKey:@"percent"] floatValue]/200.0];	
+			[Prop(@"displayPercent") setFloatValue:[[dict valueForKey:@"percent"] floatValue]];
+
+		} else {
+			[Prop(@"displayPercent") setIntValue:-1];
+		};
+		
+	}
+	if([(NSString*)context isEqualToString:@"customProperties"]){			
+		[self setSurveyData:[customProperties valueForKey:@"survey"]];
+//		[surveyData addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:12],@"number",[NSNumber numberWithInt:10],@"percent",[NSNumber numberWithInt:12],@"bobbel",nil]];
+
+	}
+}
+
+-(NSMutableDictionary *) customProperties{
+	//Read the settings of the selected cameras
+	NSMutableDictionary * dict = customProperties;
+	[dict setObject:surveyData forKey:@"survey"];
+	return dict;
+}
+
+
+
 
 -(void) setup{
 	contourFinder = new ofxCvContourFinder();
@@ -682,21 +745,18 @@ double polygonArea(vector<RPoint> points) {
 	tmpimage = new 	ofxCvFloatImage();
 	tmpimage->allocate(IMGWIDTH, IMGHEIGHT);
 	
-	[Prop(@"percentage1") setIntValue:0];
-	[Prop(@"percentage2") setIntValue:0];
-	[Prop(@"percentage3") setIntValue:0];
-	[Prop(@"percentage4") setIntValue:0];
-	[Prop(@"percentage5") setIntValue:0];
-	[Prop(@"percentage6") setIntValue:0];
-}
-
--(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-	if(object == Prop(@"clear") && [object boolValue]){
-		clear = true;
-		[object setBoolValue:NO];		
+	for(int i=0;i<11;i++){
+		[Prop(([NSString stringWithFormat:@"percentage%i",i+1 ]))	setIntValue:0];	
 	}
+	[Prop(@"displayPercent") setIntValue:-1];
+	[Prop(@"applyPercentageNumber") setIntValue:0];
+	
+	font = new ofTrueTypeFont();
+	font->loadFont("/Users/malpais/Udvikling/of_preRelease_v0062_osxSL_FAT/apps/recoil/Malpais/bin/data/LucidaGrande.ttc", 20, true, true, true);
+	
+	
+	
 }
-
 
 -(void) update:(NSDictionary *)drawingInformation{
 	
@@ -712,54 +772,59 @@ double polygonArea(vector<RPoint> points) {
 		[rubbers removeAllObjects];
 		timeout = 100;
 		clear = NO;
+		for(int i=0;i<11;i++){
+			[Prop(([NSString stringWithFormat:@"percentage%i",i+1 ]))	setIntValue:0];	
+		}
+		[Prop(@"displayPercent") setIntValue:-1];
+		[Prop(@"applyPercentageNumber") setIntValue:0];
+		
 	}
 	
 	vector<ofxPoint2f> points;
 	
 	
-	if(PropB(@"enableKinect")){
-		vector<ofxPoint3f> pointsKinect = [GetPlugin(Kinect) getPointsInBoxXMin:0 xMax:[self aspect] yMin:0 yMax:PropI(@"yMax") zMin:PropF(@"zMin") zMax:PropF(@"zMax") res:PropI(@"KinectRes")];
-		if(pointsKinect.size() > 0){
-			for(int i=0;i<pointsKinect.size();i++){				
-				if(pointsKinect[i].y > PropF(@"goodPointMaxY"))
-					badPoints.push_back(ofxPoint3f(pointsKinect[i].x,pointsKinect[i].y, pointsKinect[i].z));
-				else {
-					
-					goodPoints.push_back(ofxPoint3f(pointsKinect[i].x, pointsKinect[i].y, pointsKinect[i].z));	
-				}
-				
-				points.push_back(ofxPoint2f(pointsKinect[i].x, pointsKinect[i].z));
-			}		
-			
-			if((float) goodPoints.size() > 0){
-				goodBadFactor += ((badPoints.size() / (float) goodPoints.size()) - goodBadFactor)*0.1;
-			}
+	vector<ofxPoint3f> pointsKinect = [GetPlugin(Kinect) getPointsInBoxXMin:0 xMax:[self aspect] yMin:0 yMax:PropI(@"yMax") zMin:PropF(@"zMin") zMax:PropF(@"zMax") res:PropI(@"KinectRes")];
+	if(pointsKinect.size() > 0){
+		for(int i=0;i<pointsKinect.size();i++){				
+			if(pointsKinect[i].y > PropF(@"goodPointMaxY"))
+				badPoints.push_back(ofxPoint3f(pointsKinect[i].x,pointsKinect[i].y, pointsKinect[i].z));
 			else {
-				goodBadFactor += (0 - goodBadFactor)*0.1;	
+				
+				goodPoints.push_back(ofxPoint3f(pointsKinect[i].x, pointsKinect[i].y, pointsKinect[i].z));	
 			}
 			
-			
-			float dist;
-			for(int i=0;i<pointsKinect.size();i++){
-				dist += pointsKinect[i].z;
-			}
-			dist /= pointsKinect.size();
-			
-			if(avgDist == -1)
-				avgDist = dist;
-			avgDist += (dist - avgDist)*0.1;
-			if(avgDist < 1.0/3.0){
-				[Prop(@"KinectRes") setIntValue:38];
-			} else if(avgDist < 2.0/3.0){
-				[Prop(@"KinectRes") setIntValue:76];
-			} else {
-				[Prop(@"KinectRes") setIntValue:153];	
-			}
-			
-			if(goodBadFactor > PropF(@"goodBadFactor"))
-				points.clear();
+			points.push_back(ofxPoint2f(pointsKinect[i].x, pointsKinect[i].z));
+		}		
+		
+		if((float) goodPoints.size() > 0){
+			goodBadFactor += ((badPoints.size() / (float) goodPoints.size()) - goodBadFactor)*0.1;
 		}
+		else {
+			goodBadFactor += (0 - goodBadFactor)*0.1;	
+		}
+		
+		
+		float dist;
+		for(int i=0;i<pointsKinect.size();i++){
+			dist += pointsKinect[i].z;
+		}
+		dist /= pointsKinect.size();
+		
+		if(avgDist == -1)
+			avgDist = dist;
+		avgDist += (dist - avgDist)*0.1;
+		if(avgDist < 1.0/3.0){
+			[Prop(@"KinectRes") setIntValue:38];
+		} else if(avgDist < 2.0/3.0){
+			[Prop(@"KinectRes") setIntValue:76];
+		} else {
+			[Prop(@"KinectRes") setIntValue:153];	
+		}
+		
+		if(goodBadFactor > PropF(@"goodBadFactor"))
+			points.clear();
 	}
+	
 	
 	if(mouseh > 0){		
 		points.reserve(100);
@@ -768,62 +833,56 @@ double polygonArea(vector<RPoint> points) {
 			float s = 0.02;
 			points.push_back(ofxPoint2f(mousex*[self aspect],mousey)+ ofxPoint2f(cos(r)*s,sin(r)*s));
 		}
-	} else if(mouseh == 0){
-		for(int i=0;i<100;i++){
-			float r = TWO_PI*i/100.0;
-			float s = 0.09;
-			//	storedPoints.push_back(ofxPoint2f(mousex*[self aspect],mousey)+ ofxPoint2f(cos(r)*s,sin(r)*s));
-		}
-		
 	}
 	
 	if(PropB(@"bindBox")){
-		for(int i=-5;i<25;i++){
-			float f = [self aspect] * i/20.0;
-			points.push_back(ofxPoint2f(f,-0.05));
-			//			points.push_back(ofxPoint2f(f,-0.0));
-		}
+		points.push_back(ofxPoint2f([self aspect]*0.5,-0.05));
+		points.push_back(ofxPoint2f([self aspect]*0.5,-0.09));
+		points.push_back(ofxPoint2f([self aspect]*0.5,-0.07));
 	}
-	
 	
 	
 	Rubber * updateRubber = nil;
-	if(points.size() > 0){
-		if(timeout > 30 && (PropB(@"allowNewRubbers") || [rubbers count] == 0)){
-			ofxPoint2f c;
-			for(int i=0;i<points.size();i++){
-				c += points[i];	
-			}
-			c /= points.size();
+	if(PropB(@"enableKinect")){			
+		
+		if(points.size() > 0){
 			
-			for(Rubber * r in rubbers){
-				if([r pointInsidePoly:c]){
-					updateRubber = r;
-					break;
-				}	
-			}
 			
-			if(updateRubber == nil){
-				updateRubber = [[Rubber alloc] initWithPoints:points];
-				[updateRubber bindTo:self];
-				
-				
-				
-				for(int i=0;i<200;i++){
-					[updateRubber updateWithPoints:points];
-					[updateRubber updateWithTimestep:1.0/ofGetFrameRate()];				
-					
+			if(timeout > 30 && (PropB(@"allowNewRubbers") || [rubbers count] == 0)){
+				ofxPoint2f c;
+				for(int i=0;i<points.size();i++){
+					c += points[i];	
 				}
-				[updateRubber calculateFilteredPos];
+				c /= points.size();
 				
-				[rubbers addObject:updateRubber];
+				for(Rubber * r in rubbers){
+					if([r pointInsidePoly:c]){
+						updateRubber = r;
+						break;
+					}	
+				}
+				
+				if(updateRubber == nil){
+					updateRubber = [[Rubber alloc] initWithPoints:points radius:0.08];
+					[updateRubber bindTo:self];
+					
+					
+					
+					for(int i=0;i<200;i++){
+						[updateRubber updateWithPoints:points];
+						[updateRubber updateWithTimestep:1.0/ofGetFrameRate()];				
+						
+					}
+					[updateRubber calculateFilteredPos];
+					
+					[rubbers addObject:updateRubber];
+				}
+			} else {
+				updateRubber = [rubbers objectAtIndex:0];
 			}
-		} else {
-			updateRubber = [rubbers objectAtIndex:0];
+			timeout = 0;
 		}
-		timeout = 0;
 	}
-	
 	
 	/*
 	 if(points.size() > 150){
@@ -845,18 +904,22 @@ double polygonArea(vector<RPoint> points) {
 	}
 	
 	
-	for(int i=0;i<6;i++){
+	for(int i=0;i<11;i++){
 		Rubber * pRubber = nil;
 		float p = PropF(([NSString stringWithFormat:@"percentage%i",i+1]));
 		if(p > 0){
-			if([rubbers count] < i+2){
+			if([rubbers count] < i+1){
 				vector<ofxPoint2f> p;
-				p.push_back(ofxPoint2f(0.2,0.5));
-				pRubber = [[Rubber alloc] initWithPoints:p];
+				if(points.size() > 10){
+					p = points;
+				} else {
+					p.push_back(ofxPoint2f(ofRandom(0, [self aspect]),ofRandom(0, 1)));
+				}
+				pRubber = [[Rubber alloc] initWithPoints:p radius:0.02];
 				[pRubber bindTo:self];								
 				[rubbers addObject:pRubber];
 			} else {
-				pRubber = [rubbers objectAtIndex:i+1];
+				pRubber = [rubbers objectAtIndex:i];
 			}
 			[pRubber updateWithPercentage:p];
 		}
@@ -932,6 +995,16 @@ double polygonArea(vector<RPoint> points) {
 		
 	}
 	
+	int i=1;
+	for(Rubber * r in rubbers){
+
+		if(PropI(@"applyPercentageNumber") == i){
+			r->r += (255 - r->r)*0.1;
+		} else {
+			r->r += (0 - r->r)*0.1;	
+		}
+ 		i++;  
+	}
 	
 	timeout ++;
 	
@@ -979,11 +1052,17 @@ double polygonArea(vector<RPoint> points) {
 	 */	
 	PopSurface();
 	
-	ApplySurface(@"Wall");
-	ofSetColor(255, 255, 255);
-	ofFill();
-	ofRect(0, PropF(@"wallFill"), 1, 1-PropF(@"wallFill"));
-	PopSurface();
+	if(PropF(@"displayPercent") >= 0){
+		ApplySurface(@"Wall");
+		ofSetColor(255, 255, 255);
+		ofFill();
+		glTranslated(0.1, 0.5, 0);
+		glScaled(0.015, 0.015, 1.0);
+		font->drawString(ofToString(PropF(@"displayPercent"), 1)+"%", 0, 0);
+		//	ofRect(0, PropF(@"wallFill"), 1, 1-PropF(@"wallFill"));
+		
+		PopSurface();
+	}
 	
 }
 

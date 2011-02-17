@@ -43,6 +43,10 @@ struct RPoint {
 	float aspect;
 	
 	vector<ofxPoint2f> lastPointsIn;
+	
+	float r,g,b;
+	
+	
 }
 
 @property (readwrite, retain) NSNumber * elasticForce;
@@ -61,7 +65,7 @@ struct RPoint {
 
 @property (readwrite, retain) NSNumber * stiffness;
 
--(id) initWithPoints:(vector<ofxPoint2f>) points;
+-(id) initWithPoints:(vector<ofxPoint2f>) points radius:(float)radius;
 -(void) updateWithPoints:(vector<ofxPoint2f>) points;
 -(void) updateForceToOtherObjects:(NSArray*)array;
 -(void) updateWithTimestep:(float)time;
@@ -94,7 +98,13 @@ struct RPoint {
 	ofxCvFloatImage * image;
 	ofxCvFloatImage * tmpimage;
 	ofxCvContourFinder * contourFinder;
+	
+	NSMutableArray * surveyData;
+	ofTrueTypeFont * font;
+
 }
+@property (readwrite, retain) NSMutableArray * surveyData;
+
 
 -(float) aspect;
 @end

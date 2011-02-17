@@ -24,8 +24,37 @@
 //
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-	if(context != nil){
+	if(object == Prop(@"video")){
 		
+		if(PropI(@"video") < 0){
+			
+			
+		//	dispatch_sync(dispatch_get_main_queue(), ^{		
+				for(int i=0;i<NUMVIDEOS;i++){				
+					[movie[i] gotoBeginning];				
+					[movie[i] setRate:0.0];		
+					//QTVisualContextTask(textureContext[i]);	
+					
+					// if we have a previous frame release it
+					if (NULL != currentFrame[i]) {
+						CVOpenGLTextureRelease(currentFrame[i]);
+						currentFrame[i] = NULL;
+					}
+					
+					// get a "frame" (image buffer) from the Visual Context, indexed by the provided time
+					///					OSStatus status = QTVisualContextCopyImageForTime(textureContext[i], NULL, outputTime, &currentFrame[i]);
+					
+					//	
+					
+				}
+				forceDrawNextFrame = YES;
+		//	});
+			
+			
+		}
+	}
+	if(context != nil){
+
 	}
 }
 
@@ -103,7 +132,7 @@
 //
 
 -(void) setup{	
-	[Prop(@"video") setFloatValue:0];
+	[Prop(@"video") setFloatValue:-1];
 	
 	dispatch_async(dispatch_get_main_queue(), ^{	
 		NSError * error = [NSError alloc];			
@@ -118,7 +147,6 @@
 			
 			[dict setObject:[NSString stringWithFormat:@"%@/Malpais%@.mov",basePath,fileNumber] forKey:QTMovieFileNameAttribute];
 			movie[i] = [[QTMovie alloc] initWithAttributes:dict error:&error];
-			
 			if(error != nil){ 
 				NSLog(@"ERROR: Could not load movie %i: %@",i,error);
 				[dict setObject:[NSString stringWithFormat:@"%@/404.mov",basePath] forKey:QTMovieFileNameAttribute];
@@ -181,7 +209,6 @@
 			[movie[i] setVisualContext:textureContext[i]];
 		}
 		
-		[movie[0] setRate:1.0];
 	});		
 }
 
@@ -194,35 +221,12 @@
 	const CVTimeStamp * outputTime;
 	[[drawingInformation objectForKey:@"outputTime"] getValue:&outputTime];	
 	
+	if([movie[PropI(@"video")] currentTime].timeValue >= [movie[PropI(@"video")] duration].timeValue-0.1*[movie[PropI(@"video")] duration].timeScale){
+		//Videoen er nået til ende, så gå til næste video
+		[Prop(@"video") setIntValue:-1];
+	}		
 	
-	
-	if(PropI(@"video") < 0){
-		
-		forceDrawNextFrame = YES;
-		for(int i=0;i<NUMVIDEOS;i++){				
-			dispatch_sync(dispatch_get_main_queue(), ^{		
-				
-				[movie[i] gotoBeginning];				
-				//[movie[i] setRate:0.0];		
-				QTVisualContextTask(textureContext[i]);	
-				
-				// if we have a previous frame release it
-				if (NULL != currentFrame[i]) {
-					CVOpenGLTextureRelease(currentFrame[i]);
-					currentFrame[i] = NULL;
-				}
-				
-				
-				// get a "frame" (image buffer) from the Visual Context, indexed by the provided time
-				///					OSStatus status = QTVisualContextCopyImageForTime(textureContext[i], NULL, outputTime, &currentFrame[i]);
-				
-				//	
-			});
-			
-		}
-		
-		
-	}
+
 	if(PropI(@"video") >= 0 && PropI(@"video") < NUMVIDEOS){
 		int i = PropF(@"video");	
 		
