@@ -9,12 +9,27 @@
 #import "Ocean.h"
 #import "Keystoner.h"
 
-#pragma mark TODO add ofxFBO
 
 @implementation Ocean
 
-
 -(void) initPlugin{
+	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"amplitude"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"alpha"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1000.0] named:@"resolution"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:10.0] named:@"frequency"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:100.0 minValue:-100.0 maxValue:100.0] named:@"drift"];
+	
+	for (int i = 0; i < NUM_VOICES+1; i++) {
+		[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named: 
+		 [NSString stringWithFormat:@"wave%iOn",i]
+		 ];
+		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:
+		 [NSString stringWithFormat:@"wave%iChannel",i]
+		 ];
+	}
+	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"drag"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:-1.0 minValue:-1.0 maxValue:2.0] named:@"dragToX"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"dragToY"];
@@ -23,6 +38,12 @@
 }
 
 -(void) setup{
+	
+	for (int i = 0; i < NUM_VOICES+1; i++) {
+		waveForm[i] =  new MSA::Interpolator1D;
+		waveForm[i]->reserve((int)roundf(PropF(@"resolution")));
+	}
+	
 	mouseParticle = new ofxParticle();
 	mouseParticle->setActive(false);
 	dragParticle = new ofxParticle();
@@ -32,13 +53,13 @@
 	[[properties objectForKey:@"reset"] setBoolValue:YES];
 	
 	fbo.setup(kFBOWidth, kFBOHeight, GL_RGBA, 0);
-
+	
 }
 
 -(void) update:(NSDictionary *)drawingInformation{
 	
 	if (PropB(@"reset")) {
-
+		
 		ofPoint gravity(0, 0);
 		if(physics){
 			physics->deleteAll();
@@ -72,7 +93,7 @@
 			_particles[x] = new ofxParticle[(int)(grid/[self aspect])+1];
 		}
 		[self makeSpringWidth:[self aspect]*400.0 height:1.0*400.0];
-
+		
 		[[properties objectForKey:@"reset"] setBoolValue:NO];
 		[[properties objectForKey:@"drag"] setFloatValue:0.0];
 		
@@ -110,7 +131,7 @@
 		
 		if (wallParticlePos.y/400.0 < PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5) ||
 			wallParticlePos.y/400.0 > PropF(@"dragToY")+(PropF(@"dragWindowWidth")*0.5)) {
-
+			
 			ofxParticle* p = new ofxParticle(wallParticlePos, 400.0/wallParticleResolution);
 			p->setActive(false);
 			p->setMass(200);
@@ -119,7 +140,7 @@
 		}
 		
 	}
-
+	
 	if(!dragSpring){
 		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
 		ofPoint dragPoint = ofPoint(wallX*400, PropF(@"dragToY")*400);
@@ -135,47 +156,130 @@
 		dragParticle->set(ofPoint(
 								  dragOrigin->x + (((PropF(@"dragToX")*[self aspect]*400.0*3)-dragOrigin->x)*PropF(@"drag")),
 								  dragOrigin->y + (((PropF(@"dragToY")*400.0)-dragOrigin->y)*PropF(@"drag"))
-						  ));
+								  ));
 	}
-
 	
 	physics->update();
+	
+	
+	
+	int resolution = (int)roundf(PropF(@"resolution"));
+	
+	for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
+		
+		NSString * waveOnStr = [NSString stringWithFormat:@"wave%iOn",iVoice];
+		
+		if (PropB(waveOnStr)) {
+			
+			NSString * waveChannelStr = [NSString stringWithFormat:@"wave%iChannel",iVoice];
+			
+			wave = [GetPlugin(Wave)
+					getWaveFormWithIndex:(int)roundf(PropF(waveChannelStr))
+					amplitude:1.0 
+					driftSpeed:PropF(@"drift")
+					smoothing:PropF(@"smoothing")
+					freqeuncy:PropF(@"frequency")
+					random:0
+					];
+			
+			if ([wave count] > 0) {
+				waveForm[iVoice]->clear();
+				for (int i=0; i < [wave count]; i++) {
+					waveForm[iVoice]->push_back([[wave objectAtIndex:i] floatValue]);
+				}
+				
+			}
+			
+		}	
+		
+	}
 	
 }
 
 -(void) draw:(NSDictionary *)drawingInformation{
 	
-	fbo.begin();
+	fbo.begin();{
+		
+		glScaled(kFBOHeight, kFBOHeight, 0);
 
-	ofBackground(0,0,0);
-	glScaled(kFBOHeight, kFBOHeight, 0);
-	
-	ofFill();
-	
-	for(int i = 0; i < 200; i++){
-		ofSetColor(255-i, 0,i);
-		ofRect(0, (1.0/200)*i, [self aspect], 1.0/200);
-	}
-	
-	float t = sinf(ofGetElapsedTimef());
-	
-	ofSetColor(t*255,t*255,0);
-	ofCircle([self aspect]*.5, 0.5, 0.1);
-	
-	
-	fbo.end();
+		//ofSetColor(0,0,0,15);
+		
+		//ofRect(0,0,[self aspect], 1.0);
+		
+		ofBackground(0,0,0);
+		
+		glTranslated(0, 0.5/(NUM_VOICES+1), 0);
+		
+		for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
+			
+			NSString * waveOnStr = [NSString stringWithFormat:@"wave%iOn",iVoice];
+			
+			if (PropB(waveOnStr)) {
+				float yPos = (1.0/(NUM_VOICES+1))*iVoice;
+				ofxPoint2f * startP = new ofxPoint2f(0,yPos);
+				ofxPoint2f * endP = new ofxPoint2f([self aspect],yPos);
+				[self drawWave:iVoice from:startP to:endP];
+				delete startP;
+				delete endP;
+			}
+		}
+		
+				
+	}fbo.end();
 	
 	ApplySurface(@"Floor");{
 		
 		ofSetColor(255, 255, 255, 255);
 
-//		fbo.draw(0, 0, [self aspect], 1.0);
 		glScaled(1.0/400.0, 1.0/400.0,0);
-
+		
 		[self drawCloth:&fbo.getTexture(0) showGrid:NO];
 		
 	} PopSurface();
 	
+}
+
+-(void) drawWave:(int)iVoice from:(ofxPoint2f*)begin to:(ofxPoint2f*)end{
+	
+	ofxVec2f v1 = ofxVec2f(end->x, end->y)-ofxVec2f(begin->x, begin->y);
+	ofxVec2f v2 = ofxVec2f(0,1.0);
+	
+	float length = v1.length();
+	
+	glPushMatrix();{
+		
+		ofNoFill();
+		ofSetLineWidth(4);
+		
+		ofSetColor(255, 255, 255, 255);
+		
+		glTranslated(begin->x,begin->y, 0);
+		glRotated(-v1.angle(v2)+90, 0, 0, 1);
+		
+		int resolution = PropI(@"resolution");
+
+		float amplitude = PropF(@"amplitude");
+		
+		glBegin(GL_QUAD_STRIP);
+		ofxPoint2f lastPoint = ofxPoint2f(0,0);		
+		for (int i = 0;i< resolution; i++) {
+			float x = 1.0/resolution*i;
+			
+			if (i < resolution) {
+				ofxPoint2f p = ofxPoint2f(x*length, waveForm[iVoice]->sampleAt(x)*amplitude);
+				ofxVec2f v = p - lastPoint;
+				ofxVec2f h = ofxVec2f(-v.y,v.x);
+				h.normalize();
+				h *= 0.003;
+				glVertex2f((p+h).x, (p+h).y);
+				glVertex2f((p-h).x, (p-h).y);				
+				//				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
+				lastPoint = p;
+			}
+		}
+		glEnd();
+		
+	} glPopMatrix();
 }
 
 - (void) drawCloth:(ofTexture*)ref showGrid:(bool) showGrid{
@@ -240,23 +344,23 @@
 	
 	
 	ofSetColor(255, 255, 255,127);
-
-		[self drawCloth:&fbo.getTexture(0) showGrid:YES];
-
+	
+	[self drawCloth:&fbo.getTexture(0) showGrid:YES];
+	
 	glPushMatrix();{
-
+		
 		glScaled(200*1.0/[self aspect], 400, 1);
-
+		
 		ofFill();
 		
 		ofSetColor(255, 0, 0,127);
-
+		
 		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
 		
 		ofRect(wallX-0.01, 0, 0.02, PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5));
-
+		
 		ofRect(wallX-0.01, PropF(@"dragToY")+(PropF(@"dragWindowWidth")*0.5), 0.02, 1.0);
-
+		
 		
 	} glPopMatrix();
 }
@@ -298,8 +402,8 @@
 				ofxSpring* s = new ofxSpring(p1, p2, rest, strength);
 				physics->add(s);
 				if (i>0) {
-					 p1 = &_particles[i-1][j-1];
-					 p2 = &_particles[i][j];
+					p1 = &_particles[i-1][j-1];
+					p2 = &_particles[i][j];
 					rest = p1->distanceTo(p2);
 					ofxSpring* s = new ofxSpring(p1, p2, rest, strength*0.5);
 					physics->add(s);

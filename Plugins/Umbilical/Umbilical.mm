@@ -219,8 +219,6 @@
 		endPos = ofxVec2f(mousex,mousey);
 	}
 	
-	
-	
 }
 
 
