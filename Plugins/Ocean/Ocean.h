@@ -10,6 +10,9 @@
 #include "Plugin.h"
 #include "ofxPhysics2d.h"
 #include "ofxFbo.h"
+#include "MSAInterpolator.h"
+#include "Wave.h"
+#include "ofxPoint2f.h"
 
 #define kFBOWidth			1000
 #define kFBOHeight			2000
@@ -49,13 +52,18 @@
 	int max_tuio_constraints;
 	bool bMousePressed;
 	
+	MSA::Interpolator1D		* waveForm[NUM_VOICES+1];
+	
 	float mousex, mousey, mouseh;
+	
+	NSMutableArray * wave;
 	
 }
 
-- (void)createParticleStringFrom:(ofxParticle*)begin to:(ofxParticle*) end withNumParticles: (int) numParticles;
 - (void)makeSpringWidth:(float) _width height:(float) _height;
 - (float) aspect;
+- (void) drawWave:(int)iVoice from:(ofxPoint2f*)begin to:(ofxPoint2f*)end;
+
 
 
 @end
