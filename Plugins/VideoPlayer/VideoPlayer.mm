@@ -223,7 +223,7 @@
 	
 	if([movie[PropI(@"video")] currentTime].timeValue >= [movie[PropI(@"video")] duration].timeValue-0.1*[movie[PropI(@"video")] duration].timeScale){
 		//Videoen er nået til ende, så gå til næste video
-		[Prop(@"video") setIntValue:-1];
+		[Prop(@"video") setIntValue:-1	];
 	}		
 	
 

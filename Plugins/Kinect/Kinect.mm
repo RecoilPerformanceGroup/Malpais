@@ -1399,19 +1399,19 @@
 
 
 -(ofxPoint3f) point3:(int)point{
-	if(point3Cache[point] == nil)
+//	if(point3Cache[point] == nil)
 		point3Cache[point] = ofxPoint3f([[customProperties valueForKey:[NSString stringWithFormat:@"point%ix",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%iy",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%iz",point]] floatValue]);
 	
 	return point3Cache[point];	
 }
 -(ofxPoint2f) point2:(int)point{
-	if(point2Cache[point] == nil)
+//	if(point2Cache[point] == nil)
 		point2Cache[point] = ofxPoint2f([[customProperties valueForKey:[NSString stringWithFormat:@"point%ia",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%ib",point]] floatValue]);
 
 	return point2Cache[point];
 }
 -(ofxPoint2f) projPoint:(int)point{
-	if(projPointCache[point] == nil)
+//	if(projPointCache[point] == nil)
 		projPointCache[point] = ofxPoint2f([[customProperties valueForKey:[NSString stringWithFormat:@"proj%ix",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"proj%iy",point]] floatValue]);
 	return projPointCache[point];
 }

@@ -254,8 +254,6 @@
 			startSegment = resolution*begin.y;
 			endSegment = resolution*end.y;
 		}
-		
-		//glBegin(GL_LINE_STRIP);
 		glBegin(GL_QUAD_STRIP);
 		ofxPoint2f lastPoint = ofxPoint2f(0,0);		
 		for (int i = startSegment;i< endSegment; i++) {
