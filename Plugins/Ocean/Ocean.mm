@@ -35,6 +35,8 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"dragToY"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"dragWindowWidth"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:YES] named:@"reset"];
+	
+	[self assignMidiChannel:9];
 }
 
 -(void) setup{
@@ -93,7 +95,7 @@
 		endParticleString = NULL;
 		
 		bSetup = false;
-		grid = 6;
+		grid = 8;
 		if(_particles){
 			delete _particles;
 		}
@@ -210,6 +212,8 @@
 	
 	ApplySurface(@"Floor");{
 		
+
+		
 		fbo.begin();{
 			
 			ofBackground(0,0,0);
@@ -235,6 +239,8 @@
 		}fbo.end();
 
 		ofSetColor(255, 255, 255, 255);
+		ofFill();
+		ofRect(0, 0, [self aspect], 1);
 		
 		glScaled(1.0/400.0, 1.0/400.0,0);
 		
@@ -380,7 +386,7 @@
 	//	gridSizeY = img.getHeight()/grid;
 	gridPosX = 0;
 	gridPosY =	0;
-	strength = 0.1;
+	strength = 0.06;
 	
 	pSize = gridSizeX *0.1;
 	
