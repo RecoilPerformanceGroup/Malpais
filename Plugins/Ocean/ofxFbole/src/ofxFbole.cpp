@@ -261,10 +261,8 @@ void ofxFbole::createAndAttachTexture(GLenum attachmentPoint) {
 void ofxFbole::begin() {
 	bind();
 	fbolePushView();
-	ofSetupScreen();
+	fboleSetupScreenPerspective(getWidth(), getHeight(), false);
 	glViewport(0, 0, getWidth(), getHeight());
-//	ofSetupScreenPerspective(getWidth(), getHeight(), false);
-//	ofViewport(0, 0, getWidth(), getHeight());
 }
 
 
@@ -422,5 +420,33 @@ void ofxFbole::fbolePopView() {
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 	//	glPopAttrib();					// pop active matrix mode
+}
+
+void ofxFbole::fboleSetupScreenPerspective(float width, float height, bool vFlip, float fov, float nearDist, float farDist) {
+	if(width == 0) width = ofGetWidth();
+	if(height == 0) height = ofGetHeight();
+	
+	float eyeX = width / 2;
+	float eyeY = height / 2;
+	float halfFov = PI * fov / 360;
+	float theTan = tanf(halfFov);
+	float dist = eyeY / theTan;
+	float aspect = (float) width / height;
+	
+	if(nearDist == 0) nearDist = dist / 10.0f;
+	if(farDist == 0) farDist = dist * 10.0f;
+	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(fov, aspect, nearDist, farDist);
+	
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(eyeX, eyeY, dist, eyeX, eyeY, 0, 0, 1, 0);
+	
+	if(vFlip) {
+		glScalef(1, -1, 1);           // invert Y axis so increasing Y goes down.
+		glTranslatef(0, -height, 0);       // shift origin up to upper-left corner.
+	}
 }
 

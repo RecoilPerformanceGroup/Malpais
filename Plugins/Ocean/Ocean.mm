@@ -52,13 +52,23 @@
 	stillImg.loadImage([[[NSBundle mainBundle] pathForImageResource:@"floortest.jpg"] cString]);
 	[[properties objectForKey:@"reset"] setBoolValue:YES];
 	
-	fbo.setup(kFBOWidth, kFBOHeight, GL_RGBA, 0);
 	
 }
 
 -(void) update:(NSDictionary *)drawingInformation{
 	
 	if (PropB(@"reset")) {
+		
+		ofxFbole::Settings s;
+		s.width				= kFBOWidth;
+		s.height			= kFBOHeight;
+		s.useDepth			= false;
+		s.numColorbuffers	= 1;
+		fbo.setup(s);
+		
+		fbo.begin();{
+			ofBackground(0,0,0);
+		}fbo.end();
 		
 		ofPoint gravity(0, 0);
 		if(physics){
@@ -197,37 +207,33 @@
 
 -(void) draw:(NSDictionary *)drawingInformation{
 	
-	fbo.begin();{
-		
-		glScaled(kFBOHeight, kFBOHeight, 0);
-		
-		//ofSetColor(0,0,0,15);
-		
-		//ofRect(0,0,[self aspect], 1.0);
-		
-		ofBackground(0,0,0);
-		
-		glTranslated(0, 0.5/(NUM_VOICES+1), 0);
-		
-		for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
-			
-			NSString * waveOnStr = [NSString stringWithFormat:@"wave%iOn",iVoice];
-			
-			if (PropB(waveOnStr)) {
-				float yPos = (1.0/(NUM_VOICES+1))*iVoice;
-				ofxPoint2f * startP = new ofxPoint2f(0,yPos);
-				ofxPoint2f * endP = new ofxPoint2f([self aspect],yPos);
-				[self drawWave:iVoice from:startP to:endP];
-				delete startP;
-				delete endP;
-			}
-		}
-		
-		
-	}fbo.end();
 	
 	ApplySurface(@"Floor");{
 		
+		fbo.begin();{
+			
+			ofBackground(0,0,0);
+
+			glScaled(kFBOHeight, kFBOHeight, 0);
+			
+			glTranslated(0, 0.5/(NUM_VOICES+1), 0);
+			
+			for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
+				
+				NSString * waveOnStr = [NSString stringWithFormat:@"wave%iOn",iVoice];
+				
+				if (PropB(waveOnStr)) {
+					float yPos = (1.0/(NUM_VOICES+1))*iVoice;
+					ofxPoint2f * startP = new ofxPoint2f(0,yPos);
+					ofxPoint2f * endP = new ofxPoint2f([self aspect],yPos);
+					[self drawWave:iVoice from:startP to:endP];
+					delete startP;
+					delete endP;
+				}
+			}
+			
+		}fbo.end();
+
 		ofSetColor(255, 255, 255, 255);
 		
 		glScaled(1.0/400.0, 1.0/400.0,0);
