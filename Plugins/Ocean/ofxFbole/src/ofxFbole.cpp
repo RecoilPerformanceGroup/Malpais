@@ -261,8 +261,10 @@ void ofxFbole::createAndAttachTexture(GLenum attachmentPoint) {
 void ofxFbole::begin() {
 	bind();
 	fbolePushView();
-	ofSetupScreenPerspective(getWidth(), getHeight(), false);
-	ofViewport(0, 0, getWidth(), getHeight());
+	ofSetupScreen();
+	glViewport(0, 0, getWidth(), getHeight());
+//	ofSetupScreenPerspective(getWidth(), getHeight(), false);
+//	ofViewport(0, 0, getWidth(), getHeight());
 }
 
 

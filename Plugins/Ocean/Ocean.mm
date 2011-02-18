@@ -153,10 +153,9 @@
 			physics->add(dragSpring);
 		} 
 	} else {
-		dragParticle->set(ofPoint(
-								  dragOrigin->x + (((PropF(@"dragToX")*[self aspect]*400.0*3)-dragOrigin->x)*PropF(@"drag")),
-								  dragOrigin->y + (((PropF(@"dragToY")*400.0)-dragOrigin->y)*PropF(@"drag"))
-								  ));
+		dragParticle->set(dragOrigin->x + (((PropF(@"dragToX")*[self aspect]*400.0*3)-dragOrigin->x)*PropF(@"drag")),
+						  dragOrigin->y + (((PropF(@"dragToY")*400.0)-dragOrigin->y)*PropF(@"drag"))
+						  );
 	}
 	
 	physics->update();
@@ -201,7 +200,7 @@
 	fbo.begin();{
 		
 		glScaled(kFBOHeight, kFBOHeight, 0);
-
+		
 		//ofSetColor(0,0,0,15);
 		
 		//ofRect(0,0,[self aspect], 1.0);
@@ -224,13 +223,13 @@
 			}
 		}
 		
-				
+		
 	}fbo.end();
 	
 	ApplySurface(@"Floor");{
 		
 		ofSetColor(255, 255, 255, 255);
-
+		
 		glScaled(1.0/400.0, 1.0/400.0,0);
 		
 		[self drawCloth:&fbo.getTexture(0) showGrid:NO];
@@ -257,7 +256,7 @@
 		glRotated(-v1.angle(v2)+90, 0, 0, 1);
 		
 		int resolution = PropI(@"resolution");
-
+		
 		float amplitude = PropF(@"amplitude");
 		
 		glBegin(GL_QUAD_STRIP);
@@ -320,8 +319,10 @@
 	
 	if (showGrid)
 	{
-		ofSetColor(240, 240, 240,64);		physics->renderParticles();
-		ofSetColor(100, 100, 100,64);		physics->renderConstraints();
+		if(physics){
+			ofSetColor(240, 240, 240,64);		physics->renderParticles();
+			ofSetColor(100, 100, 100,64);		physics->renderConstraints();			
+		}
 	}
 	
 }
