@@ -245,7 +245,8 @@
 		
 		fbo.begin();{
 			
-			ofSetColor(0, 127, 255, 22);
+			ofSetColor(0, 0, 0, 255);
+			ofBackground(0, 0, 0);
 			
 			glScaled(kFBOHeight, kFBOHeight, 0);
 			
@@ -311,7 +312,7 @@
 				ofxVec2f v = p - lastPoint;
 				ofxVec2f h = ofxVec2f(-v.y,v.x);
 				h.normalize();
-				h *= 0.01;
+				h *= 0.003;
 				glVertex2f((p+h).x, (p+h).y);
 				glVertex2f((p-h).x, (p-h).y);				
 				//				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
