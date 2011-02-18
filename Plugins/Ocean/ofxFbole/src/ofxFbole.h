@@ -83,4 +83,6 @@ protected:
 	
 	void fbolePushView();
 	void fbolePopView();
+	void fboleSetupScreenPerspective(float width = 0, float height = 0, bool vFlip = true, float fov = 60, float nearDist = 0, float farDist = 0);
+
 };

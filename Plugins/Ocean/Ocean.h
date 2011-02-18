@@ -14,8 +14,8 @@
 #include "Wave.h"
 #include "ofxPoint2f.h"
 
-#define kFBOWidth			100
-#define kFBOHeight			200
+#define kFBOWidth			500
+#define kFBOHeight			1000
 
 @interface Ocean : ofPlugin {
 
