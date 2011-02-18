@@ -1,16 +1,12 @@
 #import "VideoPlayer.h"
 #include "Keystoner.h"
 
-
-#define LIGHT1 [NSNumber numberWithInt:1]
-#define LIGHT2 [NSNumber numberWithInt:2]
-#define LIGHT12 [NSNumber numberWithInt:3]
-
 @implementation VideoPlayer
 
 @synthesize loadedFiles;
 
 -(void) initPlugin{	
+	NSLog(@"Init videplayer");
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:-1 minValue:-1 maxValue:2] named:@"video"];	
 	
 	lastFramesVideo = 0;
@@ -24,37 +20,19 @@
 //
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
-	if(object == Prop(@"video")){
-		
-		if(PropI(@"video") < 0){
-			
-			
-		//	dispatch_sync(dispatch_get_main_queue(), ^{		
+	if(object == Prop(@"video")){		
+		if(PropI(@"video") < 0){			
+			NSLog(@"Reset video");
+			dispatch_async(dispatch_get_main_queue(), ^{		
 				for(int i=0;i<NUMVIDEOS;i++){				
-					[movie[i] gotoBeginning];				
-					[movie[i] setRate:0.0];		
-					//QTVisualContextTask(textureContext[i]);	
-					
-					// if we have a previous frame release it
-					if (NULL != currentFrame[i]) {
-						CVOpenGLTextureRelease(currentFrame[i]);
-						currentFrame[i] = NULL;
+					if(movie[i]){
+						[movie[i] gotoBeginning];				
+						[movie[i] setRate:0.0];							
 					}
-					
-					// get a "frame" (image buffer) from the Visual Context, indexed by the provided time
-					///					OSStatus status = QTVisualContextCopyImageForTime(textureContext[i], NULL, outputTime, &currentFrame[i]);
-					
-					//	
-					
 				}
 				forceDrawNextFrame = YES;
-		//	});
-			
-			
+			});			
 		}
-	}
-	if(context != nil){
-
 	}
 }
 
@@ -103,6 +81,7 @@
 //
 
 -(BOOL) willDraw:(NSMutableDictionary *)drawingInformation{
+	NSLog(@"Will draw?");
 	if(PropI(@"video") >= 0 && PropI(@"video") < NUMVIDEOS){
 		QTVisualContextTask(textureContext[PropI(@"video")]);
 		
@@ -132,8 +111,8 @@
 //
 
 -(void) setup{	
+	NSLog(@"Setup video");
 	[Prop(@"video") setFloatValue:-1];
-	
 	dispatch_async(dispatch_get_main_queue(), ^{	
 		NSError * error = [NSError alloc];			
 		
@@ -210,6 +189,9 @@
 		}
 		
 	});		
+	
+	//
+	
 }
 
 //
@@ -226,7 +208,7 @@
 		[Prop(@"video") setIntValue:-1	];
 	}		
 	
-
+	
 	if(PropI(@"video") >= 0 && PropI(@"video") < NUMVIDEOS){
 		int i = PropF(@"video");	
 		
@@ -235,7 +217,7 @@
 				//Video change
 				//NSLog(@"Change video %i to %i",lastFramesVideo, i);
 				
-				dispatch_sync(dispatch_get_main_queue(), ^{		
+				dispatch_async(dispatch_get_main_queue(), ^{		
 					forceDrawNextFrame = YES;						
 					
 					[movie[lastFramesVideo] setRate:0.0];	

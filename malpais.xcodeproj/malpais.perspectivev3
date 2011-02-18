@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>ActivePerspectiveName</key>
-	<string>Project</string>
+	<string>Debug</string>
 	<key>AllowedModules</key>
 	<array>
 		<dict>
@@ -287,9 +287,8 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>15</integer>
-									<integer>12</integer>
-									<integer>10</integer>
+									<integer>43</integer>
+									<integer>39</integer>
 									<integer>0</integer>
 								</array>
 							</array>
@@ -310,8 +309,6 @@
 							<string>MainColumn</string>
 							<real>341</real>
 						</array>
-						<key>RubberWindowFrame</key>
-						<string>2 510 1185 1388 0 0 1200 1898 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -322,14 +319,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>339BA97F12F6E75E00DCB104</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>Ocean.mm</string>
+								<string>VideoPlayer.mm</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -337,11 +332,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>339BA98012F6E75E00DCB104</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>Ocean.mm</string>
+										<string>VideoPlayer.mm</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>3325A7A1130E8ADB0044FC2A</string>
+										<string>3325A897130E96320044FC2A</string>
 										<key>history</key>
 										<array>
 											<string>339BA9D012F6ED9200DCB104</string>
@@ -371,7 +366,6 @@
 											<string>33546AF612F97CDD0072289C</string>
 											<string>33546B1A12F97FEA0072289C</string>
 											<string>33546B3112F980A40072289C</string>
-											<string>33FCFBA512F98128008D740B</string>
 											<string>33E4E0F112F994EF0055C3D3</string>
 											<string>33E4E21212F9A7460055C3D3</string>
 											<string>33E4E34712F9C3D90055C3D3</string>
@@ -402,7 +396,6 @@
 											<string>337814C21302F4A2007DA08E</string>
 											<string>337814C31302F4A2007DA08E</string>
 											<string>337814C41302F4A2007DA08E</string>
-											<string>3378156F13031A97007DA08E</string>
 											<string>337815F313033C58007DA08E</string>
 											<string>337815F913033C58007DA08E</string>
 											<string>33049CC3130416D30046635A</string>
@@ -443,14 +436,12 @@
 											<string>33F9CC24130D91F10036EF0B</string>
 											<string>33F9CC25130D91F10036EF0B</string>
 											<string>33F9CC26130D91F10036EF0B</string>
-											<string>33F9CC28130D91F10036EF0B</string>
 											<string>33F9CC40130D94DB0036EF0B</string>
 											<string>33F9CC47130D95670036EF0B</string>
 											<string>33F9CC81130D9FDF0036EF0B</string>
 											<string>33F9CC8F130DA0430036EF0B</string>
 											<string>33F9CD3F130DC49F0036EF0B</string>
 											<string>33F9CD40130DC49F0036EF0B</string>
-											<string>33F9CD41130DC49F0036EF0B</string>
 											<string>33F9CD42130DC49F0036EF0B</string>
 											<string>33F9CD43130DC49F0036EF0B</string>
 											<string>33F9CD44130DC49F0036EF0B</string>
@@ -459,12 +450,20 @@
 											<string>33F9CD47130DC49F0036EF0B</string>
 											<string>33F9CD48130DC49F0036EF0B</string>
 											<string>33F9CD49130DC49F0036EF0B</string>
-											<string>33F9CD62130DC50A0036EF0B</string>
 											<string>3325A76C130E835F0044FC2A</string>
 											<string>3325A786130E89050044FC2A</string>
 											<string>3325A79E130E8ADB0044FC2A</string>
 											<string>3325A79F130E8ADB0044FC2A</string>
-											<string>3325A7A0130E8ADB0044FC2A</string>
+											<string>3325A7BB130E8F180044FC2A</string>
+											<string>3325A7BD130E8F180044FC2A</string>
+											<string>3325A7BE130E8F180044FC2A</string>
+											<string>3325A7D7130E91400044FC2A</string>
+											<string>3325A86D130E950F0044FC2A</string>
+											<string>3325A873130E95590044FC2A</string>
+											<string>3325A874130E95590044FC2A</string>
+											<string>3325A883130E95DB0044FC2A</string>
+											<string>3325A888130E96000044FC2A</string>
+											<string>3325A88E130E960E0044FC2A</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -479,8 +478,6 @@
 							<dict>
 								<key>Frame</key>
 								<string>{{0, 0}, {822, 1220}}</string>
-								<key>RubberWindowFrame</key>
-								<string>2 510 1185 1388 0 0 1200 1898 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -504,8 +501,6 @@
 									<dict>
 										<key>Frame</key>
 										<string>{{10, 27}, {822, 95}}</string>
-										<key>RubberWindowFrame</key>
-										<string>2 510 1185 1388 0 0 1200 1898 </string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
@@ -521,7 +516,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {837, 501}}</string>
+										<string>{{10, 27}, {822, 95}}</string>
 									</dict>
 									<key>Module</key>
 									<string>PBXProjectFindModule</string>
@@ -643,6 +638,8 @@
 					<dict>
 						<key>Frame</key>
 						<string>{{0, 0}, {1185, 360}}</string>
+						<key>RubberWindowFrame</key>
+						<string>2 510 1185 1388 0 0 1200 1898 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXDebugCLIModule</string>
@@ -717,7 +714,11 @@
 							</array>
 							<key>Frame</key>
 							<string>{{574, 0}, {611, 332}}</string>
+							<key>RubberWindowFrame</key>
+							<string>2 510 1185 1388 0 0 1200 1898 </string>
 						</dict>
+						<key>RubberWindowFrame</key>
+						<string>2 510 1185 1388 0 0 1200 1898 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXDebugSessionModule</string>
@@ -781,7 +782,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>3325A7A2130E8ADB0044FC2A</string>
+		<string>3325A898130E96320044FC2A</string>
 		<string>3325A778130E83D40044FC2A</string>
 		<string>3325A779130E83D40044FC2A</string>
 		<string>/Users/malpais/Udvikling/of_preRelease_v0062_osxSL_FAT/apps/recoil/Malpais/malpais.xcodeproj</string>
