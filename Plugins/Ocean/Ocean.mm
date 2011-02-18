@@ -19,7 +19,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1000.0] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:10.0] named:@"frequency"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:100.0 minValue:-100.0 maxValue:100.0] named:@"drift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10.0 minValue:-10.0 maxValue:10.0] named:@"drift"];
 	
 	for (int i = 0; i < NUM_VOICES+1; i++) {
 		[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named: 
@@ -54,75 +54,70 @@
 	stillImg.loadImage([[[NSBundle mainBundle] pathForImageResource:@"floortest.jpg"] cString]);
 	[[properties objectForKey:@"reset"] setBoolValue:YES];
 	
+	[self reset];
 	
+}
+
+-(void) reset{
+	ofxFbole::Settings s;
+	s.width				= kFBOWidth;
+	s.height			= kFBOHeight;
+	s.useDepth			= false;
+	s.numColorbuffers	= 1;
+	fbo.setup(s);
+	
+	fbo.begin();{
+		ofBackground(0,0,0);
+	}fbo.end();
+	
+	ofPoint gravity(0, 0);
+	if(physics){
+		physics->removeAll();
+		delete physics;
+	}
+	physics = new ofxPhysics2d(gravity);
+	physics->checkBounds(false);
+	physics->enableCollisions(true);
+	physics->setNumIterations(10);
+	
+	wallParticles.clear();
+	
+	bCreateParticles = false;
+	mouseSpring = NULL;
+	dragSpring = NULL;
+	newParticle = NULL;
+	dragOrigin = NULL;
+	
+	newParticleIncrement = 0;
+	bCreateParticleString = false;
+	beginParticleString = NULL;
+	endParticleString = NULL;
+	
+	bSetup = false;
+	grid = 6;
+	if(_particles){
+		delete _particles;
+	}
+	_particles = new ofxParticle*[grid];
+	for(int x = 0 ; x < grid+1 ;x++)
+	{
+		_particles[x] = new ofxParticle[(int)(grid/[self aspect])+1];
+	}
+	[self makeSpringWidth:[self aspect]*400.0 height:1.0*400.0];
+	
+	[[properties objectForKey:@"reset"] setBoolValue:NO];
+	[[properties objectForKey:@"drag"] setFloatValue:0.0];
 }
 
 -(void) update:(NSDictionary *)drawingInformation{
 	
 	if (PropB(@"reset")) {
 		
-		ofxFbole::Settings s;
-		s.width				= kFBOWidth;
-		s.height			= kFBOHeight;
-		s.useDepth			= false;
-		s.numColorbuffers	= 1;
-		fbo.setup(s);
-		
-		fbo.begin();{
-			ofBackground(0,0,0);
-		}fbo.end();
-		
-		ofPoint gravity(0, 0);
-		if(physics){
-			physics->removeAll();
-			delete physics;
-		}
-		physics = new ofxPhysics2d(gravity);
-		physics->checkBounds(false);
-		physics->enableCollisions(true);
-		physics->setNumIterations(10);
-		
-		wallParticles.clear();
-		
-		bCreateParticles = false;
-		mouseSpring = NULL;
-		dragSpring = NULL;
-		newParticle = NULL;
-		dragOrigin = NULL;
-		
-		newParticleIncrement = 0;
-		bCreateParticleString = false;
-		beginParticleString = NULL;
-		endParticleString = NULL;
-		
-		bSetup = false;
-		grid = 8;
-		if(_particles){
-			delete _particles;
-		}
-		_particles = new ofxParticle*[grid];
-		for(int x = 0 ; x < grid+1 ;x++)
-		{
-			_particles[x] = new ofxParticle[(int)(grid/[self aspect])+1];
-		}
-		[self makeSpringWidth:[self aspect]*400.0 height:1.0*400.0];
-		
-		[[properties objectForKey:@"reset"] setBoolValue:NO];
-		[[properties objectForKey:@"drag"] setFloatValue:0.0];
+		[self reset];
 		
 	}
 	
 	mouseParticle->set(mousex*400.0, mousey*400.0);
-	
-	for(int i=0; i<particles.size(); i++){
-		if(particles[i]->y > 400 + particles[i]->getRadius()){
-			while(physics->getConstraintWithParticle(particles[i]) != NULL){
-				physics->deleteConstraintsWithParticle(particles[i]);
-			}
-			physics->deleteParticle(particles[i]);
-			particles.erase(particles.begin()+i);
-		}
-	}
 	
 	if(mouseSpring && !bMousePressed){
 		physics->deleteConstraint(mouseSpring);
@@ -132,6 +127,7 @@
 	for (int i = 0; i < wallParticles.size(); i++) {
 		physics->deleteParticle(wallParticles[i]);
 	}
+	
 	wallParticles.clear();
 	
 	int wallParticleResolution = 20;
@@ -213,11 +209,9 @@
 	
 	ApplySurface(@"Floor");{
 		
-
-		
 		fbo.begin();{
 			
-			ofBackground(0,0,0);
+			ofBackground(0,0,0,32);
 
 			glScaled(kFBOHeight, kFBOHeight, 0);
 			
