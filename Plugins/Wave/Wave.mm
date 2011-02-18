@@ -423,18 +423,18 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		
 		for (int i = 0; i < voiceLength; i++) {
 			
-			NSNumber * formerAmplitude;
+			float formerAmplitude;
 			if (iBand == 0) {
-				formerAmplitude = [NSNumber numberWithDouble:smoothingFactor*[[aVoice objectAtIndex:i] doubleValue]];
+				formerAmplitude = smoothingFactor*[[aVoice objectAtIndex:i] floatValue];
 			} else {
-				formerAmplitude = [aVoice objectAtIndex:i];
+				formerAmplitude = [[aVoice objectAtIndex:i] floatValue];
 			}
 			
 			float amp = sinf((((1.0*i*NUM_BANDS)/voiceLength)*(1.0+iBand))*frequency/*+(1.0/(1+iBand))*/-drift) * fmaxf(bandValue, ampRnd);
 			
-			NSNumber * anAmplitude = [NSNumber numberWithDouble:
+			NSNumber * anAmplitude = [NSNumber numberWithFloat:
 									  ((1.0/NUM_BANDS) * amp * (1.0-smoothingFactor))
-									  +[formerAmplitude doubleValue]
+									  +formerAmplitude 
 									  ];
 			
 			voiceSourceWaves[index][iBand][i] = (voiceSourceWaves[index][iBand][i]*smoothingFactor) + (amp * (1.0-smoothingFactor));

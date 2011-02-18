@@ -83,7 +83,7 @@
 		endParticleString = NULL;
 		
 		bSetup = false;
-		grid = 15;
+		grid = 6;
 		if(_particles){
 			delete _particles;
 		}
