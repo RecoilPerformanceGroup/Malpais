@@ -711,9 +711,9 @@ double polygonArea(vector<RPoint> points) {
 		if(PropI(@"applyPercentageNumber") >= 1){
 			NSDictionary * dict = [surveyData objectAtIndex:PropI(@"applyPercentageNumber")-1];
 			//	Rubber * obj = [rubbers objectAtIndex:[dict valueForKey:@"bobbel"]];
-			[Prop(([NSString stringWithFormat:@"percentage%i",PropI(@"applyPercentageNumber")])) setFloatValue:[[dict valueForKey:@"percent"] floatValue]/200.0];	
+			[Prop(([NSString stringWithFormat:@"percentage%i",[[dict valueForKey:@"bobbel"] intValue]+1])) setFloatValue:[[dict valueForKey:@"percent"] floatValue]/200.0];	
 			[Prop(@"displayPercent") setFloatValue:[[dict valueForKey:@"percent"] floatValue]];
-
+			
 		} else {
 			[Prop(@"displayPercent") setIntValue:-1];
 		};
@@ -721,8 +721,8 @@ double polygonArea(vector<RPoint> points) {
 	}
 	if([(NSString*)context isEqualToString:@"customProperties"]){			
 		[self setSurveyData:[customProperties valueForKey:@"survey"]];
-//		[surveyData addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:12],@"number",[NSNumber numberWithInt:10],@"percent",[NSNumber numberWithInt:12],@"bobbel",nil]];
-
+		//		[surveyData addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:12],@"number",[NSNumber numberWithInt:10],@"percent",[NSNumber numberWithInt:12],@"bobbel",nil]];
+		
 	}
 }
 
@@ -995,15 +995,21 @@ double polygonArea(vector<RPoint> points) {
 		
 	}
 	
-	int i=1;
+	int i=0;
+	int j = -1;
+	if(PropI(@"applyPercentageNumber") >= 1){
+		NSDictionary * dict = [surveyData objectAtIndex:PropI(@"applyPercentageNumber")-1];
+		j = [[dict valueForKey:@"bobbel"] intValue];
+	}
 	for(Rubber * r in rubbers){
-
-		if(PropI(@"applyPercentageNumber") == i){
+		
+		if(j == i){
 			r->r += (255 - r->r)*0.1;
 		} else {
 			r->r += (0 - r->r)*0.1;	
 		}
- 		i++;  
+		i++;  
+
 	}
 	
 	timeout ++;

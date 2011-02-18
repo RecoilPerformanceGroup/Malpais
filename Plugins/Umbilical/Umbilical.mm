@@ -51,6 +51,7 @@
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"stretch"];
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"endpointPushForce"];
+	[self assignMidiChannel:7];
 }
 
 -(void) setup{	
