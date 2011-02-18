@@ -280,19 +280,20 @@
 								<string>E4C2422310CC54B6004149E2</string>
 								<string>E45BE0360E8CC5DE009D7055</string>
 								<string>DD7B144C11A3CF38000D9775</string>
+								<string>DD593CE212E4A9A1005F2189</string>
 								<string>1C37FBAC04509CD000000102</string>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>12</integer>
-									<integer>10</integer>
+									<integer>49</integer>
+									<integer>46</integer>
 									<integer>9</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 0}, {284, 876}}</string>
+							<string>{{0, 282}, {284, 876}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -327,7 +328,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>7FBF1B3D12E49996009E32EF</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>Ocean.mm</string>
+								<string>Kinect.mm</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -335,11 +336,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>7FBF1B3E12E49996009E32EF</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>Ocean.mm</string>
+										<string>Kinect.mm</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7F6A568F130DB2AF00844BEF</string>
+										<string>7F6A5694130DB41B00844BEF</string>
 										<key>history</key>
 										<array>
 											<string>7FBF1BBD12E49CC3009E32EF</string>
@@ -467,14 +468,14 @@
 											<string>7F0F79D9130C5420009A31C0</string>
 											<string>7F58E005130D680900C6E42E</string>
 											<string>7F6A555E130D7A8C00844BEF</string>
-											<string>7F6A557C130D8F5800844BEF</string>
 											<string>7F6A557D130D8F5800844BEF</string>
 											<string>7F6A55D4130D93BB00844BEF</string>
-											<string>7F6A55FF130D96B500844BEF</string>
 											<string>7F6A568A130DB29200844BEF</string>
-											<string>7F6A568B130DB29200844BEF</string>
 											<string>7F6A568C130DB29200844BEF</string>
-											<string>7F6A568D130DB29200844BEF</string>
+											<string>7F6A5690130DB41B00844BEF</string>
+											<string>7F6A5691130DB41B00844BEF</string>
+											<string>7F6A5692130DB41B00844BEF</string>
+											<string>7F6A5693130DB41B00844BEF</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
