@@ -72,7 +72,8 @@
 		
 		ofPoint gravity(0, 0);
 		if(physics){
-			physics->deleteAll();
+			physics->removeAll();
+			delete physics;
 		}
 		physics = new ofxPhysics2d(gravity);
 		physics->checkBounds(false);
@@ -225,7 +226,7 @@
 				if (PropB(waveOnStr)) {
 					float yPos = (1.0/(NUM_VOICES+1))*iVoice;
 					ofxPoint2f * startP = new ofxPoint2f(0,yPos);
-					ofxPoint2f * endP = new ofxPoint2f([self aspect],yPos);
+					ofxPoint2f * endP = new ofxPoint2f(0.5,yPos);
 					[self drawWave:iVoice from:startP to:endP];
 					delete startP;
 					delete endP;
