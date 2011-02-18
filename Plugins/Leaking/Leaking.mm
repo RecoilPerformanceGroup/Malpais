@@ -720,7 +720,8 @@ double polygonArea(vector<RPoint> points) {
 		
 	}
 	if([(NSString*)context isEqualToString:@"customProperties"]){			
-		[self setSurveyData:[customProperties valueForKey:@"survey"]];
+		if([customProperties objectForKey:@"survey"] != nil)
+			[self setSurveyData:[customProperties valueForKey:@"survey"]];
 		//		[surveyData addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:12],@"number",[NSNumber numberWithInt:10],@"percent",[NSNumber numberWithInt:12],@"bobbel",nil]];
 		
 	}
