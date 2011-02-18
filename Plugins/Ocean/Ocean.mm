@@ -124,6 +124,9 @@
 	 */	
 	int wallParticleResolution = 20;
 	
+	ofxParticle * lastParticle;
+	lastParticle = NULL;
+	
 	for (int i = 0; i < wallParticleResolution; i++) {
 		
 		float particleRadius = 1.5;
@@ -148,12 +151,14 @@
 			p->setMass(100);
 			wallParticles.push_back(p);
 			physics->add(p);
-			if(i>0){
-				rest = p->distanceTo(wallParticles[wallParticles.size()-2]);
+			if(lastParticle){
+				rest = p->distanceTo(lastParticle);
 				ofxSpring* s = new ofxSpring(p, wallParticles[wallParticles.size()-2], rest*0.9, 1.0);
 				wallSprings.push_back(s);
 				physics->add(s);
 			}
+			
+			lastParticle = p;
 			
 		}
 		
@@ -240,7 +245,7 @@
 		
 		fbo.begin();{
 			
-			ofSetColor(0, 0, 0, 255);
+			ofSetColor(0, 127, 255, 22);
 			
 			glScaled(kFBOHeight, kFBOHeight, 0);
 			
@@ -306,7 +311,7 @@
 				ofxVec2f v = p - lastPoint;
 				ofxVec2f h = ofxVec2f(-v.y,v.x);
 				h.normalize();
-				h *= 0.003;
+				h *= 0.01;
 				glVertex2f((p+h).x, (p+h).y);
 				glVertex2f((p-h).x, (p-h).y);				
 				//				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
@@ -320,7 +325,41 @@
 
 - (void) drawCloth:(ofTexture*)ref showGrid:(bool) showGrid{
 	
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
+	
+	ofSetColor(0, 0,0,255);
+	for (int i = 0; i < grid; i++)
+	{
+		for (int j = 0; j < ((int)(grid/[self aspect])); j++)
+		{
+			float texCoorX = ref->getWidth()/grid*1.0f;
+			float texCoorY = ref->getHeight()/grid*1.0f*[self aspect];
+			ofxParticle *p1 = &_particles[i][j];
+			ofxParticle *p2 = &_particles[i+1][j];
+			ofxParticle *p3 = &_particles[i+1][j+1];
+			ofxParticle *p4 = &_particles[i][j+1];
+			
+			glBegin(GL_QUADS);
+			
+			glTexCoord2f((texCoorX*i),(texCoorY*j));
+			glVertex2f(  p1->x, p1->y);
+			
+			glTexCoord2f((texCoorX*(i+1)),(texCoorY*j));
+			glVertex2f(  p2->x,p2->y);
+			
+			glTexCoord2f((texCoorX*(i+1)),(texCoorY*(j+1)));
+			glVertex2f(  p3->x, p3->y);
+			
+			glTexCoord2f((texCoorX*(i)),(texCoorY*(j+1)));
+			glVertex2f(  p4->x, p4->y);
+			
+			glEnd();
+		}
+	}
+	
+
+	ofSetColor(255,255,255,255);
+
 	ref->bind();
 	for (int i = 0; i < grid; i++)
 	{
@@ -351,7 +390,7 @@
 		}
 	}
 	ref->unbind();
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	ofNoFill();
 	
 	if (showGrid)

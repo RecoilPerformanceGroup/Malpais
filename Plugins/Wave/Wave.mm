@@ -18,6 +18,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	
 	voiceWaveForms = [NSMutableArray arrayWithCapacity:NUM_VOICES];
 	
+	[voiceWaveForms retain];
+	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"alpha wall"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"alpha floor"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:10.0] named:@"line width"];
@@ -395,60 +397,68 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 							   freqeuncy:(float)frequency
 								  random:(float)randomFactor
 {
-	NSMutableArray * aVoice = [voiceWaveForms objectAtIndex:index];
 	
-	float now = ofGetElapsedTimef();
-	
-	//	if(now - voiceUpdateTimes[index] > 1.0/60){
-	
-	voiceUpdateTimes[index] = now;
-	
-	for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
+	NSMutableArray * aVoice;
+
+	if ([voiceWaveForms count]>index) {
 		
-		NSString * propStr;
+		aVoice = [voiceWaveForms objectAtIndex:index];
 		
-		if(index == 0)
-			propStr = [NSString stringWithFormat:@"live voice band %i", iBand+1];
-		else 
-			propStr = [NSString stringWithFormat:@"voice %i band %i", index, iBand+1];
+		float now = ofGetElapsedTimef();
 		
-		float bandValue = PropF(propStr);
+		//	if(now - voiceUpdateTimes[index] > 1.0/60){
 		
-		//			double drift = PropF(@"drift speed")*ofGetElapsedTimef()*(2.0*((iBand-(NUM_BANDS/2))+1.0));
-		double drift = driftSpeed*ofGetElapsedTimef()*(iBand+1.0/NUM_BANDS);
-		double smoothingFactor = 1.0-powf((1.0-sqrt(smoothing)), 2.5);
-		double ampRnd = ofRandom(0,randomFactor);
+		voiceUpdateTimes[index] = now;
 		
-		int voiceLength = [aVoice count]; 
-		
-		for (int i = 0; i < voiceLength; i++) {
+		for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
 			
-			float formerAmplitude;
-			if (iBand == 0) {
-				formerAmplitude = smoothingFactor*[[aVoice objectAtIndex:i] floatValue];
-			} else {
-				formerAmplitude = [[aVoice objectAtIndex:i] floatValue];
+			NSString * propStr;
+			
+			if(index == 0)
+				propStr = [NSString stringWithFormat:@"live voice band %i", iBand+1];
+			else 
+				propStr = [NSString stringWithFormat:@"voice %i band %i", index, iBand+1];
+			
+			float bandValue = PropF(propStr);
+			
+			//			double drift = PropF(@"drift speed")*ofGetElapsedTimef()*(2.0*((iBand-(NUM_BANDS/2))+1.0));
+			double drift = driftSpeed*ofGetElapsedTimef()*(iBand+1.0/NUM_BANDS);
+			double smoothingFactor = 1.0-powf((1.0-sqrt(smoothing)), 2.5);
+			double ampRnd = ofRandom(0,randomFactor);
+			
+			int voiceLength = [aVoice count]; 
+			
+			for (int i = 0; i < voiceLength; i++) {
+				
+				float formerAmplitude;
+				if (iBand == 0) {
+					formerAmplitude = smoothingFactor*[[aVoice objectAtIndex:i] floatValue];
+				} else {
+					formerAmplitude = [[aVoice objectAtIndex:i] floatValue];
+				}
+				
+				float amp = sinf((((1.0*i*NUM_BANDS)/voiceLength)*(1.0+iBand))*frequency/*+(1.0/(1+iBand))*/-drift) * fmaxf(bandValue, ampRnd);
+				
+				NSNumber * anAmplitude = [NSNumber numberWithFloat:
+										  ((1.0/NUM_BANDS) * amp * (1.0-smoothingFactor))
+										  +formerAmplitude 
+										  ];
+				
+				voiceSourceWaves[index][iBand][i] = (voiceSourceWaves[index][iBand][i]*smoothingFactor) + (amp * (1.0-smoothingFactor));
+				
+				[aVoice replaceObjectAtIndex:i withObject:anAmplitude];
+				
 			}
 			
-			float amp = sinf((((1.0*i*NUM_BANDS)/voiceLength)*(1.0+iBand))*frequency/*+(1.0/(1+iBand))*/-drift) * fmaxf(bandValue, ampRnd);
-			
-			NSNumber * anAmplitude = [NSNumber numberWithFloat:
-									  ((1.0/NUM_BANDS) * amp * (1.0-smoothingFactor))
-									  +formerAmplitude 
-									  ];
-			
-			voiceSourceWaves[index][iBand][i] = (voiceSourceWaves[index][iBand][i]*smoothingFactor) + (amp * (1.0-smoothingFactor));
-			
-			[aVoice replaceObjectAtIndex:i withObject:anAmplitude];
 			
 		}
 		
-		
+	} else {
+		aVoice = [NSMutableArray array];
 	}
-	
-	
-	//	}
-	
+
+	[aVoice retain];
+
 	return aVoice;
 	
 }
