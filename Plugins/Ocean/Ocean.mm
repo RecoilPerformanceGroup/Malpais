@@ -34,6 +34,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:-1.0 minValue:-1.0 maxValue:2.0] named:@"dragToX"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"dragToY"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"dragWindowWidth"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.01 minValue:0.0 maxValue:1.0] named:@"stiffness"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:YES] named:@"reset"];
 	
 	[self assignMidiChannel:9];
@@ -81,6 +82,8 @@
 	physics->setNumIterations(10);
 	
 	wallParticles.clear();
+	wallSprings.clear();
+	springs.clear();
 	
 	bCreateParticles = false;
 	mouseSpring = NULL;
@@ -107,6 +110,61 @@
 	
 	[[properties objectForKey:@"reset"] setBoolValue:NO];
 	[[properties objectForKey:@"drag"] setFloatValue:0.0];
+	
+	
+	/*	for (int i = 0; i < wallSprings.size(); i++) {
+	 physics->deleteConstraint(wallSprings[i]);
+	 }
+	 wallSprings.clear();
+	 
+	 for (int i = 0; i < wallParticles.size(); i++) {
+	 physics->deleteParticle(wallParticles[i]);
+	 }
+	 wallParticles.clear();
+	 */	
+	int wallParticleResolution = 20;
+	
+	ofxParticle * lastParticle;
+	lastParticle = NULL;
+	
+	for (int i = 0; i < wallParticleResolution; i++) {
+		
+		float particleRadius = 1.5;
+		float particleMargin = (_particles[0][0].getRadius()/20.0);
+		
+		float wallX = (PropF(@"dragToX") < 0.5)?-((particleRadius+particleMargin)/wallParticleResolution):[self aspect]+((particleRadius+particleMargin)/wallParticleResolution);
+		
+		float rest;
+		
+		ofPoint wallParticlePos = ofPoint(wallX*400,400*(1.0/wallParticleResolution)*i);
+		
+		if (wallParticlePos.y/400.0 < PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5) ||
+			wallParticlePos.y/400.0 > PropF(@"dragToY")+(PropF(@"dragWindowWidth")*0.5)) {
+			
+			ofxParticle* p = new ofxParticle(wallParticlePos, particleRadius*400.0/wallParticleResolution);
+			if (i==0 || i==wallParticleResolution-1) {
+				p->setActive(false);
+			} else {
+				p->setActive(false);
+			}
+			
+			p->setMass(100);
+			wallParticles.push_back(p);
+			physics->add(p);
+			if(lastParticle){
+				rest = p->distanceTo(lastParticle);
+				ofxSpring* s = new ofxSpring(p, wallParticles[wallParticles.size()-2], rest*0.9, 1.0);
+				wallSprings.push_back(s);
+				physics->add(s);
+			}
+			
+			lastParticle = p;
+			
+		}
+		
+	}
+	
+	
 }
 
 -(void) update:(NSDictionary *)drawingInformation{
@@ -117,37 +175,15 @@
 		
 	}
 	
+	for (int i=0; i<springs.size(); i++) {
+		springs[i]->setStrength(PropF(@"stiffness"));
+	}
+	
 	mouseParticle->set(mousex*400.0, mousey*400.0);
 	
 	if(mouseSpring && !bMousePressed){
 		physics->deleteConstraint(mouseSpring);
 		mouseSpring = NULL;
-	}
-	
-	for (int i = 0; i < wallParticles.size(); i++) {
-		physics->deleteParticle(wallParticles[i]);
-	}
-	
-	wallParticles.clear();
-	
-	int wallParticleResolution = 20;
-	
-	for (int i = 0; i < wallParticleResolution; i++) {
-		
-		float wallX = (PropF(@"dragToX") < 0.5)?-(1.2/wallParticleResolution):[self aspect]+(1.2/wallParticleResolution);
-		
-		ofPoint wallParticlePos = ofPoint(wallX*400,400*(1.0/wallParticleResolution)*i);
-		
-		if (wallParticlePos.y/400.0 < PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5) ||
-			wallParticlePos.y/400.0 > PropF(@"dragToY")+(PropF(@"dragWindowWidth")*0.5)) {
-			
-			ofxParticle* p = new ofxParticle(wallParticlePos, 400.0/wallParticleResolution);
-			p->setActive(false);
-			p->setMass(200);
-			wallParticles.push_back(p);
-			physics->add(p);
-		}
-		
 	}
 	
 	if(!dragSpring){
@@ -168,8 +204,6 @@
 	}
 	
 	physics->update();
-	
-	
 	
 	int resolution = (int)roundf(PropF(@"resolution"));
 	
@@ -211,9 +245,11 @@
 		
 		fbo.begin();{
 			
-			ofBackground(0,0,0);
-
+			ofSetColor(0, 127, 255, 22);
+			
 			glScaled(kFBOHeight, kFBOHeight, 0);
+			
+			ofRect(0, 0, 0.5, 1);
 			
 			glTranslated(0, 0.5/(NUM_VOICES+1), 0);
 			
@@ -232,7 +268,7 @@
 			}
 			
 		}fbo.end();
-
+		
 		ofSetColor(255, 255, 255, 255);
 		ofFill();
 		ofRect(0, 0, [self aspect], 1);
@@ -263,7 +299,6 @@
 		glRotated(-v1.angle(v2)+90, 0, 0, 1);
 		
 		int resolution = PropI(@"resolution");
-		
 		float amplitude = PropF(@"amplitude");
 		
 		glBegin(GL_QUAD_STRIP);
@@ -276,7 +311,7 @@
 				ofxVec2f v = p - lastPoint;
 				ofxVec2f h = ofxVec2f(-v.y,v.x);
 				h.normalize();
-				h *= 0.003;
+				h *= 0.01;
 				glVertex2f((p+h).x, (p+h).y);
 				glVertex2f((p-h).x, (p-h).y);				
 				//				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
@@ -290,7 +325,41 @@
 
 - (void) drawCloth:(ofTexture*)ref showGrid:(bool) showGrid{
 	
-	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_DEPTH_TEST);
+	
+	ofSetColor(0, 0,0,255);
+	for (int i = 0; i < grid; i++)
+	{
+		for (int j = 0; j < ((int)(grid/[self aspect])); j++)
+		{
+			float texCoorX = ref->getWidth()/grid*1.0f;
+			float texCoorY = ref->getHeight()/grid*1.0f*[self aspect];
+			ofxParticle *p1 = &_particles[i][j];
+			ofxParticle *p2 = &_particles[i+1][j];
+			ofxParticle *p3 = &_particles[i+1][j+1];
+			ofxParticle *p4 = &_particles[i][j+1];
+			
+			glBegin(GL_QUADS);
+			
+			glTexCoord2f((texCoorX*i),(texCoorY*j));
+			glVertex2f(  p1->x, p1->y);
+			
+			glTexCoord2f((texCoorX*(i+1)),(texCoorY*j));
+			glVertex2f(  p2->x,p2->y);
+			
+			glTexCoord2f((texCoorX*(i+1)),(texCoorY*(j+1)));
+			glVertex2f(  p3->x, p3->y);
+			
+			glTexCoord2f((texCoorX*(i)),(texCoorY*(j+1)));
+			glVertex2f(  p4->x, p4->y);
+			
+			glEnd();
+		}
+	}
+	
+
+	ofSetColor(255,255,255,255);
+
 	ref->bind();
 	for (int i = 0; i < grid; i++)
 	{
@@ -321,7 +390,7 @@
 		}
 	}
 	ref->unbind();
-	glDisable(GL_DEPTH_TEST);
+	//glDisable(GL_DEPTH_TEST);
 	ofNoFill();
 	
 	if (showGrid)
@@ -350,10 +419,12 @@
 		ofEllipse(mousex*200.0*(1.0/[self aspect]), mousey*400.0, 15, 15);
 	}
 	
-	
-	ofSetColor(255, 255, 255,127);
-	
-	[self drawCloth:&fbo.getTexture(0) showGrid:YES];
+	glPushMatrix();{
+		
+		glTranslated((0.5-[self aspect])*200, 0, 0);
+		ofSetColor(255, 255, 255,127);
+		[self drawCloth:&fbo.getTexture(0) showGrid:YES];
+	} glPopMatrix();
 	
 	glPushMatrix();{
 		
@@ -381,7 +452,7 @@
 	//	gridSizeY = img.getHeight()/grid;
 	gridPosX = 0;
 	gridPosY =	0;
-	strength = 0.06;
+	strength = 0.1;
 	
 	pSize = gridSizeX *0.1;
 	
@@ -409,12 +480,14 @@
 				float rest = p1->distanceTo(p2);
 				ofxSpring* s = new ofxSpring(p1, p2, rest, strength);
 				physics->add(s);
+				springs.push_back(s);
 				if (i>0) {
 					p1 = &_particles[i-1][j-1];
 					p2 = &_particles[i][j];
 					rest = p1->distanceTo(p2);
-					ofxSpring* s = new ofxSpring(p1, p2, rest, strength*0.5);
+					ofxSpring* s = new ofxSpring(p1, p2, rest, strength);
 					physics->add(s);
+					springs.push_back(s);
 				}
             }
             if (i > 0)
@@ -425,12 +498,14 @@
 				float rest = p1->distanceTo(p2);
 				ofxSpring* s = new ofxSpring(p1, p2, rest, strength);
 				physics->add(s);
+				springs.push_back(s);
 				if (j>0) {
 					p1 = &_particles[i-1][j];
 					p2 = &_particles[i][j-1];
 					rest = p1->distanceTo(p2);
-					ofxSpring* s = new ofxSpring(p1, p2, rest, strength*0.5);
+					ofxSpring* s = new ofxSpring(p1, p2, rest, strength);
 					physics->add(s);
+					springs.push_back(s);
 				}
             }
         }
@@ -448,16 +523,14 @@
 }
 
 -(void) controlMousePressed:(float)x y:(float)y button:(int)button{
-	mousex = [self aspect] * x / 200.0;
+	mousex = [self aspect]*x / 200.0;
 	mousey = y / 400.0;
 	mouseh = (controlMouseFlags & NSShiftKeyMask)?0.0:10.0;	
 	
-	cout << "controlMousePressed: " << x << "," << y << endl;
-	
 	bMousePressed = true;
 	if(button == 0){
-		ofPoint mousePoint = ofPoint(x, y);
-		mouseParticle->set(x,y);
+		ofPoint mousePoint = ofPoint(x-((0.5-[self aspect])*200), y);
+		mouseParticle->set(x-((0.5-[self aspect])*200),y);
 		ofxParticle* particleUnderMouse = physics->getNearestParticle(mousePoint);
 		if(particleUnderMouse){
 			float rest = mouseParticle->distanceTo(particleUnderMouse);

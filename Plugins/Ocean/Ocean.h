@@ -30,6 +30,8 @@
 	float newParticleIncrement;
 	
 	vector<ofxParticle*>wallParticles;
+	vector<ofxSpring*>wallSprings;
+	vector<ofxSpring*>springs;
 
 	ofxFbole fbo;
 	
