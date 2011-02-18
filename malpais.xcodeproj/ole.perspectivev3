@@ -343,7 +343,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7FAEBB71130EA334009A1AEB</string>
+										<string>7FAEBB93130EB260009A1AEB</string>
 										<key>history</key>
 										<array>
 											<string>7FBF1BBD12E49CC3009E32EF</string>
@@ -477,15 +477,15 @@
 											<string>7FAEBA77130E9153009A1AEB</string>
 											<string>7FAEBA78130E9153009A1AEB</string>
 											<string>7FAEBA79130E9153009A1AEB</string>
-											<string>7FAEBA7A130E9153009A1AEB</string>
 											<string>7FAEBABC130E960D009A1AEB</string>
-											<string>7FAEBACB130E96D2009A1AEB</string>
 											<string>7FAEBB01130E9AE5009A1AEB</string>
-											<string>7FAEBB0A130E9B1E009A1AEB</string>
 											<string>7FAEBB15130E9B66009A1AEB</string>
 											<string>7FAEBB46130EA010009A1AEB</string>
 											<string>7FAEBB6B130EA325009A1AEB</string>
-											<string>7FAEBB6C130EA325009A1AEB</string>
+											<string>7FAEBB8F130EB260009A1AEB</string>
+											<string>7FAEBB90130EB260009A1AEB</string>
+											<string>7FAEBB91130EB260009A1AEB</string>
+											<string>7FAEBB92130EB260009A1AEB</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -802,7 +802,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7FAEBB72130EA334009A1AEB</string>
+		<string>7FAEBB94130EB260009A1AEB</string>
 		<string>7FAEBA86130E9155009A1AEB</string>
 		<string>7FAEBA87130E9155009A1AEB</string>
 		<string>/Users/ole/Development/openFrameworks/apps/recoil/Malpais/malpais.xcodeproj</string>

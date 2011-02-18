@@ -164,9 +164,9 @@
 	};
 	7F0F7751130C1A3F009A31C0 /* Ocean.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1194, 6084}}";
-			sepNavSelRange = "{3571, 0}";
-			sepNavVisRange = "{3225, 1228}";
+			sepNavIntBoundsRect = "{{0, 0}, {1194, 6214}}";
+			sepNavSelRange = "{3513, 0}";
+			sepNavVisRange = "{2868, 904}";
 		};
 	};
 	7F0F7758130C1D04009A31C0 /* ofxCollisionSolverBase.h */ = {
@@ -877,16 +877,16 @@
 	};
 	7F6A56A7130E7A3500844BEF /* ofxFbole.cpp */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1194, 5889}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1194, 5928}}";
 			sepNavSelRange = "{12262, 41}";
-			sepNavVisRange = "{4611, 851}";
+			sepNavVisRange = "{4988, 684}";
 		};
 	};
 	7F6A56A8130E7A3500844BEF /* ofxFbole.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1194, 1144}}";
-			sepNavSelRange = "{2813, 0}";
-			sepNavVisRange = "{1112, 1835}";
+			sepNavSelRange = "{107, 0}";
+			sepNavVisRange = "{0, 855}";
 		};
 	};
 	7F6A56B0130E7D3D00844BEF /* PBXTextBookmark */ = {
@@ -986,7 +986,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 177";
 		rLen = 0;
-		rLoc = 5613;
+		rLoc = 5616;
 		rType = 0;
 		vrLen = 823;
 		vrLoc = 5396;
@@ -1320,7 +1320,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 54";
 		rLen = 0;
-		rLoc = 2329;
+		rLoc = 2344;
 		rType = 0;
 		vrLen = 1388;
 		vrLoc = 1286;
@@ -1330,7 +1330,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 201";
 		rLen = 0;
-		rLoc = 6031;
+		rLoc = 6034;
 		rType = 0;
 		vrLen = 875;
 		vrLoc = 5947;
@@ -1340,7 +1340,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 201";
 		rLen = 0;
-		rLoc = 6031;
+		rLoc = 6034;
 		rType = 0;
 		vrLen = 875;
 		vrLoc = 5947;
@@ -1350,7 +1350,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 200";
 		rLen = 0;
-		rLoc = 6031;
+		rLoc = 6034;
 		rType = 0;
 		vrLen = 404;
 		vrLoc = 5947;
@@ -1360,7 +1360,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 200";
 		rLen = 0;
-		rLoc = 6031;
+		rLoc = 6034;
 		rType = 0;
 		vrLen = 848;
 		vrLoc = 6125;
@@ -1370,7 +1370,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 227";
 		rLen = 0;
-		rLoc = 6615;
+		rLoc = 6621;
 		rType = 0;
 		vrLen = 827;
 		vrLoc = 6170;
@@ -1380,7 +1380,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 214";
 		rLen = 0;
-		rLoc = 6196;
+		rLoc = 6202;
 		rType = 0;
 		vrLen = 827;
 		vrLoc = 6170;
@@ -1390,7 +1390,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 214";
 		rLen = 0;
-		rLoc = 6196;
+		rLoc = 6202;
 		rType = 0;
 		vrLen = 827;
 		vrLoc = 6170;
@@ -1400,7 +1400,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 214";
 		rLen = 0;
-		rLoc = 6196;
+		rLoc = 6202;
 		rType = 0;
 		vrLen = 772;
 		vrLoc = 6151;
@@ -1410,7 +1410,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 215";
 		rLen = 0;
-		rLoc = 6196;
+		rLoc = 6202;
 		rType = 0;
 		vrLen = 778;
 		vrLoc = 6151;
@@ -1420,7 +1420,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 216";
 		rLen = 0;
-		rLoc = 6196;
+		rLoc = 6202;
 		rType = 0;
 		vrLen = 843;
 		vrLoc = 6074;
@@ -1430,7 +1430,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 217";
 		rLen = 0;
-		rLoc = 6196;
+		rLoc = 6202;
 		rType = 0;
 		vrLen = 808;
 		vrLoc = 6074;
@@ -1440,7 +1440,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 217";
 		rLen = 0;
-		rLoc = 6196;
+		rLoc = 6202;
 		rType = 0;
 		vrLen = 810;
 		vrLoc = 6074;
@@ -1450,7 +1450,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 214";
 		rLen = 0;
-		rLoc = 6196;
+		rLoc = 6202;
 		rType = 0;
 		vrLen = 807;
 		vrLoc = 6074;
@@ -1460,7 +1460,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 188";
 		rLen = 0;
-		rLoc = 5797;
+		rLoc = 5800;
 		rType = 0;
 		vrLen = 523;
 		vrLoc = 5737;
@@ -1470,7 +1470,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 188";
 		rLen = 0;
-		rLoc = 5797;
+		rLoc = 5800;
 		rType = 0;
 		vrLen = 912;
 		vrLoc = 5483;
@@ -1520,7 +1520,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 211";
 		rLen = 0;
-		rLoc = 6106;
+		rLoc = 6112;
 		rType = 0;
 		vrLen = 615;
 		vrLoc = 6232;
@@ -1530,7 +1530,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 216";
 		rLen = 0;
-		rLoc = 6260;
+		rLoc = 6266;
 		rType = 0;
 		vrLen = 665;
 		vrLoc = 6181;
@@ -1550,7 +1550,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 216";
 		rLen = 0;
-		rLoc = 6260;
+		rLoc = 6266;
 		rType = 0;
 		vrLen = 809;
 		vrLoc = 6165;
@@ -1580,7 +1580,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 216";
 		rLen = 0;
-		rLoc = 6260;
+		rLoc = 6266;
 		rType = 0;
 		vrLen = 809;
 		vrLoc = 6165;
@@ -1590,7 +1590,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 60";
 		rLen = 0;
-		rLoc = 2329;
+		rLoc = 2344;
 		rType = 0;
 		vrLen = 1041;
 		vrLoc = 1759;
@@ -1600,7 +1600,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 60";
 		rLen = 0;
-		rLoc = 2329;
+		rLoc = 2344;
 		rType = 0;
 		vrLen = 1161;
 		vrLoc = 972;
@@ -1610,7 +1610,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 60";
 		rLen = 0;
-		rLoc = 2329;
+		rLoc = 2344;
 		rType = 0;
 		vrLen = 975;
 		vrLoc = 1759;
@@ -1620,7 +1620,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 60";
 		rLen = 0;
-		rLoc = 2329;
+		rLoc = 2344;
 		rType = 0;
 		vrLen = 972;
 		vrLoc = 1759;
@@ -1630,7 +1630,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 60";
 		rLen = 0;
-		rLoc = 2329;
+		rLoc = 2344;
 		rType = 0;
 		vrLen = 957;
 		vrLoc = 1759;
@@ -1640,7 +1640,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 61";
 		rLen = 0;
-		rLoc = 2329;
+		rLoc = 2344;
 		rType = 0;
 		vrLen = 1161;
 		vrLoc = 972;
@@ -1650,7 +1650,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 63";
 		rLen = 0;
-		rLoc = 2329;
+		rLoc = 2344;
 		rType = 0;
 		vrLen = 973;
 		vrLoc = 1759;
@@ -1660,7 +1660,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 55";
 		rLen = 0;
-		rLoc = 2329;
+		rLoc = 2344;
 		rType = 0;
 		vrLen = 975;
 		vrLoc = 1759;
@@ -1670,7 +1670,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 62";
 		rLen = 0;
-		rLoc = 2414;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 578;
 		vrLoc = 2180;
@@ -1680,7 +1680,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 62";
 		rLen = 0;
-		rLoc = 2414;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 901;
 		vrLoc = 2006;
@@ -1730,7 +1730,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 62";
 		rLen = 0;
-		rLoc = 2414;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 578;
 		vrLoc = 2180;
@@ -1900,7 +1900,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 62";
 		rLen = 0;
-		rLoc = 2414;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 879;
 		vrLoc = 2006;
@@ -1910,7 +1910,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 62";
 		rLen = 0;
-		rLoc = 2414;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 2559;
@@ -1920,7 +1920,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 62";
 		rLen = 0;
-		rLoc = 2414;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 2559;
@@ -1930,7 +1930,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 62";
 		rLen = 0;
-		rLoc = 2414;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 937;
 		vrLoc = 2559;
@@ -1950,7 +1950,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 85";
 		rLen = 0;
-		rLoc = 2922;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 537;
 		vrLoc = 2559;
@@ -1960,7 +1960,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 228";
 		rLen = 0;
-		rLoc = 6510;
+		rLoc = 6516;
 		rType = 0;
 		vrLen = 884;
 		vrLoc = 6283;
@@ -1970,7 +1970,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 98";
 		rLen = 0;
-		rLoc = 3163;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 1038;
 		vrLoc = 2684;
@@ -1980,7 +1980,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 98";
 		rLen = 0;
-		rLoc = 3163;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 1038;
 		vrLoc = 2684;
@@ -1990,7 +1990,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 98";
 		rLen = 0;
-		rLoc = 3163;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 1038;
 		vrLoc = 2684;
@@ -2000,7 +2000,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 98";
 		rLen = 0;
-		rLoc = 3163;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 809;
 		vrLoc = 3144;
@@ -2016,7 +2016,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libSystem.B.dylib;
-		modificationTime = 319726387.570938;
+		modificationTime = 319730271.982832;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
 		symbolName = malloc_error_break;
@@ -2026,7 +2026,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 98";
 		rLen = 0;
-		rLoc = 3163;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 1043;
 		vrLoc = 3035;
@@ -2036,7 +2036,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 98";
 		rLen = 0;
-		rLoc = 3163;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 1043;
 		vrLoc = 3035;
@@ -2071,7 +2071,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 75";
 		rLen = 0;
-		rLoc = 2699;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 547;
 		vrLoc = 2518;
@@ -2098,7 +2098,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 98";
 		rLen = 0;
-		rLoc = 3163;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 1043;
 		vrLoc = 3035;
@@ -2128,7 +2128,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 75";
 		rLen = 0;
-		rLoc = 2655;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 645;
 		vrLoc = 2851;
@@ -2190,7 +2190,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 98";
 		rLen = 0;
-		rLoc = 3163;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 1043;
 		vrLoc = 3029;
@@ -2200,7 +2200,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 75";
 		rLen = 0;
-		rLoc = 2699;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 872;
 		vrLoc = 2441;
@@ -2210,7 +2210,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 76";
 		rLen = 0;
-		rLoc = 2699;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 895;
 		vrLoc = 2441;
@@ -2220,7 +2220,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 76";
 		rLen = 0;
-		rLoc = 2699;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 826;
 		vrLoc = 2441;
@@ -2230,7 +2230,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 76";
 		rLen = 0;
-		rLoc = 2699;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 826;
 		vrLoc = 2441;
@@ -2240,7 +2240,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 76";
 		rLen = 0;
-		rLoc = 2699;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 872;
 		vrLoc = 2146;
@@ -2280,7 +2280,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 89";
 		rLen = 0;
-		rLoc = 2841;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 976;
 		vrLoc = 2599;
@@ -2290,7 +2290,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 83";
 		rLen = 0;
-		rLoc = 2680;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 1254;
 		vrLoc = 3823;
@@ -2300,7 +2300,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 83";
 		rLen = 0;
-		rLoc = 2680;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 1254;
 		vrLoc = 3823;
@@ -2344,7 +2344,7 @@
 		isa = PBXTextBookmark;
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		rLen = 0;
-		rLoc = 75;
+		rLoc = 114;
 		rType = 1;
 	};
 	7FAEBB6A130EA2E7009A1AEB /* PBXTextBookmark */ = {
@@ -2352,7 +2352,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 75";
 		rLen = 0;
-		rLoc = 2655;
+		rLoc = 3513;
 		rType = 0;
 		vrLen = 679;
 		vrLoc = 2515;
@@ -2372,7 +2372,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 115";
 		rLen = 0;
-		rLoc = 3571;
+		rLoc = 3572;
 		rType = 0;
 		vrLen = 1225;
 		vrLoc = 3225;
@@ -2382,7 +2382,7 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 115";
 		rLen = 0;
-		rLoc = 3571;
+		rLoc = 3572;
 		rType = 0;
 		vrLen = 1225;
 		vrLoc = 3225;
@@ -2392,10 +2392,162 @@
 		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
 		name = "Ocean.mm: 115";
 		rLen = 0;
-		rLoc = 3571;
+		rLoc = 3572;
 		rType = 0;
 		vrLen = 1228;
 		vrLoc = 3225;
+	};
+	7FAEBB75130EA538009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
+		name = "Ocean.mm: 375";
+		rLen = 0;
+		rLoc = 10146;
+		rType = 0;
+		vrLen = 977;
+		vrLoc = 9450;
+	};
+	7FAEBB79130EA5B4009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
+		name = "Ocean.mm: 231";
+		rLen = 0;
+		rLoc = 6720;
+		rType = 0;
+		vrLen = 870;
+		vrLoc = 6030;
+	};
+	7FAEBB7D130EA5D6009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
+		name = "Ocean.mm: 230";
+		rLen = 0;
+		rLoc = 6675;
+		rType = 0;
+		vrLen = 951;
+		vrLoc = 6030;
+	};
+	7FAEBB80130EB190009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
+		name = "Ocean.mm: 207";
+		rLen = 0;
+		rLoc = 6108;
+		rType = 0;
+		vrLen = 797;
+		vrLoc = 5965;
+	};
+	7FAEBB84130EB1B6009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
+		name = "Ocean.mm: 207";
+		rLen = 0;
+		rLoc = 6108;
+		rType = 0;
+		vrLen = 878;
+		vrLoc = 5645;
+	};
+	7FAEBB87130EB1D9009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
+		name = "Ocean.mm: 207";
+		rLen = 0;
+		rLoc = 6108;
+		rType = 0;
+		vrLen = 844;
+		vrLoc = 5186;
+	};
+	7FAEBB88130EB209009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7FAEBB89130EB209009A1AEB /* asm malloc_error_break  0x9818af7c */;
+		name = "asm malloc_error_break  0x9818af7c: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 233;
+		vrLoc = 0;
+	};
+	7FAEBB89130EB209009A1AEB /* asm malloc_error_break  0x9818af7c */ = {
+		isa = PBXFileReference;
+		path = "asm malloc_error_break  0x9818af7c";
+		sourceTree = "<group>";
+	};
+	7FAEBB8A130EB209009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
+		name = "Ocean.mm: 207";
+		rLen = 0;
+		rLoc = 6108;
+		rType = 0;
+		vrLen = 585;
+		vrLoc = 5445;
+	};
+	7FAEBB8B130EB209009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DDB7C1D612AD16C000197290 /* SharedContextLayer.mm */;
+		rLen = 0;
+		rLoc = 57;
+		rType = 1;
+	};
+	7FAEBB8C130EB209009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DDB7C1D612AD16C000197290 /* SharedContextLayer.mm */;
+		name = "SharedContextLayer.mm: 58";
+		rLen = 0;
+		rLoc = 1610;
+		rType = 0;
+		vrLen = 844;
+		vrLoc = 993;
+	};
+	7FAEBB8F130EB260009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = DDB7C1D612AD16C000197290 /* SharedContextLayer.mm */;
+		name = "SharedContextLayer.mm: 58";
+		rLen = 0;
+		rLoc = 1610;
+		rType = 0;
+		vrLen = 1151;
+		vrLoc = 852;
+	};
+	7FAEBB90130EB260009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F6A56A8130E7A3500844BEF /* ofxFbole.h */;
+		name = "ofxFbole.h: 11";
+		rLen = 0;
+		rLoc = 107;
+		rType = 0;
+		vrLen = 855;
+		vrLoc = 0;
+	};
+	7FAEBB91130EB260009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F6A56A7130E7A3500844BEF /* ofxFbole.cpp */;
+		name = "ofxFbole.cpp: 371";
+		rLen = 41;
+		rLoc = 12262;
+		rType = 0;
+		vrLen = 684;
+		vrLoc = 4988;
+	};
+	7FAEBB92130EB260009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
+		name = "Ocean.mm: 207";
+		rLen = 0;
+		rLoc = 6108;
+		rType = 0;
+		vrLen = 833;
+		vrLoc = 5197;
+	};
+	7FAEBB93130EB260009A1AEB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */;
+		name = "Ocean.mm: 115";
+		rLen = 0;
+		rLoc = 3513;
+		rType = 0;
+		vrLen = 904;
+		vrLoc = 2868;
 	};
 	7FBF1B0C12E498E0009E32EF /* Recoil Malpais */ = {
 		isa = PBXExecutable;
@@ -3422,9 +3574,9 @@
 	};
 	DDB7C1D612AD16C000197290 /* SharedContextLayer.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1500, 1625}}";
-			sepNavSelRange = "{1654, 0}";
-			sepNavVisRange = "{1103, 782}";
+			sepNavIntBoundsRect = "{{0, 0}, {1500, 1599}}";
+			sepNavSelRange = "{1610, 0}";
+			sepNavVisRange = "{993, 844}";
 		};
 	};
 	DDB7C1D912AD16C000197290 /* Plugin.mm */ = {
@@ -3818,6 +3970,21 @@
 			7FAEBB6C130EA325009A1AEB /* PBXTextBookmark */ = 7FAEBB6C130EA325009A1AEB /* PBXTextBookmark */;
 			7FAEBB6D130EA325009A1AEB /* PBXTextBookmark */ = 7FAEBB6D130EA325009A1AEB /* PBXTextBookmark */;
 			7FAEBB71130EA334009A1AEB /* PBXTextBookmark */ = 7FAEBB71130EA334009A1AEB /* PBXTextBookmark */;
+			7FAEBB75130EA538009A1AEB /* PBXTextBookmark */ = 7FAEBB75130EA538009A1AEB /* PBXTextBookmark */;
+			7FAEBB79130EA5B4009A1AEB /* PBXTextBookmark */ = 7FAEBB79130EA5B4009A1AEB /* PBXTextBookmark */;
+			7FAEBB7D130EA5D6009A1AEB /* PBXTextBookmark */ = 7FAEBB7D130EA5D6009A1AEB /* PBXTextBookmark */;
+			7FAEBB80130EB190009A1AEB /* PBXTextBookmark */ = 7FAEBB80130EB190009A1AEB /* PBXTextBookmark */;
+			7FAEBB84130EB1B6009A1AEB /* PBXTextBookmark */ = 7FAEBB84130EB1B6009A1AEB /* PBXTextBookmark */;
+			7FAEBB87130EB1D9009A1AEB /* PBXTextBookmark */ = 7FAEBB87130EB1D9009A1AEB /* PBXTextBookmark */;
+			7FAEBB88130EB209009A1AEB /* PBXTextBookmark */ = 7FAEBB88130EB209009A1AEB /* PBXTextBookmark */;
+			7FAEBB8A130EB209009A1AEB /* PBXTextBookmark */ = 7FAEBB8A130EB209009A1AEB /* PBXTextBookmark */;
+			7FAEBB8B130EB209009A1AEB /* PBXTextBookmark */ = 7FAEBB8B130EB209009A1AEB /* PBXTextBookmark */;
+			7FAEBB8C130EB209009A1AEB /* PBXTextBookmark */ = 7FAEBB8C130EB209009A1AEB /* PBXTextBookmark */;
+			7FAEBB8F130EB260009A1AEB /* PBXTextBookmark */ = 7FAEBB8F130EB260009A1AEB /* PBXTextBookmark */;
+			7FAEBB90130EB260009A1AEB /* PBXTextBookmark */ = 7FAEBB90130EB260009A1AEB /* PBXTextBookmark */;
+			7FAEBB91130EB260009A1AEB /* PBXTextBookmark */ = 7FAEBB91130EB260009A1AEB /* PBXTextBookmark */;
+			7FAEBB92130EB260009A1AEB /* PBXTextBookmark */ = 7FAEBB92130EB260009A1AEB /* PBXTextBookmark */;
+			7FAEBB93130EB260009A1AEB /* PBXTextBookmark */ = 7FAEBB93130EB260009A1AEB /* PBXTextBookmark */;
 			7FBF1BBD12E49CC3009E32EF = 7FBF1BBD12E49CC3009E32EF /* PBXTextBookmark */;
 			7FBF1BBF12E49CC3009E32EF = 7FBF1BBF12E49CC3009E32EF /* PBXTextBookmark */;
 			7FBF1BC012E49CC3009E32EF = 7FBF1BC012E49CC3009E32EF /* PBXTextBookmark */;
