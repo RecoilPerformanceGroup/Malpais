@@ -211,7 +211,7 @@
 		
 		fbo.begin();{
 			
-			ofBackground(0,0,0,32);
+			ofBackground(0,0,0);
 
 			glScaled(kFBOHeight, kFBOHeight, 0);
 			
