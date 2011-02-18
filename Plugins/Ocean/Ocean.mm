@@ -19,7 +19,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1000.0] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:10.0] named:@"frequency"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:100.0 minValue:-100.0 maxValue:100.0] named:@"drift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10.0 minValue:-10.0 maxValue:10.0] named:@"drift"];
 	
 	for (int i = 0; i < NUM_VOICES+1; i++) {
 		[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named: 
@@ -111,16 +111,6 @@
 	}
 	
 	mouseParticle->set(mousex*400.0, mousey*400.0);
-	
-	for(int i=0; i<particles.size(); i++){
-		if(particles[i]->y > 400 + particles[i]->getRadius()){
-			while(physics->getConstraintWithParticle(particles[i]) != NULL){
-				physics->deleteConstraintsWithParticle(particles[i]);
-			}
-			physics->deleteParticle(particles[i]);
-			particles.erase(particles.begin()+i);
-		}
-	}
 	
 	if(mouseSpring && !bMousePressed){
 		physics->deleteConstraint(mouseSpring);

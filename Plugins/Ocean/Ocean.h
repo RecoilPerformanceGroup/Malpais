@@ -36,8 +36,7 @@
 	bool bCreateParticleString;
 	ofxParticle* beginParticleString;
 	ofxParticle* endParticleString;
-	vector<ofxParticle*>particles;
-	
+
 	ofxParticle **_particles;
 	int grid;
 	float gridSizeX,gridSizeY,gridPosX,gridPosY,pSize;
