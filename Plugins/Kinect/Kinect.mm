@@ -716,9 +716,7 @@
 			projHandles[0] = [self projPoint:0];
 			projHandles[1] = [self projPoint:1];
 			projHandles[2] = [self projPoint:2];
-			
-			
-			
+						
 			//----------
 			//Depth image	
 			

@@ -31,7 +31,7 @@
 		7F0F77DF130C25DC009A31C0 /* floortest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F77DE130C25DC009A31C0 /* floortest.jpg */; };
 		7F0F77E1130C25E6009A31C0 /* LucidaGrande.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F77E0130C25E6009A31C0 /* LucidaGrande.ttc */; };
 		7F521A7C12FB26AB00FEDF19 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7F521A7B12FB26AB00FEDF19 /* icon.icns */; };
-		7F58DFF3130D658200C6E42E /* ofxFbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F58DFF1130D658200C6E42E /* ofxFbo.cpp */; };
+		7F6A56A9130E7A3500844BEF /* ofxFbole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F6A56A7130E7A3500844BEF /* ofxFbole.cpp */; };
 		7F8F6BA5130565580097D302 /* Wave.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F8F6BA4130565580097D302 /* Wave.mm */; };
 		7FBF1BAA12E49AD2009E32EF /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C1C512AD16C000197290 /* BWToolkitFramework.framework */; };
 		7FBF1BD212E49E6F009E32EF /* libdc1394.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C19412AD16C000197290 /* libdc1394.a */; };
@@ -294,8 +294,8 @@
 		7F0F77DE130C25DC009A31C0 /* floortest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = floortest.jpg; path = ../../../../apps/recoil/Malpais/bin/data/floortest.jpg; sourceTree = "<group>"; };
 		7F0F77E0130C25E6009A31C0 /* LucidaGrande.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; name = LucidaGrande.ttc; path = ../../../../apps/recoil/Malpais/bin/data/LucidaGrande.ttc; sourceTree = "<group>"; };
 		7F521A7B12FB26AB00FEDF19 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = src/icon.icns; sourceTree = SOURCE_ROOT; };
-		7F58DFF1130D658200C6E42E /* ofxFbo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxFbo.cpp; sourceTree = "<group>"; };
-		7F58DFF2130D658200C6E42E /* ofxFbo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxFbo.h; sourceTree = "<group>"; };
+		7F6A56A7130E7A3500844BEF /* ofxFbole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxFbole.cpp; sourceTree = "<group>"; };
+		7F6A56A8130E7A3500844BEF /* ofxFbole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxFbole.h; sourceTree = "<group>"; };
 		7F8F6BA3130565580097D302 /* Wave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wave.h; sourceTree = "<group>"; };
 		7F8F6BA4130565580097D302 /* Wave.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Wave.mm; sourceTree = "<group>"; };
 		7FD2E9041306D0D700B274C9 /* AudioDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDevice.cpp; sourceTree = "<group>"; };
@@ -834,6 +834,7 @@
 		7F0F774F130C1A29009A31C0 /* Ocean */ = {
 			isa = PBXGroup;
 			children = (
+				7F6A56A1130E7A0300844BEF /* ofxFbole */,
 				7F0F7750130C1A3F009A31C0 /* Ocean.h */,
 				7F0F7751130C1A3F009A31C0 /* Ocean.mm */,
 				7F0F7779130C20A7009A31C0 /* Ocean.xib */,
@@ -896,20 +897,19 @@
 			path = particles;
 			sourceTree = "<group>";
 		};
-		7F58DFEF130D658200C6E42E /* ofxFbo */ = {
+		7F6A56A1130E7A0300844BEF /* ofxFbole */ = {
 			isa = PBXGroup;
 			children = (
-				7F58DFF0130D658200C6E42E /* src */,
+				7F6A56A2130E7A0300844BEF /* src */,
 			);
-			name = ofxFbo;
-			path = ../../../addons/ofxFbo;
+			path = ofxFbole;
 			sourceTree = "<group>";
 		};
-		7F58DFF0130D658200C6E42E /* src */ = {
+		7F6A56A2130E7A0300844BEF /* src */ = {
 			isa = PBXGroup;
 			children = (
-				7F58DFF1130D658200C6E42E /* ofxFbo.cpp */,
-				7F58DFF2130D658200C6E42E /* ofxFbo.h */,
+				7F6A56A7130E7A3500844BEF /* ofxFbole.cpp */,
+				7F6A56A8130E7A3500844BEF /* ofxFbole.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -1103,7 +1103,6 @@
 		DD7B144C11A3CF38000D9775 /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				7F58DFEF130D658200C6E42E /* ofxFbo */,
 				7F0F7755130C1D04009A31C0 /* ofxRuiPhysics2d_002 */,
 				DD593CE212E4A9A1005F2189 /* ofxOpenNI */,
 				DDB7C14A12AD16C000197290 /* ofxCocoaPlugins */,
@@ -1769,6 +1768,7 @@
 		E45BE0360E8CC5DE009D7055 /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				E4C2422310CC54B6004149E2 /* openFrameworks */,
 				DD7B144C11A3CF38000D9775 /* addons */,
 				4BA2589C1153B0790008D49C /* GraphKitHeaders */,
 				DD7B158711A3CFDE000D9775 /* CoreMIDI.framework */,
@@ -1962,7 +1962,6 @@
 				DDF87490114AB2D0004B2FE2 /* Resources */,
 				DDC8EA5D113809B100574926 /* Plugins */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
-				E4C2422310CC54B6004149E2 /* openFrameworks */,
 				E45BE0360E8CC5DE009D7055 /* libs */,
 			);
 			sourceTree = "<group>";
@@ -2286,8 +2285,8 @@
 				7F0F7752130C1A3F009A31C0 /* Ocean.mm in Sources */,
 				7F0F7769130C1D04009A31C0 /* ofxPhysics2d.cpp in Sources */,
 				7F0F776A130C1D04009A31C0 /* ofxParticle.cpp in Sources */,
-				7F58DFF3130D658200C6E42E /* ofxFbo.cpp in Sources */,
 				33F9CD10130DB0620036EF0B /* VideoPlayer.mm in Sources */,
+				7F6A56A9130E7A3500844BEF /* ofxFbole.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

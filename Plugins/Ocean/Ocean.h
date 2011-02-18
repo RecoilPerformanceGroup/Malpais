@@ -9,7 +9,7 @@
 #pragma once
 #include "Plugin.h"
 #include "ofxPhysics2d.h"
-#include "ofxFbo.h"
+#include "ofxFbole.h"
 #include "MSAInterpolator.h"
 #include "Wave.h"
 #include "ofxPoint2f.h"
@@ -31,7 +31,7 @@
 	
 	vector<ofxParticle*>wallParticles;
 
-	ofxFbo fbo;
+	ofxFbole fbo;
 	
 	bool bCreateParticleString;
 	ofxParticle* beginParticleString;
