@@ -33,8 +33,8 @@ double polygonArea(vector<RPoint> points) {
 		center /= _points.size();
 		
 		for(int i=0;i<NUMPOINTS;i++){
-			float r = TWO_PI*(float)i/NUMPOINTS;
-			ofxPoint2f p = 	center + ofxPoint2f(sin(r), cos(r))*radius;
+			float deg = TWO_PI*(float)i/NUMPOINTS;
+			ofxPoint2f p = 	center + ofxPoint2f(sin(deg), cos(deg))*radius;
 			RPoint newP;
 			newP.pos = p;
 			
@@ -720,10 +720,10 @@ double polygonArea(vector<RPoint> points) {
 		
 	}
 	if([(NSString*)context isEqualToString:@"customProperties"]){			
-		if([customProperties objectForKey:@"survey"] != nil)
+		if([customProperties objectForKey:@"survey"] != nil){
 			[self setSurveyData:[customProperties valueForKey:@"survey"]];
-		//		[surveyData addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:12],@"number",[NSNumber numberWithInt:10],@"percent",[NSNumber numberWithInt:12],@"bobbel",nil]];
-		
+		//		[surveyData addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:12],@"number",[NSNumber numberWithInt:10],@"percent",[NSNumber numberWithInt:12],@"bobbel",nil]];		
+		}
 	}
 }
 

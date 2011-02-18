@@ -81,7 +81,6 @@
 //
 
 -(BOOL) willDraw:(NSMutableDictionary *)drawingInformation{
-	NSLog(@"Will draw?");
 	if(PropI(@"video") >= 0 && PropI(@"video") < NUMVIDEOS){
 		QTVisualContextTask(textureContext[PropI(@"video")]);
 		

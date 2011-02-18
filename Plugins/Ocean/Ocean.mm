@@ -36,6 +36,8 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"dragWindowWidth"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.01 minValue:0.0 maxValue:1.0] named:@"stiffness"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:YES] named:@"reset"];
+	
+	[self assignMidiChannel:9];
 }
 
 -(void) setup{
