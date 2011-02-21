@@ -178,4 +178,7 @@ struct Dancer {
 -(ofxUserGenerator*) getUserGenerator;
 
 -(void) performBlobTracking:(id)param;
+
+-(IBAction) resetCalibration:(id)sender;
+-(void) reset;
 @end
