@@ -143,6 +143,10 @@ struct Dancer {
 	ofxPoint3f threadWorldPos[640*480];
 	
 	long unsigned int pidCounter;
+	
+	ofxPoint2f projPointCache[3];
+	ofxPoint2f point2Cache[3];
+	ofxPoint3f point3Cache[3];
 
 }
 
@@ -174,4 +178,7 @@ struct Dancer {
 -(ofxUserGenerator*) getUserGenerator;
 
 -(void) performBlobTracking:(id)param;
+
+-(IBAction) resetCalibration:(id)sender;
+-(void) reset;
 @end

@@ -8,4 +8,8 @@
 #include "FysiskeReaktioner.h"
 #include "TrackingElements.h"
 #include "Leaking.h"
+#include "Umbilical.h"
+#include "Ocean.h"
+#include "VideoPlayer.h"
+
 //#include "Tracking.h"

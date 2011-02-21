@@ -32,6 +32,7 @@
 		centroidFilter[2]->setDl(1, -2.5818614306773719263, 2.2466666427559748864, -.65727470210265670262);
 		
 		blobs = [[NSMutableArray array] retain];
+		
 	}
 	return self;
 }
@@ -215,34 +216,10 @@
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:0 maxValue:1] named:@"persistentDist"];	
 	
+	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:1.0] named:@"blobTracking"];
+	
 	if([customProperties valueForKey:@"point0a"] == nil){
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0a"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0b"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0x"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0y"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0z"];
-		
-		[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"point1a"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point1b"];
-		[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"point1x"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point1y"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point1z"];
-		
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point2a"];
-		[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"point2b"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point2x"];
-		[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"point2y"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point2z"];		
-		
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"proj0x"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"proj0y"];
-		
-		[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"proj1x"];
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"proj1y"];
-		
-		[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"proj2x"];
-		[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"proj2y"];
-		
+		[self reset];
 	}
 	
 	stop = NO;
@@ -257,6 +234,19 @@
 	threadBlobs = [[NSMutableArray array] retain];
 	persistentBlobs = [[NSMutableArray array] retain];
 	
+	projPointCache[0] = nil;
+	projPointCache[1] = nil;
+	projPointCache[2] = nil;
+	
+	point2Cache[0] = nil;
+	point2Cache[1] = nil;
+	point2Cache[2] = nil;
+	
+	point3Cache[0] = nil;
+	point3Cache[1] = nil;
+	point3Cache[2] = nil;
+	
+	
 }
 
 -(void) setup{
@@ -265,7 +255,7 @@
 	kinectConnected = depth.setup(&context);
 	
 	if(kinectConnected){
-		users.setup(&context, &depth);		
+		//	users.setup(&context, &depth);		
 		[self calculateMatrix];	 
 	}
 	
@@ -296,10 +286,11 @@
 	if(!stop && kinectConnected){
 		context.update();
 		depth.update();
-		users.update();		
+		//users.update();		
+		
 		
 		//Blob tracking
-		{
+		if(PropB(@"blobTracking")){
 			xn::DepthMetaData dmd;
 			depth.getXnDepthGenerator().GetMetaData(dmd);	
 			const XnDepthPixel* pixels = dmd.Data();
@@ -345,17 +336,7 @@
 				//Går igennem alle grupper for at finde den nærmeste gruppe som blobben kan tilhøre
 				//Magisk høj dist: 0.3
 				
-				/*for(int u=0;u<[persistentBlobs count];u++){
-				 //Giv forrang til døde persistent blobs
-				 if(((PersistentBlob*)[persistentBlobs objectAtIndex:u])->timeoutCounter > 5){
-				 float dist = centroid.distance(*((PersistentBlob*)[persistentBlobs objectAtIndex:u])->centroid);
-				 if(dist < [persistentSlider floatValue]*0.5 && (dist < shortestDist || bestId == -1)){
-				 bestId = u;
-				 shortestDist = dist;
-				 blobFound = true;
-				 }
-				 }
-				 }*/
+				
 				if(!blobFound){						
 					for(int u=0;u<[persistentBlobs count];u++){
 						//						ofxPoint2f centroidPoint = [GetPlugin(ProjectionSurfaces) convertPoint:*((PersistentBlob*)[persistentBlobs objectAtIndex:u])->centroid fromProjection:"Front" surface:"Floor"];
@@ -540,6 +521,7 @@
 			}
 		});
 	}
+	
 }
 
 -(void) draw:(NSDictionary *)drawingInformation{
@@ -569,11 +551,6 @@
 		
 		
 		for(PersistentBlob * b in persistentBlobs){
-			/*	ofxPoint3f o = ofxPoint3f([b centroidFiltered].x*640, [b centroidFiltered].y*480, [b avgDepth]);
-			 cout<<o.x<<"  "<<o.y<<"  "<<o.z<<endl;
-			 ofxPoint3f foot = [self convertKinectToWorld:o];
-			 ofxPoint3f wfoot = [self convertWorldToFloor:foot];
-			 */	
 			ofxPoint3f p = [b centroidFiltered];
 			
 			ofSetLineWidth(1);
@@ -701,14 +678,12 @@
 			projHandles[1] = [self projPoint:1];
 			projHandles[2] = [self projPoint:2];
 			
-			
-			
 			//----------
 			//Depth image	
 			
 			glPushMatrix();{
 				glScaled(0.5, 0.5, 1.0);
-				users.draw();
+				depth.draw();
 			}glPopMatrix();
 			
 			
@@ -930,7 +905,7 @@
 			ofSetColor(255, 255, 255);
 			ofLine((640/2), 0, (640/2), 480);
 			ofLine(0, (480/2), 640, (480/2));	
-			
+			ofLine(0, (480), 640, (480));				
 		} else {
 			//----------
 			//Blob segment view	
@@ -1051,41 +1026,7 @@
 				glScaled(0.5, 0.5, 1.0);
 				users.draw();
 				glPopMatrix();
-				/*
-				 Blob * b;
-				 for(b in blobs){
-				 switch ([b segment]) {
-				 case 0:
-				 ofSetColor(255, 0, 0);
-				 break;
-				 case 1:
-				 ofSetColor(0, 255, 0);
-				 break;
-				 case 2:
-				 ofSetColor(0, 0, 255);
-				 break;
-				 case 3:
-				 ofSetColor(255, 255, 0);
-				 break;
-				 case 4:
-				 ofSetColor(255, 0, 255);
-				 break;
-				 default:
-				 break;
-				 }
-				 glBegin(GL_LINE_STRIP);
-				 for(int i=0;i<[b nPts];i++){
-				 ofxVec2f p = [b pts][i];
-				 //				p = [GetPlugin(ProjectionSurfaces) convertPoint:[b pts][i] fromProjection:"Front" surface:"Floor"];
-				 p = [b originalblob]->pts[i];
-				 glVertex2f(p.x*320, p.y*240);
-				 
-				 //glVertex2f(w*3+p.x/640.0*w, p.y/480.0*h);
-				 //cout<<p.x<<"  "<<p.y<<endl;
-				 
-				 }
-				 glEnd();
-				 }*/
+				
 				PersistentBlob * blob;				
 				for(blob in persistentBlobs){
 					int i=blob->pid%5;
@@ -1133,6 +1074,50 @@
 			}glPopMatrix();	
 		}
 	}
+}
+
+
+-(IBAction) resetCalibration:(id)sender{
+	NSAlert *alert = [[NSAlert alloc] init];
+	[alert addButtonWithTitle:@"OK"];
+	[alert addButtonWithTitle:@"Cancel"];
+	[alert setMessageText:@"Reset calibration?"];
+	[alert setInformativeText:@"Cannot be restored!"];
+	[alert setAlertStyle:NSWarningAlertStyle];
+	if ([alert runModal] == NSAlertFirstButtonReturn) {
+		[self reset];
+	}
+	[alert release];
+}
+
+-(void) reset{
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0a"];
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0b"];
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0x"];
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0y"];
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point0z"];
+	
+	[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"point1a"];
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point1b"];
+	[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"point1x"];
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point1y"];
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point1z"];
+	
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point2a"];
+	[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"point2b"];
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point2x"];
+	[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"point2y"];
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"point2z"];		
+	
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"proj0x"];
+	[customProperties setValue:[NSNumber numberWithFloat:0.1] forKey:@"proj0y"];
+	
+	[customProperties setValue:[NSNumber numberWithFloat:[self floorAspect]] forKey:@"proj1x"];
+	[customProperties setValue:[NSNumber numberWithFloat:0.1] forKey:@"proj1y"];
+	
+	[customProperties setValue:[NSNumber numberWithInt:0] forKey:@"proj2x"];
+	[customProperties setValue:[NSNumber numberWithInt:1] forKey:@"proj2y"];
+	[self calculateMatrix];
 }
 
 -(vector<ofxPoint3f>) getPointsInBoxXMin:(float)xMin xMax:(float)xMax yMin:(float)yMin yMax:(float)yMax zMin:(float)zMin zMax:(float)zMax res:(int)res{
@@ -1306,10 +1291,12 @@
 			pIn.Z = dmd.Data()[(int)pIn.X+(int)pIn.Y*640];
 			XnPoint3D pOut;
 			
-			depth.getXnDepthGenerator().ConvertProjectiveToRealWorld(1, &pIn, &pOut);
-			ofxPoint3f coord = ofxPoint3f(pOut.X, pOut.Y, pOut.Z);
-			[self setPoint3:draggedPoint coord:coord];
-			[self setPoint2:draggedPoint coord:mouse];
+			if(pIn.Z != 0){
+				depth.getXnDepthGenerator().ConvertProjectiveToRealWorld(1, &pIn, &pOut);
+				ofxPoint3f coord = ofxPoint3f(pOut.X, pOut.Y, pOut.Z);
+				[self setPoint3:draggedPoint coord:coord];
+				[self setPoint2:draggedPoint coord:mouse];
+			}
 		} else {
 			mouse.y -= 1;
 			float aspect = [self floorAspect];
@@ -1321,6 +1308,9 @@
 				mouse.y += (1.0/aspect)/2.0;
 				mouse *= 1.0/aspect;
 			}
+			
+			mouse.x = ofClamp(mouse.x, 0, [self floorAspect]);
+			mouse.y = ofClamp(mouse.y, 0, 1);
 			
 			[self setProjPoint:draggedPoint-3 coord:mouse];
 			
@@ -1383,27 +1373,38 @@
 
 
 -(ofxPoint3f) point3:(int)point{
-	return ofxPoint3f([[customProperties valueForKey:[NSString stringWithFormat:@"point%ix",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%iy",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%iz",point]] floatValue]);
+	//	if(point3Cache[point] == nil)
+	point3Cache[point] = ofxPoint3f([[customProperties valueForKey:[NSString stringWithFormat:@"point%ix",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%iy",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%iz",point]] floatValue]);
+	
+	return point3Cache[point];	
 }
 -(ofxPoint2f) point2:(int)point{
-	return ofxPoint2f([[customProperties valueForKey:[NSString stringWithFormat:@"point%ia",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%ib",point]] floatValue]);
+	//	if(point2Cache[point] == nil)
+	point2Cache[point] = ofxPoint2f([[customProperties valueForKey:[NSString stringWithFormat:@"point%ia",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"point%ib",point]] floatValue]);
+	
+	return point2Cache[point];
 }
 -(ofxPoint2f) projPoint:(int)point{
-	return ofxPoint2f([[customProperties valueForKey:[NSString stringWithFormat:@"proj%ix",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"proj%iy",point]] floatValue]);
+	//	if(projPointCache[point] == nil)
+	projPointCache[point] = ofxPoint2f([[customProperties valueForKey:[NSString stringWithFormat:@"proj%ix",point]] floatValue], [[customProperties valueForKey:[NSString stringWithFormat:@"proj%iy",point]] floatValue]);
+	return projPointCache[point];
 }
 
 -(void) setPoint3:(int) point coord:(ofxPoint3f)coord{
 	[customProperties setValue:[NSNumber numberWithFloat:coord.x] forKey:[NSString stringWithFormat:@"point%ix",point]];
 	[customProperties setValue:[NSNumber numberWithFloat:coord.y] forKey:[NSString stringWithFormat:@"point%iy",point]];
 	[customProperties setValue:[NSNumber numberWithFloat:coord.z] forKey:[NSString stringWithFormat:@"point%iz",point]];
+	point3Cache[point] = nil;
 }
 -(void) setPoint2:(int) point coord:(ofxPoint2f)coord{
 	[customProperties setValue:[NSNumber numberWithFloat:coord.x] forKey:[NSString stringWithFormat:@"point%ia",point]];
 	[customProperties setValue:[NSNumber numberWithFloat:coord.y] forKey:[NSString stringWithFormat:@"point%ib",point]];
+	point2Cache[point] = nil;
 }
 -(void) setProjPoint:(int) point coord:(ofxPoint2f)coord{
 	[customProperties setValue:[NSNumber numberWithFloat:coord.x] forKey:[NSString stringWithFormat:@"proj%ix",point]];
 	[customProperties setValue:[NSNumber numberWithFloat:coord.y] forKey:[NSString stringWithFormat:@"proj%iy",point]];
+	projPointCache[point] = nil;
 }
 
 -(ofxUserGenerator*) getUserGenerator{
