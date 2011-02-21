@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		330CC62412FB3067000283DE /* TrackingElements.mm in Sources */ = {isa = PBXBuildFile; fileRef = 330CC62212FB3067000283DE /* TrackingElements.mm */; };
 		330CC62512FB3067000283DE /* TrackingElements.xib in Resources */ = {isa = PBXBuildFile; fileRef = 330CC62312FB3067000283DE /* TrackingElements.xib */; };
+		3363CC1B1312EFA4004ABBA2 /* SceneX.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3363CC1A1312EFA4004ABBA2 /* SceneX.mm */; };
+		3363CC1D1312EFB5004ABBA2 /* SceneX.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3363CC1C1312EFB5004ABBA2 /* SceneX.xib */; };
+		3363CC2C1312F3F5004ABBA2 /* scenex0.png in Resources */ = {isa = PBXBuildFile; fileRef = 3363CC291312F3F5004ABBA2 /* scenex0.png */; };
+		3363CC2D1312F3F5004ABBA2 /* scenex1.png in Resources */ = {isa = PBXBuildFile; fileRef = 3363CC2A1312F3F5004ABBA2 /* scenex1.png */; };
+		3363CC2E1312F3F5004ABBA2 /* scenex2.png in Resources */ = {isa = PBXBuildFile; fileRef = 3363CC2B1312F3F5004ABBA2 /* scenex2.png */; };
 		33D7296412F85998009CD4A3 /* libOpenNI.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 33D7296312F85998009CD4A3 /* libOpenNI.dylib */; };
 		33ED1B0A13015A520090E1EB /* Leaking.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33ED1B0813015A520090E1EB /* Leaking.mm */; };
 		33ED1B0B13015A520090E1EB /* Leaking.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33ED1B0913015A520090E1EB /* Leaking.xib */; };
@@ -232,6 +237,12 @@
 		330CC62112FB3067000283DE /* TrackingElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackingElements.h; sourceTree = "<group>"; };
 		330CC62212FB3067000283DE /* TrackingElements.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TrackingElements.mm; sourceTree = "<group>"; };
 		330CC62312FB3067000283DE /* TrackingElements.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackingElements.xib; sourceTree = "<group>"; };
+		3363CC191312EFA4004ABBA2 /* SceneX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneX.h; sourceTree = "<group>"; };
+		3363CC1A1312EFA4004ABBA2 /* SceneX.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneX.mm; sourceTree = "<group>"; };
+		3363CC1C1312EFB5004ABBA2 /* SceneX.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SceneX.xib; sourceTree = "<group>"; };
+		3363CC291312F3F5004ABBA2 /* scenex0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scenex0.png; path = bin/data/scenex0.png; sourceTree = SOURCE_ROOT; };
+		3363CC2A1312F3F5004ABBA2 /* scenex1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scenex1.png; path = bin/data/scenex1.png; sourceTree = SOURCE_ROOT; };
+		3363CC2B1312F3F5004ABBA2 /* scenex2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = scenex2.png; path = bin/data/scenex2.png; sourceTree = SOURCE_ROOT; };
 		33D7296312F85998009CD4A3 /* libOpenNI.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libOpenNI.dylib; path = /usr/lib/libOpenNI.dylib; sourceTree = "<absolute>"; };
 		33ED1B0713015A520090E1EB /* Leaking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Leaking.h; sourceTree = "<group>"; };
 		33ED1B0813015A520090E1EB /* Leaking.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Leaking.mm; sourceTree = "<group>"; };
@@ -731,6 +742,16 @@
 				330CC62312FB3067000283DE /* TrackingElements.xib */,
 			);
 			path = TrackingElements;
+			sourceTree = "<group>";
+		};
+		3363CC171312EF9B004ABBA2 /* SceneX */ = {
+			isa = PBXGroup;
+			children = (
+				3363CC191312EFA4004ABBA2 /* SceneX.h */,
+				3363CC1A1312EFA4004ABBA2 /* SceneX.mm */,
+				3363CC1C1312EFB5004ABBA2 /* SceneX.xib */,
+			);
+			path = SceneX;
 			sourceTree = "<group>";
 		};
 		33ED1B0613015A520090E1EB /* Leaking */ = {
@@ -1738,6 +1759,7 @@
 		DDC8EA5D113809B100574926 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				3363CC171312EF9B004ABBA2 /* SceneX */,
 				33F9CD0C130DB0620036EF0B /* VideoPlayer */,
 				7F0F774F130C1A29009A31C0 /* Ocean */,
 				7FD2EC491309824700B274C9 /* Umbilical */,
@@ -1760,6 +1782,9 @@
 				7F521A7B12FB26AB00FEDF19 /* icon.icns */,
 				DDF87534114ABE89004B2FE2 /* GraphIcoMarked.png */,
 				DDF874DA114AB393004B2FE2 /* GraphIcon.png */,
+				3363CC291312F3F5004ABBA2 /* scenex0.png */,
+				3363CC2A1312F3F5004ABBA2 /* scenex1.png */,
+				3363CC2B1312F3F5004ABBA2 /* scenex2.png */,
 			);
 			name = Resources;
 			path = ../../../addons/ofxCocoaPlugins/src/Resources;
@@ -2131,6 +2156,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3363CC2C1312F3F5004ABBA2 /* scenex0.png in Resources */,
+				3363CC2D1312F3F5004ABBA2 /* scenex1.png in Resources */,
+				3363CC2E1312F3F5004ABBA2 /* scenex2.png in Resources */,
 				33F9CD09130DB0550036EF0B /* SendToQlab.scpt in Resources */,
 				DDF874DB114AB393004B2FE2 /* GraphIcon.png in Resources */,
 				DDF87535114ABE89004B2FE2 /* GraphIcoMarked.png in Resources */,
@@ -2158,6 +2186,7 @@
 				7F0F77DF130C25DC009A31C0 /* floortest.jpg in Resources */,
 				7F0F77E1130C25E6009A31C0 /* LucidaGrande.ttc in Resources */,
 				33F9CD11130DB0620036EF0B /* VideoPlayer.xib in Resources */,
+				3363CC1D1312EFB5004ABBA2 /* SceneX.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2287,6 +2316,7 @@
 				7F0F776A130C1D04009A31C0 /* ofxParticle.cpp in Sources */,
 				33F9CD10130DB0620036EF0B /* VideoPlayer.mm in Sources */,
 				7F6A56A9130E7A3500844BEF /* ofxFbole.cpp in Sources */,
+				3363CC1B1312EFA4004ABBA2 /* SceneX.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
