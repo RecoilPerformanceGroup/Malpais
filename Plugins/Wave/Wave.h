@@ -19,13 +19,13 @@
 
 
 @interface Wave : ofPlugin {
-
+	
 	WaveObject * liveVoice;
 	
 	NSMutableArray * voiceWaveForms;
-
+	
 	float voiceSourceWaves[NUM_VOICES+1][NUM_BANDS][MAX_RESOLUTION];
-
+	
 	float voiceUpdateTimes[NUM_VOICES+1];
 	
 	float frameRateDeltaTime;
@@ -33,16 +33,16 @@
 	
 	fft		liveFFT;
 	int liveSamples;
-		
+	
 	float magnitude[2048];
 	float phase[2048];
 	float power[2048];
 	float avg_power;		
 	
 	IBOutlet NSPopUpButton *		mInputDevices;
-//	AudioDeviceList *				mInputDeviceList;
-//	AudioDeviceID					inputDevice;
-
+	//	AudioDeviceList *				mInputDeviceList;
+	//	AudioDeviceID					inputDevice;
+	
 }
 
 - (IBAction)inputDeviceSelected:(id)sender;
@@ -51,14 +51,16 @@
 							  driftSpeed:(float)driftSpeed
 							   smoothing:(float)smoothing
 							   freqeuncy:(float)frequency
-								  random:(float)randomFactor;
+								  random:(float)randomFactor
+								  offset:(float)offset;
 
 - (NSMutableArray*) getWaveFormsWithIndex:(int)index 
-							   amplitude:(float)amplitude 
-							  driftSpeed:(float)driftSpeed
-							   smoothing:(float)smoothing
-							   freqeuncy:(float)frequency
-								  random:(float)randomFactor;
+								amplitude:(float)amplitude 
+							   driftSpeed:(float)driftSpeed
+								smoothing:(float)smoothing
+								freqeuncy:(float)frequency
+								   random:(float)randomFactor								  
+								   offset:(float)offset;
 
 
 @end

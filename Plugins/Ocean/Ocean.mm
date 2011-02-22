@@ -222,6 +222,7 @@
 					smoothing:PropF(@"smoothing")
 					freqeuncy:PropF(@"frequency")
 					random:0
+					offset: iVoice/(NUM_VOICES+1.0)
 					];
 			
 			if ([wave count] > 0) {
