@@ -30,8 +30,6 @@
 		4BA258F41153B1E80008D49C /* testApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BA258F31153B1E80008D49C /* testApp.mm */; };
 		4BA259911153B98B0008D49C /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
 		7F0F7752130C1A3F009A31C0 /* Ocean.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */; };
-		7F0F7769130C1D04009A31C0 /* ofxPhysics2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F7764130C1D04009A31C0 /* ofxPhysics2d.cpp */; };
-		7F0F776A130C1D04009A31C0 /* ofxParticle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F7767130C1D04009A31C0 /* ofxParticle.cpp */; };
 		7F0F777A130C20A7009A31C0 /* Ocean.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F7779130C20A7009A31C0 /* Ocean.xib */; };
 		7F0F77DF130C25DC009A31C0 /* floortest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F77DE130C25DC009A31C0 /* floortest.jpg */; };
 		7F0F77E1130C25E6009A31C0 /* LucidaGrande.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F77E0130C25E6009A31C0 /* LucidaGrande.ttc */; };
@@ -85,10 +83,11 @@
 		DD7B14BF11A3CF38000D9775 /* ofxQuaternion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD7B14A811A3CF38000D9775 /* ofxQuaternion.cpp */; };
 		DD7B158611A3CFD7000D9775 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7B158511A3CFD7000D9775 /* QTKit.framework */; };
 		DD7B158811A3CFDE000D9775 /* CoreMIDI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD7B158711A3CFDE000D9775 /* CoreMIDI.framework */; };
+		DD95E789131312D50032A86D /* ofxPhysics2d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD95E784131312D50032A86D /* ofxPhysics2d.cpp */; };
+		DD95E78A131312D50032A86D /* ofxParticle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD95E787131312D50032A86D /* ofxParticle.cpp */; };
 		DD9C01C812E8758300EF6F51 /* oldWave.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD9C01C712E8758300EF6F51 /* oldWave.mm */; };
 		DD9C01CA12E8758A00EF6F51 /* Wave.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD9C01C912E8758A00EF6F51 /* Wave.xib */; };
 		DD9C01CE12E8768B00EF6F51 /* WaveObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD9C01CD12E8768B00EF6F51 /* WaveObject.mm */; };
-		DDB7C1F412AD16C100197290 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C14D12AD16C000197290 /* AppDelegate.mm */; };
 		DDB7C1F512AD16C100197290 /* GraphDebugger.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C14F12AD16C000197290 /* GraphDebugger.mm */; };
 		DDB7C1F612AD16C100197290 /* GraphDebugView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C15112AD16C000197290 /* GraphDebugView.mm */; };
 		DDB7C1F712AD16C100197290 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDB7C15212AD16C000197290 /* MainMenu.xib */; };
@@ -286,21 +285,6 @@
 		4BA258F31153B1E80008D49C /* testApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = testApp.mm; sourceTree = "<group>"; };
 		7F0F7750130C1A3F009A31C0 /* Ocean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ocean.h; sourceTree = "<group>"; };
 		7F0F7751130C1A3F009A31C0 /* Ocean.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Ocean.mm; sourceTree = "<group>"; };
-		7F0F7758130C1D04009A31C0 /* ofxCollisionSolverBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCollisionSolverBase.h; sourceTree = "<group>"; };
-		7F0F7759130C1D04009A31C0 /* ofxSimpleCollisionsolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSimpleCollisionsolver.h; sourceTree = "<group>"; };
-		7F0F775A130C1D04009A31C0 /* ofxSortingCollisionSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSortingCollisionSolver.h; sourceTree = "<group>"; };
-		7F0F775C130C1D04009A31C0 /* ofxCollisionConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCollisionConstraint.h; sourceTree = "<group>"; };
-		7F0F775D130C1D04009A31C0 /* ofxConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxConstraint.h; sourceTree = "<group>"; };
-		7F0F775E130C1D04009A31C0 /* ofxFollowerConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxFollowerConstraint.h; sourceTree = "<group>"; };
-		7F0F775F130C1D04009A31C0 /* ofxInequalityConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxInequalityConstraint.h; sourceTree = "<group>"; };
-		7F0F7760130C1D04009A31C0 /* ofxMaxDistSpring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMaxDistSpring.h; sourceTree = "<group>"; };
-		7F0F7761130C1D04009A31C0 /* ofxMinDistSpring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMinDistSpring.h; sourceTree = "<group>"; };
-		7F0F7762130C1D04009A31C0 /* ofxSpring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSpring.h; sourceTree = "<group>"; };
-		7F0F7763130C1D04009A31C0 /* ofxSupportConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSupportConstraint.h; sourceTree = "<group>"; };
-		7F0F7764130C1D04009A31C0 /* ofxPhysics2d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPhysics2d.cpp; sourceTree = "<group>"; };
-		7F0F7765130C1D04009A31C0 /* ofxPhysics2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPhysics2d.h; sourceTree = "<group>"; };
-		7F0F7767130C1D04009A31C0 /* ofxParticle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxParticle.cpp; sourceTree = "<group>"; };
-		7F0F7768130C1D04009A31C0 /* ofxParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxParticle.h; sourceTree = "<group>"; };
 		7F0F7779130C20A7009A31C0 /* Ocean.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Ocean.xib; sourceTree = "<group>"; };
 		7F0F77DE130C25DC009A31C0 /* floortest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = floortest.jpg; path = ../../../../apps/recoil/Malpais/bin/data/floortest.jpg; sourceTree = "<group>"; };
 		7F0F77E0130C25E6009A31C0 /* LucidaGrande.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; name = LucidaGrande.ttc; path = ../../../../apps/recoil/Malpais/bin/data/LucidaGrande.ttc; sourceTree = "<group>"; };
@@ -486,13 +470,26 @@
 		DD7B14AD11A3CF38000D9775 /* ofxVectorMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxVectorMath.h; sourceTree = "<group>"; };
 		DD7B158511A3CFD7000D9775 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		DD7B158711A3CFDE000D9775 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = /System/Library/Frameworks/CoreMIDI.framework; sourceTree = "<absolute>"; };
+		DD95E778131312D50032A86D /* ofxCollisionSolverBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCollisionSolverBase.h; sourceTree = "<group>"; };
+		DD95E779131312D50032A86D /* ofxSimpleCollisionsolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSimpleCollisionsolver.h; sourceTree = "<group>"; };
+		DD95E77A131312D50032A86D /* ofxSortingCollisionSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSortingCollisionSolver.h; sourceTree = "<group>"; };
+		DD95E77C131312D50032A86D /* ofxCollisionConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCollisionConstraint.h; sourceTree = "<group>"; };
+		DD95E77D131312D50032A86D /* ofxConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxConstraint.h; sourceTree = "<group>"; };
+		DD95E77E131312D50032A86D /* ofxFollowerConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxFollowerConstraint.h; sourceTree = "<group>"; };
+		DD95E77F131312D50032A86D /* ofxInequalityConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxInequalityConstraint.h; sourceTree = "<group>"; };
+		DD95E780131312D50032A86D /* ofxMaxDistSpring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMaxDistSpring.h; sourceTree = "<group>"; };
+		DD95E781131312D50032A86D /* ofxMinDistSpring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxMinDistSpring.h; sourceTree = "<group>"; };
+		DD95E782131312D50032A86D /* ofxSpring.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSpring.h; sourceTree = "<group>"; };
+		DD95E783131312D50032A86D /* ofxSupportConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSupportConstraint.h; sourceTree = "<group>"; };
+		DD95E784131312D50032A86D /* ofxPhysics2d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPhysics2d.cpp; sourceTree = "<group>"; };
+		DD95E785131312D50032A86D /* ofxPhysics2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPhysics2d.h; sourceTree = "<group>"; };
+		DD95E787131312D50032A86D /* ofxParticle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxParticle.cpp; sourceTree = "<group>"; };
+		DD95E788131312D50032A86D /* ofxParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxParticle.h; sourceTree = "<group>"; };
 		DD9C01C612E8758300EF6F51 /* oldWave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oldWave.h; sourceTree = "<group>"; };
 		DD9C01C712E8758300EF6F51 /* oldWave.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = oldWave.mm; sourceTree = "<group>"; };
 		DD9C01C912E8758A00EF6F51 /* Wave.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Wave.xib; sourceTree = "<group>"; };
 		DD9C01CC12E8768B00EF6F51 /* WaveObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaveObject.h; sourceTree = "<group>"; };
 		DD9C01CD12E8768B00EF6F51 /* WaveObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WaveObject.mm; sourceTree = "<group>"; };
-		DDB7C14C12AD16C000197290 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		DDB7C14D12AD16C000197290 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		DDB7C14E12AD16C000197290 /* GraphDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphDebugger.h; sourceTree = "<group>"; };
 		DDB7C14F12AD16C000197290 /* GraphDebugger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphDebugger.mm; sourceTree = "<group>"; };
 		DDB7C15012AD16C000197290 /* GraphDebugView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphDebugView.h; sourceTree = "<group>"; };
@@ -863,61 +860,6 @@
 			path = Ocean;
 			sourceTree = "<group>";
 		};
-		7F0F7755130C1D04009A31C0 /* ofxRuiPhysics2d_002 */ = {
-			isa = PBXGroup;
-			children = (
-				7F0F7756130C1D04009A31C0 /* src */,
-			);
-			name = ofxRuiPhysics2d_002;
-			path = ../../../addons/ofxRuiPhysics2d_002;
-			sourceTree = "<group>";
-		};
-		7F0F7756130C1D04009A31C0 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				7F0F7757130C1D04009A31C0 /* collision */,
-				7F0F775B130C1D04009A31C0 /* constraints */,
-				7F0F7764130C1D04009A31C0 /* ofxPhysics2d.cpp */,
-				7F0F7765130C1D04009A31C0 /* ofxPhysics2d.h */,
-				7F0F7766130C1D04009A31C0 /* particles */,
-			);
-			path = src;
-			sourceTree = "<group>";
-		};
-		7F0F7757130C1D04009A31C0 /* collision */ = {
-			isa = PBXGroup;
-			children = (
-				7F0F7758130C1D04009A31C0 /* ofxCollisionSolverBase.h */,
-				7F0F7759130C1D04009A31C0 /* ofxSimpleCollisionsolver.h */,
-				7F0F775A130C1D04009A31C0 /* ofxSortingCollisionSolver.h */,
-			);
-			path = collision;
-			sourceTree = "<group>";
-		};
-		7F0F775B130C1D04009A31C0 /* constraints */ = {
-			isa = PBXGroup;
-			children = (
-				7F0F775C130C1D04009A31C0 /* ofxCollisionConstraint.h */,
-				7F0F775D130C1D04009A31C0 /* ofxConstraint.h */,
-				7F0F775E130C1D04009A31C0 /* ofxFollowerConstraint.h */,
-				7F0F775F130C1D04009A31C0 /* ofxInequalityConstraint.h */,
-				7F0F7760130C1D04009A31C0 /* ofxMaxDistSpring.h */,
-				7F0F7761130C1D04009A31C0 /* ofxMinDistSpring.h */,
-				7F0F7762130C1D04009A31C0 /* ofxSpring.h */,
-				7F0F7763130C1D04009A31C0 /* ofxSupportConstraint.h */,
-			);
-			path = constraints;
-			sourceTree = "<group>";
-		};
-		7F0F7766130C1D04009A31C0 /* particles */ = {
-			isa = PBXGroup;
-			children = (
-				7F0F7767130C1D04009A31C0 /* ofxParticle.cpp */,
-				7F0F7768130C1D04009A31C0 /* ofxParticle.h */,
-			);
-			path = particles;
-			sourceTree = "<group>";
-		};
 		7F6A56A1130E7A0300844BEF /* ofxFbole */ = {
 			isa = PBXGroup;
 			children = (
@@ -1124,7 +1066,7 @@
 		DD7B144C11A3CF38000D9775 /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				7F0F7755130C1D04009A31C0 /* ofxRuiPhysics2d_002 */,
+				DD95E775131312D50032A86D /* ofxRuiPhysics2d_002 */,
 				DD593CE212E4A9A1005F2189 /* ofxOpenNI */,
 				DDB7C14A12AD16C000197290 /* ofxCocoaPlugins */,
 				DD7B144D11A3CF38000D9775 /* ofxOsc */,
@@ -1389,6 +1331,60 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		DD95E775131312D50032A86D /* ofxRuiPhysics2d_002 */ = {
+			isa = PBXGroup;
+			children = (
+				DD95E776131312D50032A86D /* src */,
+			);
+			path = ofxRuiPhysics2d_002;
+			sourceTree = "<group>";
+		};
+		DD95E776131312D50032A86D /* src */ = {
+			isa = PBXGroup;
+			children = (
+				DD95E777131312D50032A86D /* collision */,
+				DD95E77B131312D50032A86D /* constraints */,
+				DD95E784131312D50032A86D /* ofxPhysics2d.cpp */,
+				DD95E785131312D50032A86D /* ofxPhysics2d.h */,
+				DD95E786131312D50032A86D /* particles */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		DD95E777131312D50032A86D /* collision */ = {
+			isa = PBXGroup;
+			children = (
+				DD95E778131312D50032A86D /* ofxCollisionSolverBase.h */,
+				DD95E779131312D50032A86D /* ofxSimpleCollisionsolver.h */,
+				DD95E77A131312D50032A86D /* ofxSortingCollisionSolver.h */,
+			);
+			path = collision;
+			sourceTree = "<group>";
+		};
+		DD95E77B131312D50032A86D /* constraints */ = {
+			isa = PBXGroup;
+			children = (
+				DD95E77C131312D50032A86D /* ofxCollisionConstraint.h */,
+				DD95E77D131312D50032A86D /* ofxConstraint.h */,
+				DD95E77E131312D50032A86D /* ofxFollowerConstraint.h */,
+				DD95E77F131312D50032A86D /* ofxInequalityConstraint.h */,
+				DD95E780131312D50032A86D /* ofxMaxDistSpring.h */,
+				DD95E781131312D50032A86D /* ofxMinDistSpring.h */,
+				DD95E782131312D50032A86D /* ofxSpring.h */,
+				DD95E783131312D50032A86D /* ofxSupportConstraint.h */,
+			);
+			path = constraints;
+			sourceTree = "<group>";
+		};
+		DD95E786131312D50032A86D /* particles */ = {
+			isa = PBXGroup;
+			children = (
+				DD95E787131312D50032A86D /* ofxParticle.cpp */,
+				DD95E788131312D50032A86D /* ofxParticle.h */,
+			);
+			path = particles;
+			sourceTree = "<group>";
+		};
 		DD9C01C512E8755600EF6F51 /* Wave */ = {
 			isa = PBXGroup;
 			children = (
@@ -1432,22 +1428,20 @@
 			children = (
 				DDB7C15212AD16C000197290 /* MainMenu.xib */,
 				DDB7C15712AD16C000197290 /* OutputPanel.xib */,
-				DDB7C14C12AD16C000197290 /* AppDelegate.h */,
-				DDB7C14D12AD16C000197290 /* AppDelegate.mm */,
-				DDB7C14E12AD16C000197290 /* GraphDebugger.h */,
-				DDB7C14F12AD16C000197290 /* GraphDebugger.mm */,
-				DDB7C15012AD16C000197290 /* GraphDebugView.h */,
-				DDB7C15112AD16C000197290 /* GraphDebugView.mm */,
 				DDB7C15312AD16C000197290 /* MainWindow.h */,
 				DDB7C15412AD16C000197290 /* MainWindow.m */,
+				DDB7C15C12AD16C000197290 /* SaveManager.h */,
+				DDB7C15D12AD16C000197290 /* SaveManager.mm */,
 				DDB7C15512AD16C000197290 /* ofAppCocoaWindow.h */,
 				DDB7C15612AD16C000197290 /* ofAppCocoaWindow.mm */,
 				DDB7C15812AD16C000197290 /* OutputPanelController.h */,
 				DDB7C15912AD16C000197290 /* OutputPanelController.mm */,
 				DDB7C15A12AD16C000197290 /* OutputViewManager.h */,
 				DDB7C15B12AD16C000197290 /* OutputViewManager.mm */,
-				DDB7C15C12AD16C000197290 /* SaveManager.h */,
-				DDB7C15D12AD16C000197290 /* SaveManager.mm */,
+				DDB7C14E12AD16C000197290 /* GraphDebugger.h */,
+				DDB7C14F12AD16C000197290 /* GraphDebugger.mm */,
+				DDB7C15012AD16C000197290 /* GraphDebugView.h */,
+				DDB7C15112AD16C000197290 /* GraphDebugView.mm */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -2230,7 +2224,6 @@
 				DD7B14BD11A3CF38000D9775 /* ofxMatrix3x3.cpp in Sources */,
 				DD7B14BE11A3CF38000D9775 /* ofxMatrix4x4.cpp in Sources */,
 				DD7B14BF11A3CF38000D9775 /* ofxQuaternion.cpp in Sources */,
-				DDB7C1F412AD16C100197290 /* AppDelegate.mm in Sources */,
 				DDB7C1F512AD16C100197290 /* GraphDebugger.mm in Sources */,
 				DDB7C1F612AD16C100197290 /* GraphDebugView.mm in Sources */,
 				DDB7C1F812AD16C100197290 /* MainWindow.m in Sources */,
@@ -2312,11 +2305,11 @@
 				7FD2E9661306D51600B274C9 /* fft.cpp in Sources */,
 				7FD2EC4D130982E600B274C9 /* Umbilical.mm in Sources */,
 				7F0F7752130C1A3F009A31C0 /* Ocean.mm in Sources */,
-				7F0F7769130C1D04009A31C0 /* ofxPhysics2d.cpp in Sources */,
-				7F0F776A130C1D04009A31C0 /* ofxParticle.cpp in Sources */,
 				33F9CD10130DB0620036EF0B /* VideoPlayer.mm in Sources */,
 				7F6A56A9130E7A3500844BEF /* ofxFbole.cpp in Sources */,
 				3363CC1B1312EFA4004ABBA2 /* SceneX.mm in Sources */,
+				DD95E789131312D50032A86D /* ofxPhysics2d.cpp in Sources */,
+				DD95E78A131312D50032A86D /* ofxParticle.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
