@@ -88,7 +88,6 @@
 		DD9C01C812E8758300EF6F51 /* oldWave.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD9C01C712E8758300EF6F51 /* oldWave.mm */; };
 		DD9C01CA12E8758A00EF6F51 /* Wave.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD9C01C912E8758A00EF6F51 /* Wave.xib */; };
 		DD9C01CE12E8768B00EF6F51 /* WaveObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD9C01CD12E8768B00EF6F51 /* WaveObject.mm */; };
-		DDB7C1F412AD16C100197290 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C14D12AD16C000197290 /* AppDelegate.mm */; };
 		DDB7C1F512AD16C100197290 /* GraphDebugger.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C14F12AD16C000197290 /* GraphDebugger.mm */; };
 		DDB7C1F612AD16C100197290 /* GraphDebugView.mm in Sources */ = {isa = PBXBuildFile; fileRef = DDB7C15112AD16C000197290 /* GraphDebugView.mm */; };
 		DDB7C1F712AD16C100197290 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = DDB7C15212AD16C000197290 /* MainMenu.xib */; };
@@ -491,8 +490,6 @@
 		DD9C01C912E8758A00EF6F51 /* Wave.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Wave.xib; sourceTree = "<group>"; };
 		DD9C01CC12E8768B00EF6F51 /* WaveObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WaveObject.h; sourceTree = "<group>"; };
 		DD9C01CD12E8768B00EF6F51 /* WaveObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = WaveObject.mm; sourceTree = "<group>"; };
-		DDB7C14C12AD16C000197290 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		DDB7C14D12AD16C000197290 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		DDB7C14E12AD16C000197290 /* GraphDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphDebugger.h; sourceTree = "<group>"; };
 		DDB7C14F12AD16C000197290 /* GraphDebugger.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphDebugger.mm; sourceTree = "<group>"; };
 		DDB7C15012AD16C000197290 /* GraphDebugView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphDebugView.h; sourceTree = "<group>"; };
@@ -1431,22 +1428,20 @@
 			children = (
 				DDB7C15212AD16C000197290 /* MainMenu.xib */,
 				DDB7C15712AD16C000197290 /* OutputPanel.xib */,
-				DDB7C14C12AD16C000197290 /* AppDelegate.h */,
-				DDB7C14D12AD16C000197290 /* AppDelegate.mm */,
-				DDB7C14E12AD16C000197290 /* GraphDebugger.h */,
-				DDB7C14F12AD16C000197290 /* GraphDebugger.mm */,
-				DDB7C15012AD16C000197290 /* GraphDebugView.h */,
-				DDB7C15112AD16C000197290 /* GraphDebugView.mm */,
 				DDB7C15312AD16C000197290 /* MainWindow.h */,
 				DDB7C15412AD16C000197290 /* MainWindow.m */,
+				DDB7C15C12AD16C000197290 /* SaveManager.h */,
+				DDB7C15D12AD16C000197290 /* SaveManager.mm */,
 				DDB7C15512AD16C000197290 /* ofAppCocoaWindow.h */,
 				DDB7C15612AD16C000197290 /* ofAppCocoaWindow.mm */,
 				DDB7C15812AD16C000197290 /* OutputPanelController.h */,
 				DDB7C15912AD16C000197290 /* OutputPanelController.mm */,
 				DDB7C15A12AD16C000197290 /* OutputViewManager.h */,
 				DDB7C15B12AD16C000197290 /* OutputViewManager.mm */,
-				DDB7C15C12AD16C000197290 /* SaveManager.h */,
-				DDB7C15D12AD16C000197290 /* SaveManager.mm */,
+				DDB7C14E12AD16C000197290 /* GraphDebugger.h */,
+				DDB7C14F12AD16C000197290 /* GraphDebugger.mm */,
+				DDB7C15012AD16C000197290 /* GraphDebugView.h */,
+				DDB7C15112AD16C000197290 /* GraphDebugView.mm */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -2229,7 +2224,6 @@
 				DD7B14BD11A3CF38000D9775 /* ofxMatrix3x3.cpp in Sources */,
 				DD7B14BE11A3CF38000D9775 /* ofxMatrix4x4.cpp in Sources */,
 				DD7B14BF11A3CF38000D9775 /* ofxQuaternion.cpp in Sources */,
-				DDB7C1F412AD16C100197290 /* AppDelegate.mm in Sources */,
 				DDB7C1F512AD16C100197290 /* GraphDebugger.mm in Sources */,
 				DDB7C1F612AD16C100197290 /* GraphDebugView.mm in Sources */,
 				DDB7C1F812AD16C100197290 /* MainWindow.m in Sources */,
