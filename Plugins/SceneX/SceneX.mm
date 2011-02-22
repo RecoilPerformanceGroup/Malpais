@@ -1,11 +1,3 @@
-//
-//  SceneX.mm
-//  malpais
-//
-//  Created by Malpais on 21/02/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
-//
-
 #import "SceneX.h"
 
 #import "Keystoner.h"
