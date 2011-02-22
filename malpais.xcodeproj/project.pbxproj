@@ -23,6 +23,22 @@
 		33ED1C821301900F0090E1EB /* install.xml in Resources */ = {isa = PBXBuildFile; fileRef = 33ED1C731301900F0090E1EB /* install.xml */; };
 		33ED1C841301900F0090E1EB /* MSACoreGL.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 33ED1C7F1301900F0090E1EB /* MSACoreGL.cpp */; };
 		33ED1C8B130190210090E1EB /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 33ED1C88130190210090E1EB /* Color.cpp */; };
+		33F793D61313D4E3009414EA /* Statestik.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33F793D51313D4E3009414EA /* Statestik.xib */; };
+		33F793D91313D4EB009414EA /* Statestik.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33F793D81313D4EB009414EA /* Statestik.mm */; };
+		33F794431313E55C009414EA /* ApexNew-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F794351313E55C009414EA /* ApexNew-Bold.otf */; };
+		33F794441313E55C009414EA /* ApexNew-BoldItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F794361313E55C009414EA /* ApexNew-BoldItalic.otf */; };
+		33F794451313E55C009414EA /* ApexNew-Book.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F794371313E55C009414EA /* ApexNew-Book.otf */; };
+		33F794461313E55C009414EA /* ApexNew-BookItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F794381313E55C009414EA /* ApexNew-BookItalic.otf */; };
+		33F794471313E55C009414EA /* ApexNew-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F794391313E55C009414EA /* ApexNew-Heavy.otf */; };
+		33F794481313E55C009414EA /* ApexNew-HeavyItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F7943A1313E55C009414EA /* ApexNew-HeavyItalic.otf */; };
+		33F794491313E55C009414EA /* ApexNew-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F7943B1313E55C009414EA /* ApexNew-Light.otf */; };
+		33F7944A1313E55C009414EA /* ApexNew-LightItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F7943C1313E55C009414EA /* ApexNew-LightItalic.otf */; };
+		33F7944B1313E55C009414EA /* ApexNew-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F7943D1313E55C009414EA /* ApexNew-Medium.otf */; };
+		33F7944C1313E55C009414EA /* ApexNew-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F7943E1313E55C009414EA /* ApexNew-MediumItalic.otf */; };
+		33F7944D1313E55C009414EA /* ApexNew-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F7943F1313E55C009414EA /* ApexNew-Thin.otf */; };
+		33F7944E1313E55C009414EA /* ApexNew-ThinItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F794401313E55C009414EA /* ApexNew-ThinItalic.otf */; };
+		33F7944F1313E55C009414EA /* ApexNew-Ultra.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F794411313E55C009414EA /* ApexNew-Ultra.otf */; };
+		33F794501313E55C009414EA /* ApexNew-UltraItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 33F794421313E55C009414EA /* ApexNew-UltraItalic.otf */; };
 		33F9CD09130DB0550036EF0B /* SendToQlab.scpt in Resources */ = {isa = PBXBuildFile; fileRef = 33F9CCEA130DB03F0036EF0B /* SendToQlab.scpt */; };
 		33F9CD10130DB0620036EF0B /* VideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33F9CD0E130DB0620036EF0B /* VideoPlayer.mm */; };
 		33F9CD11130DB0620036EF0B /* VideoPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33F9CD0F130DB0620036EF0B /* VideoPlayer.xib */; };
@@ -267,6 +283,23 @@
 		33ED1C88130190210090E1EB /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Color.cpp; sourceTree = "<group>"; };
 		33ED1C89130190210090E1EB /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
 		33ED1C8A130190210090E1EB /* Vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Vector.h; sourceTree = "<group>"; };
+		33F793D51313D4E3009414EA /* Statestik.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Statestik.xib; sourceTree = "<group>"; };
+		33F793D71313D4EB009414EA /* Statestik.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Statestik.h; sourceTree = "<group>"; };
+		33F793D81313D4EB009414EA /* Statestik.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Statestik.mm; sourceTree = "<group>"; };
+		33F794351313E55C009414EA /* ApexNew-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-Bold.otf"; sourceTree = "<group>"; };
+		33F794361313E55C009414EA /* ApexNew-BoldItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-BoldItalic.otf"; sourceTree = "<group>"; };
+		33F794371313E55C009414EA /* ApexNew-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-Book.otf"; sourceTree = "<group>"; };
+		33F794381313E55C009414EA /* ApexNew-BookItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-BookItalic.otf"; sourceTree = "<group>"; };
+		33F794391313E55C009414EA /* ApexNew-Heavy.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-Heavy.otf"; sourceTree = "<group>"; };
+		33F7943A1313E55C009414EA /* ApexNew-HeavyItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-HeavyItalic.otf"; sourceTree = "<group>"; };
+		33F7943B1313E55C009414EA /* ApexNew-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-Light.otf"; sourceTree = "<group>"; };
+		33F7943C1313E55C009414EA /* ApexNew-LightItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-LightItalic.otf"; sourceTree = "<group>"; };
+		33F7943D1313E55C009414EA /* ApexNew-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-Medium.otf"; sourceTree = "<group>"; };
+		33F7943E1313E55C009414EA /* ApexNew-MediumItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-MediumItalic.otf"; sourceTree = "<group>"; };
+		33F7943F1313E55C009414EA /* ApexNew-Thin.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-Thin.otf"; sourceTree = "<group>"; };
+		33F794401313E55C009414EA /* ApexNew-ThinItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-ThinItalic.otf"; sourceTree = "<group>"; };
+		33F794411313E55C009414EA /* ApexNew-Ultra.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-Ultra.otf"; sourceTree = "<group>"; };
+		33F794421313E55C009414EA /* ApexNew-UltraItalic.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ApexNew-UltraItalic.otf"; sourceTree = "<group>"; };
 		33F9CCEA130DB03F0036EF0B /* SendToQlab.scpt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.scpt; path = SendToQlab.scpt; sourceTree = "<group>"; };
 		33F9CD0D130DB0620036EF0B /* VideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoPlayer.h; sourceTree = "<group>"; };
 		33F9CD0E130DB0620036EF0B /* VideoPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = VideoPlayer.mm; sourceTree = "<group>"; };
@@ -819,6 +852,38 @@
 			);
 			path = "cinder-lite";
 			sourceTree = "<group>";
+		};
+		33F793D41313D4DC009414EA /* Statestik */ = {
+			isa = PBXGroup;
+			children = (
+				33F793D51313D4E3009414EA /* Statestik.xib */,
+				33F793D71313D4EB009414EA /* Statestik.h */,
+				33F793D81313D4EB009414EA /* Statestik.mm */,
+			);
+			path = Statestik;
+			sourceTree = "<group>";
+		};
+		33F794341313E55C009414EA /* apex */ = {
+			isa = PBXGroup;
+			children = (
+				33F794351313E55C009414EA /* ApexNew-Bold.otf */,
+				33F794361313E55C009414EA /* ApexNew-BoldItalic.otf */,
+				33F794371313E55C009414EA /* ApexNew-Book.otf */,
+				33F794381313E55C009414EA /* ApexNew-BookItalic.otf */,
+				33F794391313E55C009414EA /* ApexNew-Heavy.otf */,
+				33F7943A1313E55C009414EA /* ApexNew-HeavyItalic.otf */,
+				33F7943B1313E55C009414EA /* ApexNew-Light.otf */,
+				33F7943C1313E55C009414EA /* ApexNew-LightItalic.otf */,
+				33F7943D1313E55C009414EA /* ApexNew-Medium.otf */,
+				33F7943E1313E55C009414EA /* ApexNew-MediumItalic.otf */,
+				33F7943F1313E55C009414EA /* ApexNew-Thin.otf */,
+				33F794401313E55C009414EA /* ApexNew-ThinItalic.otf */,
+				33F794411313E55C009414EA /* ApexNew-Ultra.otf */,
+				33F794421313E55C009414EA /* ApexNew-UltraItalic.otf */,
+			);
+			name = apex;
+			path = bin/data/apex;
+			sourceTree = SOURCE_ROOT;
 		};
 		33F9CD0C130DB0620036EF0B /* VideoPlayer */ = {
 			isa = PBXGroup;
@@ -1750,6 +1815,7 @@
 		DDC8EA5D113809B100574926 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				33F793D41313D4DC009414EA /* Statestik */,
 				3363CC171312EF9B004ABBA2 /* SceneX */,
 				33F9CD0C130DB0620036EF0B /* VideoPlayer */,
 				7F0F774F130C1A29009A31C0 /* Ocean */,
@@ -1776,6 +1842,7 @@
 				3363CC291312F3F5004ABBA2 /* scenex0.png */,
 				3363CC2A1312F3F5004ABBA2 /* scenex1.png */,
 				3363CC2B1312F3F5004ABBA2 /* scenex2.png */,
+				33F794341313E55C009414EA /* apex */,
 			);
 			name = Resources;
 			path = ../../../addons/ofxCocoaPlugins/src/Resources;
@@ -2176,6 +2243,21 @@
 				7F0F77E1130C25E6009A31C0 /* LucidaGrande.ttc in Resources */,
 				33F9CD11130DB0620036EF0B /* VideoPlayer.xib in Resources */,
 				3363CC1D1312EFB5004ABBA2 /* SceneX.xib in Resources */,
+				33F793D61313D4E3009414EA /* Statestik.xib in Resources */,
+				33F794431313E55C009414EA /* ApexNew-Bold.otf in Resources */,
+				33F794441313E55C009414EA /* ApexNew-BoldItalic.otf in Resources */,
+				33F794451313E55C009414EA /* ApexNew-Book.otf in Resources */,
+				33F794461313E55C009414EA /* ApexNew-BookItalic.otf in Resources */,
+				33F794471313E55C009414EA /* ApexNew-Heavy.otf in Resources */,
+				33F794481313E55C009414EA /* ApexNew-HeavyItalic.otf in Resources */,
+				33F794491313E55C009414EA /* ApexNew-Light.otf in Resources */,
+				33F7944A1313E55C009414EA /* ApexNew-LightItalic.otf in Resources */,
+				33F7944B1313E55C009414EA /* ApexNew-Medium.otf in Resources */,
+				33F7944C1313E55C009414EA /* ApexNew-MediumItalic.otf in Resources */,
+				33F7944D1313E55C009414EA /* ApexNew-Thin.otf in Resources */,
+				33F7944E1313E55C009414EA /* ApexNew-ThinItalic.otf in Resources */,
+				33F7944F1313E55C009414EA /* ApexNew-Ultra.otf in Resources */,
+				33F794501313E55C009414EA /* ApexNew-UltraItalic.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2304,6 +2386,7 @@
 				3363CC1B1312EFA4004ABBA2 /* SceneX.mm in Sources */,
 				DD95E789131312D50032A86D /* ofxPhysics2d.cpp in Sources */,
 				DD95E78A131312D50032A86D /* ofxParticle.cpp in Sources */,
+				33F793D91313D4EB009414EA /* Statestik.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
