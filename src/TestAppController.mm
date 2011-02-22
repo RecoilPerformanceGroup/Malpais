@@ -6,10 +6,9 @@
 
 #import "TestAppController.h"
 #include "PluginIncludes.h"
-#include "testApp.h"
+//#include "testApp.h"
 #include "ofAppCocoaWindow.h"
 
-extern testApp * OFSAptr;
 extern ofAppBaseWindow * window;
 
 @implementation TestAppController
@@ -30,7 +29,6 @@ extern ofAppBaseWindow * window;
 	NSLog(@"Awake test app controller from nib");
 	
 	
-	baseApp = OFSAptr;
 	cocoaWindow = window;	
 	((ofAppCocoaWindow*)cocoaWindow)->windowController = self;
 	

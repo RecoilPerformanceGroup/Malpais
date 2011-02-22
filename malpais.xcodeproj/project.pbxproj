@@ -27,7 +27,6 @@
 		33F9CD10130DB0620036EF0B /* VideoPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 33F9CD0E130DB0620036EF0B /* VideoPlayer.mm */; };
 		33F9CD11130DB0620036EF0B /* VideoPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33F9CD0F130DB0620036EF0B /* VideoPlayer.xib */; };
 		4BA258A61153B0800008D49C /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
-		4BA258F41153B1E80008D49C /* testApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4BA258F31153B1E80008D49C /* testApp.mm */; };
 		4BA259911153B98B0008D49C /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
 		7F0F7752130C1A3F009A31C0 /* Ocean.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */; };
 		7F0F777A130C20A7009A31C0 /* Ocean.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F7779130C20A7009A31C0 /* Ocean.xib */; };
@@ -281,8 +280,6 @@
 		4BA258A31153B0790008D49C /* GRPieDataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRPieDataSet.h; sourceTree = "<group>"; };
 		4BA258A41153B0790008D49C /* GRXYDataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRXYDataSet.h; sourceTree = "<group>"; };
 		4BA258A51153B0800008D49C /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = ../../../addons/ofxCocoaPlugins/src/Libs/BWToolkitFramework.framework; sourceTree = "<group>"; };
-		4BA258F21153B1E80008D49C /* testApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testApp.h; sourceTree = "<group>"; };
-		4BA258F31153B1E80008D49C /* testApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = testApp.mm; sourceTree = "<group>"; };
 		7F0F7750130C1A3F009A31C0 /* Ocean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ocean.h; sourceTree = "<group>"; };
 		7F0F7751130C1A3F009A31C0 /* Ocean.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Ocean.mm; sourceTree = "<group>"; };
 		7F0F7779130C20A7009A31C0 /* Ocean.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Ocean.xib; sourceTree = "<group>"; };
@@ -1988,8 +1985,6 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				4BA258F21153B1E80008D49C /* testApp.h */,
-				4BA258F31153B1E80008D49C /* testApp.mm */,
 				DDC8E6921137323900574926 /* TestAppController.h */,
 				DDC8E6931137323900574926 /* TestAppController.mm */,
 			);
@@ -2208,7 +2203,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDC8E6961137323900574926 /* TestAppController.mm in Sources */,
-				4BA258F41153B1E80008D49C /* testApp.mm in Sources */,
 				DD7B14AF11A3CF38000D9775 /* ofxOscBundle.cpp in Sources */,
 				DD7B14B011A3CF38000D9775 /* ofxOscMessage.cpp in Sources */,
 				DD7B14B111A3CF38000D9775 /* ofxOscReceiver.cpp in Sources */,
