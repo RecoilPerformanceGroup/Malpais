@@ -11,5 +11,7 @@
 #include "Umbilical.h"
 #include "Ocean.h"
 #include "VideoPlayer.h"
+#include "Statestik.h"
+
 #include "SceneX.h"
 //#include "Tracking.h"

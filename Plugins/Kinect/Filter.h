@@ -6,12 +6,6 @@ public:
 	float Nl[4];
 	float Dl[4];
 	
-	Filter(){
-		Zl[0] = 0.0;
-		Zl[1] = 0.0;
-		Zl[2] = 0.0;
-		Zl[3] = 0.0;
-	}
 	
 	void setDl(float a, float b, float c, float d){
 		Dl[0] = a;
@@ -25,6 +19,18 @@ public:
 		Nl[1] = b;
 		Nl[2] = c;
 		Nl[3] = d;
+	}
+	
+	
+	Filter(){
+		Zl[0] = 0.0;
+		Zl[1] = 0.0;
+		Zl[2] = 0.0;
+		Zl[3] = 0.0;
+		
+		setNl(9.413137469932821686e-04, 2.823941240979846506e-03, 2.823941240979846506e-03, 9.413137469932821686e-04);
+		setDl(1, -2.5818614306773719263, 2.2466666427559748864, -.65727470210265670262);
+
 	}
 	
 	void setStartValue(float s){
@@ -42,4 +48,5 @@ public:
 		return Zl[0]*Nl[0] + Zl[1]*Nl[1] + Zl[2]*Nl[2] + Zl[3]*Nl[3];
 		
 	}
+	
 };
