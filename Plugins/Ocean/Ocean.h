@@ -53,11 +53,11 @@
 	int max_tuio_constraints;
 	bool bMousePressed;
 	
-	MSA::Interpolator1D		* waveForm[NUM_VOICES+1];
+	MSA::Interpolator1D	* waveForm[NUM_VOICES+1];
 	
 	float mousex, mousey, mouseh;
-	
-	NSMutableArray * wave;
+		
+	NSMutableArray * waves;
 	
 }
 

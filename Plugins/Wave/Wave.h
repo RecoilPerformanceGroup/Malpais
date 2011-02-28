@@ -52,7 +52,8 @@
 							   smoothing:(float)smoothing
 							   freqeuncy:(float)frequency
 								  random:(float)randomFactor
-								  offset:(float)offset;
+								  offset:(float)offset
+						 withFormerArray:(NSMutableArray*)formerArray;
 
 - (NSMutableArray*) getWaveFormsWithIndex:(int)index 
 								amplitude:(float)amplitude 
@@ -60,7 +61,8 @@
 								smoothing:(float)smoothing
 								freqeuncy:(float)frequency
 								   random:(float)randomFactor								  
-								   offset:(float)offset;
+								   offset:(float)offset
+						  withFormerArray:(NSMutableArray*)formerArray;
 
 
 @end
