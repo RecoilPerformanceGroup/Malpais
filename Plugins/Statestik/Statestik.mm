@@ -9,10 +9,13 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:10] named:@"displayGraph"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0 maxValue:1] named:@"percentageScale"];
 	
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"lineStart"];
+//	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"lineStart"];
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:3] named:@"lineStyleWidth"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:3] named:@"lineStyleDotsize"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"lineSpeed"];
+	
+	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"showNumber"];
 	
 }
 
@@ -66,6 +69,16 @@
 }
 
 -(void) update:(NSDictionary *)drawingInformation{
+	if(PropB(@"showNumber") && lineTime < 1){
+		lineTime += 1.0/ofGetFrameRate()*PropF(@"lineSpeed")*0.1;
+		if(lineTime > 1)
+			lineTime = 1;
+	} else if(lineTime > 0){
+		lineTime -= 1.0/ofGetFrameRate()*PropF(@"lineSpeed")*0.1;
+		if(lineTime < 0)
+			lineTime = 0;		
+	}
+	
 	for(int i=0;i<graphs.size();i++){
 		for(int j=0;j<NUMVALUES;j++){
 			graphs[i].values[j] = graphs[i].filter[j].filter(graphs[i].valuesGoal[j]);
