@@ -19,6 +19,8 @@ struct Graph {
 	NSMutableArray * surveyData;
 	ofTrueTypeFont * font;
 	vector<Graph> graphs;
+	
+	float lineTime;
 }
 @property (readwrite, retain) NSMutableArray * surveyData;
 
