@@ -29,6 +29,7 @@ extern ofAppBaseWindow * window;
 	[pluginManagerController addPlugin:[[Umbilical alloc] init]];
 	[pluginManagerController addPlugin:[[VideoPlayer alloc] init]];
 	[pluginManagerController addPlugin:[[Ocean alloc] init]];
+	[pluginManagerController addPlugin:[[Beach alloc] init]];
 	[pluginManagerController addPlugin:[[Statestik alloc] init]];
 
 	[pluginManagerController addPlugin:[[SceneX alloc] init]];

@@ -20,26 +20,25 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	
 	[voiceWaveForms retain];
 	
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"alpha wall"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"alpha floor"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:10.0] named:@"line width"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"amplitude random"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"amplitude factor"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0 maxValue:10.0] named:@"frequency factor"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-10.0 maxValue:10.0] named:@"drift speed"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"smoothing factor"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"alphaWall"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"alphaFloor"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:10.0] named:@"lineWidth"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"random"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"amplitude"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0 maxValue:10.0] named:@"frequency"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-2.0 maxValue:2.0] named:@"drift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"smoothing"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:MAX_RESOLUTION minValue:1.0 maxValue:MAX_RESOLUTION] named:@"resolution"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10 minValue:1 maxValue:10] named:@"live voice samples"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10 minValue:1 maxValue:100] named:@"live voice amplification"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10 minValue:1 maxValue:10] named:@"liveVoiceSamples"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10 minValue:1 maxValue:100] named:@"liveVoiceAmplification"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"recordLive"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"updateWaveForms"];
 	
-	
-	
 	for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
 		PluginProperty * p = [NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0];
-		[self addProperty:p named:[NSString stringWithFormat:@"live voice band %i", iBand+1]];
+		[self addProperty:p named:[NSString stringWithFormat:@"liveVoiceBand%i", iBand+1]];
 	}
+	
 	NSMutableArray * aVoice = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
 	for(int i=0;i<MAX_RESOLUTION;i++){
 		[aVoice addObject:[NSNumber numberWithDouble:0.0]];
@@ -47,12 +46,12 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	[voiceWaveForms addObject:aVoice];
 	
 	PluginProperty * p = [NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0];
-	[self addProperty:p named:@"live voice offset"];
+	[self addProperty:p named:@"liveVoiceOffset"];
 	
 	for(int iVoice = 0; iVoice < NUM_VOICES; iVoice++){
 		for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
 			PluginProperty * p = [NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0];
-			[self addProperty:p named:[NSString stringWithFormat:@"voice %i band %i", iVoice+1, iBand+1]];
+			[self addProperty:p named:[NSString stringWithFormat:@"voice%iBand%i", iVoice+1, iBand+1]];
 		}
 		NSMutableArray * aVoice = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
 		
@@ -61,14 +60,14 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		}
 		
 		[voiceWaveForms addObject:aVoice];
-		[self addProperty:p named:[NSString stringWithFormat:@"voice %i offset", iVoice+1]];
+		PluginProperty * p = [NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0];
+		[self addProperty:p named:[NSString stringWithFormat:@"voice%iOffset", iVoice+1]];
 	}
 	
 	//	mInputDeviceList = new AudioDeviceList(true);
 	
 	liveVoice = [[WaveObject alloc] init];
 	[liveVoice loadMic];
-	
 	
 }
 
@@ -78,8 +77,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	//	propsize = sizeof(AudioDeviceID);
 	//	verify_noerr (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &propsize, &inputDevice));
 	//	BuildDeviceMenu(mInputDeviceList, mInputDevices, inputDevice);
-	
-	
+		
 	// bind midi channels and controlnumbers
 	
 	int midiControlNumber;
@@ -87,7 +85,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	for(int iVoice = 0; iVoice < NUM_VOICES; iVoice++){
 		midiControlNumber = iVoice*10;
 		for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
-			PluginProperty * p = [properties objectForKey:[NSString stringWithFormat:@"voice %i band %i", iVoice+1, iBand+1]];
+			PluginProperty * p = [properties objectForKey:[NSString stringWithFormat:@"voice%iBand%i", iVoice+1, iBand+1]];
 			[p setMidiChannel:[NSNumber numberWithInt:MIDI_CHANNEL]];
 			if(midiControlNumber==0){
 				[p setMidiNumber:[NSNumber numberWithInt:7]]; // undtagelse der bekræfter reglen, da nummer 0 ikke kan bruges
@@ -116,10 +114,10 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	lastUpdateTime = now;
 	
 	if (PropB(@"recordLive")) {
-		liveSamples = 1 << (int)PropF(@"live voice samples");
+		liveSamples = 1 << (int)PropF(@"liveVoiceSamples");
 		[liveVoice updateWithSpeed:1.0/ofGetFrameRate() * liveSamples];
 		liveFFT.powerSpectrum(0, (int)liveSamples/2, [liveVoice getWaveData]-liveSamples, (int)liveSamples, &magnitude[0], &phase[0], &power[0], &avg_power);
-		float amplification = PropF(@"live voice amplification");
+		float amplification = PropF(@"liveVoiceAmplification");
 		
 		int thresholds[] = {0,4,6,10,16,24,150,liveSamples/2};
 		
@@ -129,13 +127,16 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				bandMagnitude += magnitude[iMagnitude];
 			}
 			bandMagnitude *= 1.0/(thresholds[iBand+1]-thresholds[iBand]);
-			NSString * propStr = [NSString stringWithFormat:@"live voice band %i", iBand+1];
-			[[properties objectForKey:propStr] setFloatValue:(bandMagnitude/liveSamples)*amplification];
+			NSString * propStr = [NSString stringWithFormat:@"liveVoiceBand%i", iBand+1];
+			
+			bandMagnitude = (bandMagnitude/liveSamples)*amplification;
+			
+			[[properties objectForKey:propStr] setFloatValue:bandMagnitude];
 		}
 	}
 	
 	if(PropB(@"updateWaveForms")){
-		float resolution = round(PropF(@"resolution"));
+		float resolution = roundf(PropF(@"resolution"));
 		
 		for(int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++){
 			
@@ -154,17 +155,19 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			NSString * propStr;
 			
 			if(iVoice == 0)
-				propStr = [NSString stringWithFormat:@"live voice offset"];
+				propStr = [NSString stringWithFormat:@"liveVoiceOffset"];
 			else 
-				propStr = [NSString stringWithFormat:@"voice %i offset", iVoice];
+				propStr = [NSString stringWithFormat:@"voice%iOffset", iVoice];
 						
 			aVoice = [self getWaveFormWithIndex:iVoice 
 									  amplitude:1.0 
-									 driftSpeed:PropF(@"drift speed")
-									  smoothing:PropF(@"smoothing factor")
-									  freqeuncy:PropF(@"frequency factor")
-										 random:PropF(@"amplitude random")
-										 offset:PropF(propStr)];
+									 driftSpeed:PropF(@"drift")
+									  smoothing:PropF(@"smoothing")
+									  freqeuncy:PropF(@"frequency")
+										 random:PropF(@"random")
+										 offset:PropF(propStr)
+								withFormerArray:[voiceWaveForms objectAtIndex:iVoice]
+					  ];
 			
 			
 			[voiceWaveForms replaceObjectAtIndex:iVoice withObject:aVoice];
@@ -178,17 +181,17 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 
 -(void) draw:(NSDictionary *)drawingInformation{
 	
-	float resolution = round(PropF(@"resolution"));
+	float resolution = roundf(PropF(@"resolution"));
 	
 	ofSetColor(255, 255, 255);
 	ofNoFill();
-	ofSetLineWidth(PropF(@"line width"));
+	ofSetLineWidth(PropF(@"lineWidth"));
 	
 	ApplySurface(@"Floor"); {
 		
-		if (PropF(@"alpha floor") > 0) {
+		if (PropF(@"alphaFloor") > 0) {
 			
-			ofSetColor(255, 255, 255, 255.0*PropF(@"alpha floor"));
+			ofSetColor(255, 255, 255, 255.0*PropF(@"alphaFloor"));
 			
 			NSMutableArray * aVoice;
 			
@@ -207,7 +210,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				
 				for(anAmplitude in aVoice){
 					
-					glVertex2d((Aspect(@"Floor",0)/resolution)*i, [anAmplitude doubleValue]*PropF(@"amplitude factor"));
+					glVertex2d((Aspect(@"Floor",0)/resolution)*i, [anAmplitude doubleValue]*PropF(@"amplitude"));
 					i++;
 				} 
 				
@@ -220,9 +223,9 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	
 	ApplySurface(@"Wall"); {
 		
-		if (PropF(@"alpha wall") > 0) {
+		if (PropF(@"alphaWall") > 0) {
 			
-			ofSetColor(255, 255, 255, 255.0*PropF(@"alpha wall"));
+			ofSetColor(255, 255, 255, 255.0*PropF(@"alphaWall"));
 			
 			NSMutableArray * aVoice = [voiceWaveForms objectAtIndex:0];
 			
@@ -236,7 +239,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			
 			for(anAmplitude in aVoice){
 				
-				glVertex2d((Aspect(@"Wall",0)/resolution)*i, [anAmplitude doubleValue]*PropF(@"amplitude factor"));
+				glVertex2d((Aspect(@"Wall",0)/resolution)*i, [anAmplitude doubleValue]*PropF(@"amplitude"));
 				i++;
 			} 
 			
@@ -278,11 +281,9 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 					NSString * propStr;
 					
 					if(iVoice == 0)
-						propStr = [NSString stringWithFormat:@"live voice band %i", iBand+1];
+						propStr = [NSString stringWithFormat:@"liveVoiceBand%i", iBand+1];
 					else 
-						propStr = [NSString stringWithFormat:@"voice %i band %i", iVoice, iBand+1];
-					
-					ofFill();
+						propStr = [NSString stringWithFormat:@"voice%iBand%i", iVoice, iBand+1];
 					
 					//Full scales
 					if (iVoice == 0) {
@@ -290,11 +291,20 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 					} else {
 						ofSetColor(24, 88, 120);
 					}
-					
+					ofFill();
 					ofRect(0, 0, 
-						   (levelsWidth*0.75/NUM_VOICES+1),
+						   (levelsWidth/(NUM_VOICES+1.0)),
 						   (bandHeight*0.4)
 						   );
+					
+					ofSetColor(0, 0, 0,127);
+					ofSetLineWidth(1.5);
+					ofNoFill();
+					ofRect(0, 0, 
+						   (levelsWidth/(NUM_VOICES+1.0)),
+						   (bandHeight*0.4)
+						   );
+					
 					
 					//Bars
 					if (iVoice == 0) {
@@ -302,8 +312,17 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 					} else {
 						ofSetColor(68, 176, 240);
 					}
+					ofFill();
 					ofRect(0, 0, 
-						   (levelsWidth*0.75/NUM_VOICES+1)*PropF(propStr),
+						   (levelsWidth/(NUM_VOICES+1.0))*PropF(propStr),
+						   (bandHeight*0.4)
+						   );
+					
+					ofSetColor(0, 0, 0,127);
+					ofSetLineWidth(1.5);
+					ofNoFill();
+					ofRect(0, 0, 
+						   (levelsWidth/(NUM_VOICES+1.0))*PropF(propStr),
 						   (bandHeight*0.4)
 						   );
 					
@@ -316,7 +335,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 					glBegin(GL_LINE_STRIP);
 					
 					for(int a = 0; a < resolution; a++){
-						glVertex2d(((levelsWidth*0.75/NUM_VOICES+1)/resolution)*a, (bandHeight*0.4*0.5)+(voiceSourceWaves[iVoice][iBand][a]*bandHeight*0.2));
+						glVertex2d(((levelsWidth/(NUM_VOICES+1.0))/(resolution-1))*a, (bandHeight*0.4*0.5)+(voiceSourceWaves[iVoice][iBand][a]*bandHeight*0.2));
 					} 
 					
 					glEnd();
@@ -334,7 +353,12 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				}
 				
 				ofFill();
-				ofRect(0, 0, (levelsWidth*0.75/NUM_VOICES+1), bandHeight*1.5);
+				ofRect(0, 0, (levelsWidth/(NUM_VOICES+1.0)), bandHeight*1.5);
+				
+				ofSetColor(0, 0, 0,127);
+				ofSetLineWidth(1.5);
+				ofNoFill();
+				ofRect(0, 0, (levelsWidth/(NUM_VOICES+1.0)), bandHeight*1.5);
 				
 				ofNoFill();
 				ofSetLineWidth(1.5);
@@ -348,7 +372,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				
 				for(anAmplitude in aVoice){
 					
-					glVertex2d(((levelsWidth*0.75/NUM_VOICES+1)/resolution)*i, (bandHeight*1.5*0.5)+([anAmplitude doubleValue]*bandHeight*1.5));
+					glVertex2d(((levelsWidth/(NUM_VOICES+1.0))/(resolution-1))*i, (bandHeight*1.5*0.5)+([anAmplitude doubleValue]*bandHeight*1.5*0.5));
 					i++;
 				} 
 				
@@ -370,28 +394,31 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			ofSetColor(0, 0, 0, 31);
 		}
 		ofFill();
-		ofRect(0, 0, ofGetWidth()*0.987, -bandHeight*2.0);
+		ofRect(0, 0, ofGetWidth(), -bandHeight*2.0);
 		ofNoFill();
 		ofSetLineWidth(2.0);
 		ofSetColor(255, 255, 255, 255.0*0.75);
 		
 		for(int i=0;i<liveSamples/2;i++){
-			float x = (ofGetWidth()*0.987/liveSamples)*i*2.0;
+			float x = (ofGetWidth()/liveSamples)*i*2.0;
 			ofLine(x, 0, x, -bandHeight*(magnitude[i]*(10.0/liveSamples)));
 		}
+		
+		ofSetColor(0, 0, 0,127);
+		ofSetLineWidth(1.5);
+		ofNoFill();
+		ofRect(0, 0, ofGetWidth(), -bandHeight*2.0);
 		
 		
 		if (PropB(@"recordLive")) {
 			
 			glTranslated(0, -bandHeight, 0);
-			
 			ofSetColor(0,0,0, 255.0*0.5);
 			
 			glBegin(GL_LINE_STRIP);
-			for(int i=0;i<liveSamples;i++){
-				float x = (ofGetWidth()*0.987/liveSamples)*i;
-				if(i < [liveVoice simplifiedCurve]->size())
-					glVertex2f(x, [liveVoice simplifiedCurve]->at([liveVoice simplifiedCurve]->size()-i-1)*bandHeight);	
+			for(int i=0;i<[liveVoice simplifiedCurve]->size();i++){
+				float x = ((ofGetWidth()*1.0)/[liveVoice simplifiedCurve]->size())*i;
+				glVertex2f(x, [liveVoice simplifiedCurve]->at([liveVoice simplifiedCurve]->size()-i-1)*bandHeight);	
 			}
 			glEnd();
 		}
@@ -407,13 +434,25 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 							   freqeuncy:(float)frequency
 								  random:(float)randomFactor
 								  offset:(float)offset
+						 withFormerArray:(NSMutableArray*)formerArray
 {
 	
 	NSMutableArray * aVoice;
 
 	if ([voiceWaveForms count]>index) {
+				
+		int voiceLength = [[voiceWaveForms objectAtIndex:index] count];
 		
-		aVoice = [voiceWaveForms objectAtIndex:index];
+		int voiceOffset = roundf(offset * voiceLength);
+		
+		int iFrom = (voiceLength-voiceOffset)%voiceLength;
+		
+		aVoice = [NSMutableArray arrayWithCapacity:voiceLength];
+		
+		for (int iTo = 0; iTo < voiceLength; iTo++) {
+			[aVoice addObject:[formerArray objectAtIndex: iFrom]];
+			iFrom = (iFrom+1)%voiceLength;
+		}
 		
 		float now = ofGetElapsedTimef();
 		
@@ -426,18 +465,16 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			NSString * propStr;
 
 			if(index == 0)
-				propStr = [NSString stringWithFormat:@"live voice band %i", iBand+1];
+				propStr = [NSString stringWithFormat:@"liveVoiceBand%i", iBand+1];
 			else 
-				propStr = [NSString stringWithFormat:@"voice %i band %i", index, iBand+1];
+				propStr = [NSString stringWithFormat:@"voice%iBand%i", index, iBand+1];
 			
 			float bandValue = PropF(propStr);
 			
-			//			double drift = PropF(@"drift speed")*ofGetElapsedTimef()*(2.0*((iBand-(NUM_BANDS/2))+1.0));
-			double drift = driftSpeed*ofGetElapsedTimef()*(iBand+1.0/NUM_BANDS);
+			//			double drift = PropF(@"drift")*ofGetElapsedTimef()*(2.0*((iBand-(NUM_BANDS/2))+1.0));
+			double drift = driftSpeed*ofGetElapsedTimef()*(iBand+1.0/NUM_BANDS)*2.0*PI;
 			double smoothingFactor = 1.0-powf((1.0-sqrt(smoothing)), 2.5);
 			double ampRnd = ofRandom(0,randomFactor);
-			
-			int voiceLength = [aVoice count]; 
 			
 			for (int i = 0; i < voiceLength; i++) {
 				
@@ -448,7 +485,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 					formerAmplitude = [[aVoice objectAtIndex:i] floatValue];
 				}
 				
-				float amp = sinf(offset+(((1.0*i*NUM_BANDS)/voiceLength)*(1.0+iBand))*frequency/*+(1.0/(1+iBand))*/-drift) * fmaxf(bandValue, ampRnd);
+				float amp = sinf((((1.0*i)/voiceLength)*(1.0+iBand))*frequency*PI*2.0/*+(1.0/(1+iBand))*/-drift) * fmaxf(bandValue, ampRnd);
 				
 				NSNumber * anAmplitude = [NSNumber numberWithFloat:
 										  ((1.0/NUM_BANDS) * amp * (1.0-smoothingFactor))
@@ -456,18 +493,30 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 										  ];
 				
 				voiceSourceWaves[index][iBand][i] = (voiceSourceWaves[index][iBand][i]*smoothingFactor) + (amp * (1.0-smoothingFactor));
-				
+
 				[aVoice replaceObjectAtIndex:i withObject:anAmplitude];
 				
 			}
 			
-			
 		}
+	
+		NSMutableArray * aNewVoice = [NSMutableArray arrayWithCapacity:voiceLength];
+		
+		iFrom = voiceOffset%voiceLength;
+		
+		for (int iTo = 0; iTo < voiceLength; iTo++) {
+			[aNewVoice addObject:[aVoice objectAtIndex: iFrom]];
+			iFrom = (iFrom+1)%voiceLength;
+		}
+		
+		formerArray = aNewVoice;
+		aVoice = formerArray;
+				
 		
 	} else {
 		aVoice = [NSMutableArray array];
 	}
-
+	
 	[aVoice retain];
 
 	return aVoice;
@@ -481,6 +530,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 									freqeuncy:(float)frequency
 									   random:(float)randomFactor
 									   offset:(float)offset
+							  withFormerArray:(NSMutableArray*)formerArray
 {
 	
 	NSMutableArray * aVoice = [self getWaveFormWithIndex:index 
@@ -489,7 +539,9 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 											   smoothing:smoothing
 											   freqeuncy:frequency
 												  random:randomFactor
-												  offset:offset];
+												  offset:offset
+										 withFormerArray:formerArray
+							   ];
 	
 	NSMutableArray * waveFormBands = [NSMutableArray arrayWithCapacity:NUM_BANDS];
 	

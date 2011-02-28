@@ -48,6 +48,8 @@
 		7F0F777A130C20A7009A31C0 /* Ocean.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F7779130C20A7009A31C0 /* Ocean.xib */; };
 		7F0F77DF130C25DC009A31C0 /* floortest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F77DE130C25DC009A31C0 /* floortest.jpg */; };
 		7F0F77E1130C25E6009A31C0 /* LucidaGrande.ttc in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F77E0130C25E6009A31C0 /* LucidaGrande.ttc */; };
+		7F20475D131AEBEA00388BC3 /* Beach.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F20475B131AEBE900388BC3 /* Beach.mm */; };
+		7F20475E131AEBEA00388BC3 /* Beach.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F20475C131AEBE900388BC3 /* Beach.xib */; };
 		7F521A7C12FB26AB00FEDF19 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7F521A7B12FB26AB00FEDF19 /* icon.icns */; };
 		7F6A56A9130E7A3500844BEF /* ofxFbole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F6A56A7130E7A3500844BEF /* ofxFbole.cpp */; };
 		7F8F6BA5130565580097D302 /* Wave.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F8F6BA4130565580097D302 /* Wave.mm */; };
@@ -320,6 +322,9 @@
 		7F0F7779130C20A7009A31C0 /* Ocean.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Ocean.xib; sourceTree = "<group>"; };
 		7F0F77DE130C25DC009A31C0 /* floortest.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = floortest.jpg; path = ../../../../apps/recoil/Malpais/bin/data/floortest.jpg; sourceTree = "<group>"; };
 		7F0F77E0130C25E6009A31C0 /* LucidaGrande.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; name = LucidaGrande.ttc; path = ../../../../apps/recoil/Malpais/bin/data/LucidaGrande.ttc; sourceTree = "<group>"; };
+		7F20475A131AEBE900388BC3 /* Beach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Beach.h; sourceTree = "<group>"; };
+		7F20475B131AEBE900388BC3 /* Beach.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Beach.mm; sourceTree = "<group>"; };
+		7F20475C131AEBE900388BC3 /* Beach.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Beach.xib; sourceTree = "<group>"; };
 		7F521A7B12FB26AB00FEDF19 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = src/icon.icns; sourceTree = SOURCE_ROOT; };
 		7F6A56A7130E7A3500844BEF /* ofxFbole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxFbole.cpp; sourceTree = "<group>"; };
 		7F6A56A8130E7A3500844BEF /* ofxFbole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxFbole.h; sourceTree = "<group>"; };
@@ -927,6 +932,16 @@
 				7F0F7779130C20A7009A31C0 /* Ocean.xib */,
 			);
 			path = Ocean;
+			sourceTree = "<group>";
+		};
+		7F204759131AEBE900388BC3 /* Beach */ = {
+			isa = PBXGroup;
+			children = (
+				7F20475A131AEBE900388BC3 /* Beach.h */,
+				7F20475B131AEBE900388BC3 /* Beach.mm */,
+				7F20475C131AEBE900388BC3 /* Beach.xib */,
+			);
+			path = Beach;
 			sourceTree = "<group>";
 		};
 		7F6A56A1130E7A0300844BEF /* ofxFbole */ = {
@@ -1825,6 +1840,7 @@
 		DDC8EA5D113809B100574926 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				7F204759131AEBE900388BC3 /* Beach */,
 				33F793D41313D4DC009414EA /* Statestik */,
 				3363CC171312EF9B004ABBA2 /* SceneX */,
 				33F9CD0C130DB0620036EF0B /* VideoPlayer */,
@@ -2269,6 +2285,7 @@
 				33F7944E1313E55C009414EA /* ApexNew-ThinItalic.otf in Resources */,
 				33F7944F1313E55C009414EA /* ApexNew-Ultra.otf in Resources */,
 				33F794501313E55C009414EA /* ApexNew-UltraItalic.otf in Resources */,
+				7F20475E131AEBEA00388BC3 /* Beach.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2399,6 +2416,7 @@
 				DD95E78A131312D50032A86D /* ofxParticle.cpp in Sources */,
 				33F793D91313D4EB009414EA /* Statestik.mm in Sources */,
 				DD040ABF131AEF86004F7AFE /* QLabController.mm in Sources */,
+				7F20475D131AEBEA00388BC3 /* Beach.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

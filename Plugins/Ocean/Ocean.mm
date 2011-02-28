@@ -19,7 +19,9 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1000.0] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:10.0] named:@"frequency"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10.0 minValue:-10.0 maxValue:10.0] named:@"drift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2.0] named:@"floorDepth"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-5.0 maxValue:5.0] named:@"drift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:5.0] named:@"offset"];
 	
 	for (int i = 0; i < NUM_VOICES+1; i++) {
 		[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named: 
@@ -31,7 +33,7 @@
 	}
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"drag"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:-1.0 minValue:-1.0 maxValue:2.0] named:@"dragToX"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:-2.0 minValue:-2.0 maxValue:2.0 +[self aspect] ] named:@"dragToX"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"dragToY"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"dragWindowWidth"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.01 minValue:0.0 maxValue:1.0] named:@"stiffness"];
@@ -42,11 +44,20 @@
 
 -(void) setup{
 	
+	waves = [NSMutableArray array];
+	
 	for (int i = 0; i < NUM_VOICES+1; i++) {
 		waveForm[i] =  new MSA::Interpolator1D;
 		waveForm[i]->reserve((int)roundf(PropF(@"resolution")));
+		
+		NSMutableArray * aVoice = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
+		
+		for(int i=0;i<MAX_RESOLUTION;i++){
+			[aVoice addObject:[NSNumber numberWithDouble:0.0]];
+		}
+		
+		[waves addObject:aVoice];
 	}
-	
 	mouseParticle = new ofxParticle();
 	mouseParticle->setActive(false);
 	dragParticle = new ofxParticle();
@@ -215,20 +226,25 @@
 			
 			NSString * waveChannelStr = [NSString stringWithFormat:@"wave%iChannel",iVoice];
 			
-			wave = [GetPlugin(Wave)
-					getWaveFormWithIndex:(int)roundf(PropF(waveChannelStr))
-					amplitude:1.0 
-					driftSpeed:PropF(@"drift")
-					smoothing:PropF(@"smoothing")
-					freqeuncy:PropF(@"frequency")
-					random:0
-					offset: iVoice/(NUM_VOICES+1.0)
-					];
+			NSMutableArray * currentWave = [waves objectAtIndex:iVoice];
 			
-			if ([wave count] > 0) {
+			NSMutableArray * newWave = [GetPlugin(Wave)
+										getWaveFormWithIndex:(int)roundf(PropF(waveChannelStr))
+										amplitude:1.0 
+										driftSpeed:PropF(@"drift")
+										smoothing:PropF(@"smoothing")
+										freqeuncy:PropF(@"frequency")
+										random:0
+										offset: fmodf((ofGetElapsedTimef()*PropF(@"offset"))+(iVoice/(NUM_VOICES+1.0)), 1.0)
+										withFormerArray:currentWave
+										];
+			
+			[waves replaceObjectAtIndex:iVoice withObject:newWave];
+			
+			if ([newWave count] > 0) {
 				waveForm[iVoice]->clear();
-				for (int i=0; i < [wave count]; i++) {
-					waveForm[iVoice]->push_back([[wave objectAtIndex:i] floatValue]);
+				for (int i=0; i < [newWave count]; i++) {
+					waveForm[iVoice]->push_back([[newWave objectAtIndex:i] floatValue]);
 				}
 				
 			}
@@ -273,11 +289,19 @@
 		
 		ofSetColor(255, 255, 255, 255);
 		ofFill();
-		ofRect(0, 0, [self aspect], 1);
+		ofRect(0, -PropF(@"floorDepth"), [self aspect], 1+PropF(@"floorDepth"));
+		glPushMatrix();{
+			glTranslated(0, -PropF(@"floorDepth"),0);
+			glScaled(1.0/400.0, (1.0+PropF(@"floorDepth"))/400.0,0);
+			[self drawCloth:&fbo.getTexture(0) showGrid:NO];
+		}glPopMatrix();
 		
-		glScaled(1.0/400.0, 1.0/400.0,0);
-		
-		[self drawCloth:&fbo.getTexture(0) showGrid:NO];
+		ofSetColor(0,0,0,255);
+		ofFill();
+		ofRect(-2.0, -PropF(@"floorDepth"), 4.0+[self aspect], -2.0); // top
+		ofRect(-2.0, 1.0, 4.0+[self aspect], 2.0); // bottom
+		ofRect(-2.0, -PropF(@"floorDepth"), 2.0, 4.0+PropF(@"floorDepth")); // left
+		ofRect([self aspect], -PropF(@"floorDepth"), 4.0+[self aspect], 4.0+PropF(@"floorDepth")); // right
 		
 	} PopSurface();
 	
@@ -359,9 +383,9 @@
 		}
 	}
 	
-
+	
 	ofSetColor(255,255,255,255);
-
+	
 	ref->bind();
 	for (int i = 0; i < grid; i++)
 	{
