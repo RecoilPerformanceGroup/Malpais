@@ -58,6 +58,7 @@
 		7FD2E9661306D51600B274C9 /* fft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FD2E9641306D51600B274C9 /* fft.cpp */; };
 		7FD2EC4D130982E600B274C9 /* Umbilical.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7FD2EC4C130982E600B274C9 /* Umbilical.mm */; };
 		7FD2EC7013098D9D00B274C9 /* Umbilical.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7FD2EC6F13098D9D00B274C9 /* Umbilical.xib */; };
+		DD040ABF131AEF86004F7AFE /* QLabController.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD040ABE131AEF86004F7AFE /* QLabController.mm */; };
 		DD0A21DD12EF0F6D0068DCF1 /* DCAudioRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0A21DB12EF0F6D0068DCF1 /* DCAudioRecorder.cpp */; };
 		DD0A229D12EF1CA10068DCF1 /* CARingBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD0A229B12EF1CA10068DCF1 /* CARingBuffer.cpp */; };
 		DD2561DA12F3268D00BD0498 /* FysiskeReaktioner.mm in Sources */ = {isa = PBXBuildFile; fileRef = DD2561D912F3268D00BD0498 /* FysiskeReaktioner.mm */; };
@@ -170,6 +171,7 @@
 		DDC8E7941137338900574926 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC8E7921137338900574926 /* Cocoa.framework */; };
 		DDC8E7BA113733E600574926 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDC8E7B9113733E600574926 /* QuartzCore.framework */; };
 		DDD2A30E114EB48500F4FEE6 /* GraphKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDD2A30D114EB48400F4FEE6 /* GraphKit.framework */; };
+		DDD8293D131AA42200317219 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDD8293C131AA42200317219 /* ScriptingBridge.framework */; };
 		DDE0386B12E9B2CA0068E569 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDE0386A12E9B2CA0068E569 /* AudioUnit.framework */; };
 		DDF874DB114AB393004B2FE2 /* GraphIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF874DA114AB393004B2FE2 /* GraphIcon.png */; };
 		DDF87535114ABE89004B2FE2 /* GraphIcoMarked.png in Resources */ = {isa = PBXBuildFile; fileRef = DDF87534114ABE89004B2FE2 /* GraphIcoMarked.png */; };
@@ -184,7 +186,7 @@
 		E45BE9810E8CC7DD009D7055 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9770E8CC7DD009D7055 /* CoreServices.framework */; };
 		E45BE9830E8CC7DD009D7055 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9790E8CC7DD009D7055 /* OpenGL.framework */; };
 		E45BE9840E8CC7DD009D7055 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */; };
-		E4C2422B10CC554B004149E2 /* openFrameworks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2421E10CC549C004149E2 /* openFrameworks.a */; };
+		E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */; };
 		E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424410CC5A17004149E2 /* AppKit.framework */; };
 		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
 		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
@@ -337,6 +339,9 @@
 		7FD2EC4B130982E600B274C9 /* Umbilical.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Umbilical.h; path = Umbilical/Umbilical.h; sourceTree = "<group>"; };
 		7FD2EC4C130982E600B274C9 /* Umbilical.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Umbilical.mm; path = Umbilical/Umbilical.mm; sourceTree = "<group>"; };
 		7FD2EC6F13098D9D00B274C9 /* Umbilical.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Umbilical.xib; path = Umbilical/Umbilical.xib; sourceTree = "<group>"; };
+		DD040AAF131AE5FD004F7AFE /* QLab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QLab.h; sourceTree = "<group>"; };
+		DD040ABD131AEF86004F7AFE /* QLabController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QLabController.h; sourceTree = "<group>"; };
+		DD040ABE131AEF86004F7AFE /* QLabController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = QLabController.mm; sourceTree = "<group>"; };
 		DD0A21DB12EF0F6D0068DCF1 /* DCAudioRecorder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DCAudioRecorder.cpp; sourceTree = "<group>"; };
 		DD0A21DC12EF0F6D0068DCF1 /* DCAudioRecorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCAudioRecorder.h; sourceTree = "<group>"; };
 		DD0A229B12EF1CA10068DCF1 /* CARingBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CARingBuffer.cpp; path = Extras/CoreAudio/PublicUtility/CARingBuffer.cpp; sourceTree = SYSTEM_DEVELOPER_DIR; };
@@ -677,6 +682,7 @@
 		DDC8E87B1137360D00574926 /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
 		DDC8EA5E113809B100574926 /* PluginIncludes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PluginIncludes.h; sourceTree = "<group>"; };
 		DDD2A30D114EB48400F4FEE6 /* GraphKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GraphKit.framework; path = /System/Library/PrivateFrameworks/GraphKit.framework; sourceTree = "<absolute>"; };
+		DDD8293C131AA42200317219 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		DDE0386A12E9B2CA0068E569 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		DDF874DA114AB393004B2FE2 /* GraphIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GraphIcon.png; sourceTree = "<group>"; };
 		DDF87534114ABE89004B2FE2 /* GraphIcoMarked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GraphIcoMarked.png; sourceTree = "<group>"; };
@@ -722,7 +728,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E4C2422B10CC554B004149E2 /* openFrameworks.a in Frameworks */,
+				E4C2422B10CC554B004149E2 /* openFrameworksDebug.a in Frameworks */,
 				E45BE0AA0E8CC67C009D7055 /* GLee.a in Frameworks */,
 				E45BE2E40E8CC69C009D7055 /* rtAudio.a in Frameworks */,
 				E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */,
@@ -760,6 +766,7 @@
 				DDE0386B12E9B2CA0068E569 /* AudioUnit.framework in Frameworks */,
 				DD6DCD1D12E9B48400F2B664 /* CoreServices.framework in Frameworks */,
 				33D7296412F85998009CD4A3 /* libOpenNI.dylib in Frameworks */,
+				DDD8293D131AA42200317219 /* ScriptingBridge.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1776,12 +1783,15 @@
 		DDB7C1D712AD16C000197290 /* PluginManager */ = {
 			isa = PBXGroup;
 			children = (
+				DD040AAF131AE5FD004F7AFE /* QLab.h */,
 				DDB7C1D812AD16C000197290 /* Plugin.h */,
 				DDB7C1D912AD16C000197290 /* Plugin.mm */,
 				DDB7C1DA12AD16C000197290 /* PluginManagerController.h */,
 				DDB7C1DB12AD16C000197290 /* PluginManagerController.mm */,
 				DDB7C1DC12AD16C000197290 /* PluginProperty.h */,
 				DDB7C1DD12AD16C000197290 /* PluginProperty.mm */,
+				DD040ABD131AEF86004F7AFE /* QLabController.h */,
+				DD040ABE131AEF86004F7AFE /* QLabController.mm */,
 				DDB7C1DE12AD16C000197290 /* Properties */,
 			);
 			path = PluginManager;
@@ -1880,6 +1890,7 @@
 				DD6DCD1C12E9B48400F2B664 /* CoreServices.framework */,
 				DDE0386A12E9B2CA0068E569 /* AudioUnit.framework */,
 				E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */,
+				DDD8293C131AA42200317219 /* ScriptingBridge.framework */,
 				E45BEED60E8CCB34009D7055 /* core */,
 			);
 			name = libs;
@@ -2077,7 +2088,7 @@
 		E4C2421710CC549C004149E2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E4C2421E10CC549C004149E2 /* openFrameworks.a */,
+				E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2214,10 +2225,10 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		E4C2421E10CC549C004149E2 /* openFrameworks.a */ = {
+		E4C2421E10CC549C004149E2 /* openFrameworksDebug.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = openFrameworks.a;
+			path = openFrameworksDebug.a;
 			remoteRef = E4C2421D10CC549C004149E2 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -2404,6 +2415,7 @@
 				DD95E789131312D50032A86D /* ofxPhysics2d.cpp in Sources */,
 				DD95E78A131312D50032A86D /* ofxParticle.cpp in Sources */,
 				33F793D91313D4EB009414EA /* Statestik.mm in Sources */,
+				DD040ABF131AEF86004F7AFE /* QLabController.mm in Sources */,
 				7F20475D131AEBEA00388BC3 /* Beach.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
