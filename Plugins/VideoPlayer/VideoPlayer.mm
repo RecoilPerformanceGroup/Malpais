@@ -7,7 +7,8 @@
 
 -(void) initPlugin{	
 	NSLog(@"Init videplayer");
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:-1 minValue:-1 maxValue:2] named:@"video"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:NUMVIDEOS] named:@"video"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"chapter"];	
 	
 	lastFramesVideo = 0;
 	forceDrawNextFrame = NO;
@@ -21,7 +22,7 @@
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
 	if(object == Prop(@"video")){		
-		if(PropI(@"video") < 0){			
+		if(PropI(@"video") == 0){			
 			NSLog(@"Reset video");
 			dispatch_async(dispatch_get_main_queue(), ^{		
 				for(int i=0;i<NUMVIDEOS;i++){				
@@ -31,7 +32,48 @@
 					}
 				}
 				forceDrawNextFrame = YES;
+				
+				[chapterSelector removeAllItems];
+				[chapterSelector addItemWithTitle:@" - No Chapters - "];
+				[((NumberProperty*) Prop(@"chapter")) setMaxValue:[NSNumber numberWithInt:0]];
+				[Prop(@"chapter") setIntValue:0];
+
 			});			
+		} else {
+			dispatch_async(dispatch_get_main_queue(), ^{	
+				if(movie[PropI(@"video")-1]){
+					QTMovie * mov = movie[PropI(@"video")-1];
+					
+					[chapterSelector removeAllItems];				
+					if([mov chapterCount] > 0){
+						for(NSDictionary * dict in [mov chapters]){
+							[chapterSelector addItemWithTitle:[dict valueForKey:QTMovieChapterName]];
+						}
+						[((NumberProperty*) Prop(@"chapter")) setMaxValue:[NSNumber numberWithInt:[mov chapterCount]-1]];
+						[Prop(@"chapter") setIntValue:0];
+					} else {
+						[chapterSelector addItemWithTitle:@" - No Chapters - "];
+						[((NumberProperty*) Prop(@"chapter")) setMaxValue:[NSNumber numberWithInt:0]];
+						[Prop(@"chapter") setIntValue:0];
+					}
+					
+				}
+			});			
+			
+		}
+	}
+	
+	if(object == Prop(@"chapter")){
+		if(PropI(@"video") != 0){	
+			QTMovie * mov = movie[PropI(@"video")-1];
+			if([mov hasChapters]){
+				dispatch_async(dispatch_get_main_queue(), ^{	
+					NSLog(@"Change chapter");
+					[mov setCurrentTime:[mov startTimeOfChapter:PropI(@"chapter")]];
+					[mov setRate:1.0];
+
+				});
+			}
 		}
 	}
 }
@@ -43,7 +85,7 @@
 
 
 -(IBAction) restart:(id)sender{
-	[movie[PropI(@"video")] setCurrentTime:QTMakeTime(0, 60)];	
+	[movie[PropI(@"video")-1] setCurrentTime:QTMakeTime(0, 60)];	
 }
 
 //
@@ -81,24 +123,24 @@
 //
 
 -(BOOL) willDraw:(NSMutableDictionary *)drawingInformation{
-	if(PropI(@"video") >= 0 && PropI(@"video") < NUMVIDEOS){
-		QTVisualContextTask(textureContext[PropI(@"video")]);
+	if(PropI(@"video") > 0 && PropI(@"video") <= NUMVIDEOS){
+		QTVisualContextTask(textureContext[PropI(@"video")-1]);
 		
 		if(forceDrawNextFrame){
 			forceDrawNextFrame = NO;
 			return YES;
 		}
 		
-		if([movie[int(PropF(@"video"))] rate] != 1){
+		/*if([movie[PropI(@"video")-1] rate] != 1){
 			dispatch_async(dispatch_get_main_queue(), ^{				
-				[movie[int(PropF(@"video"))] setRate:1]; 
+				[movie[PropI(@"video")-1] setRate:1]; 
 			});
-		}
+		}*/
 		
 		const CVTimeStamp * outputTime;
 		[[drawingInformation objectForKey:@"outputTime"] getValue:&outputTime];
-		if(textureContext[int(PropF(@"video"))] != nil)
-			return QTVisualContextIsNewImageAvailable(textureContext[int(PropF(@"video"))], outputTime);
+		if(textureContext[PropI(@"video")-1] != nil)
+			return QTVisualContextIsNewImageAvailable(textureContext[PropI(@"video")-1], outputTime);
 		return NO;	
 	} else {
 		return NO;	
@@ -111,7 +153,7 @@
 
 -(void) setup{	
 	NSLog(@"Setup video");
-	[Prop(@"video") setFloatValue:-1];
+	[Prop(@"video") setFloatValue:0];
 	dispatch_async(dispatch_get_main_queue(), ^{	
 		NSError * error = [NSError alloc];			
 		
@@ -148,10 +190,10 @@
 				GetMediaSampleDescription([[[[movie[i] tracks] lastObject] media] quickTimeMedia], 1,
 										  (SampleDescriptionHandle)videoTrackDescH);
 				bzero(codecType, 5);           
-                memcpy((void *)&codecTypeNum, (const void *)&((*(ImageDescriptionHandle)videoTrackDescH)->cType), 4);
-                codecTypeNum = EndianU32_LtoB( codecTypeNum );
-                memcpy(codecType, (const void*)&codecTypeNum, 4);
-                codecTypeString = [NSString stringWithFormat:@"%s", codecType];
+				memcpy((void *)&codecTypeNum, (const void *)&((*(ImageDescriptionHandle)videoTrackDescH)->cType), 4);
+				codecTypeNum = EndianU32_LtoB( codecTypeNum );
+				memcpy(codecType, (const void*)&codecTypeNum, 4);
+				codecTypeString = [NSString stringWithFormat:@"%s", codecType];
 				if([codecTypeString isEqualToString:@"jpeg"]){
 					codecTypeString = @"JPEG";
 				} 
@@ -165,6 +207,7 @@
 												  [NSString stringWithFormat:@"%dx%d",(*(ImageDescriptionHandle)videoTrackDescH)->width,(*(ImageDescriptionHandle)videoTrackDescH)->height],@"size",
 												  codecTypeString, @"codec",
 												  QTStringFromTime([movie[i] duration]),@"duration",
+												  [NSNumber numberWithInt:[movie[i] chapterCount]],@"chapters",
 												  nil]];
 				
 				NSLog(@"Loaded %@",[NSString stringWithFormat:@"%@/%@.mov",basePath,fileNumber]);
@@ -187,6 +230,17 @@
 			[movie[i] setVisualContext:textureContext[i]];
 		}
 		
+		[videoSelector removeAllItems];
+		[videoSelector addItemWithTitle:@" - No video - "];
+		
+		for(NSDictionary * dict in [loadedFilesController content]){
+			[videoSelector addItemWithTitle:[dict valueForKey:@"name"]];
+		}
+		
+		
+		[chapterSelector removeAllItems];
+		[chapterSelector addItemWithTitle:@" - No Chapters - "];
+		
 	});		
 	
 	//
@@ -202,14 +256,39 @@
 	const CVTimeStamp * outputTime;
 	[[drawingInformation objectForKey:@"outputTime"] getValue:&outputTime];	
 	
-	if([movie[PropI(@"video")] currentTime].timeValue >= [movie[PropI(@"video")] duration].timeValue-0.1*[movie[PropI(@"video")] duration].timeScale){
+	if([movie[PropI(@"video")-1] currentTime].timeValue >= [movie[PropI(@"video")-1] duration].timeValue-0.1*[movie[PropI(@"video")-1] duration].timeScale){
 		//Videoen er nået til ende, så gå til næste video
-		[Prop(@"video") setIntValue:-1	];
+		[Prop(@"video") setIntValue:0];
 	}		
 	
 	
-	if(PropI(@"video") >= 0 && PropI(@"video") < NUMVIDEOS){
-		int i = PropF(@"video");	
+	
+	if([movie[PropI(@"video")-1] hasChapters]){
+	//	NSLog(@"Selected chapter: %i,  number chapter: %i,  currentChapter: %i",PropI(@"chapter"), [movie[PropI(@"video")-1] chapterCount], [movie[PropI(@"video")-1] chapterIndexForTime:[movie[PropI(@"video")-1] currentTime]] );
+		int currentChapter = [movie[PropI(@"video")-1] chapterIndexForTime:QTTimeIncrement([movie[PropI(@"video")-1] currentTime],QTMakeTime(1, 30))];
+		int numberChapters = [movie[PropI(@"video")-1] chapterCount];
+		int selectedChapter = PropI(@"chapter");
+		if(currentChapter == numberChapters)
+			currentChapter --;
+		
+		if(currentChapter == selectedChapter + 1){
+			dispatch_async(dispatch_get_main_queue(), ^{
+				
+				if(selectedChapter + 1 < numberChapters){					
+					[movie[PropI(@"video")-1] setCurrentTime:QTTimeDecrement([movie[PropI(@"video")-1] startTimeOfChapter:PropI(@"chapter")+1],QTMakeTime(2, 30))];
+				}
+				
+				[movie[PropI(@"video")-1] setRate:0.0];
+				NSLog(@"End of chapter.");
+			});
+		}
+		
+		
+	}
+	
+	
+	if(PropI(@"video") > 0 && PropI(@"video") <= NUMVIDEOS){
+		int i = PropI(@"video")-1;	
 		
 		if(movie[i] != nil){
 			if(lastFramesVideo != i){
@@ -259,10 +338,10 @@
 }
 
 -(void) draw:(NSDictionary*)drawingInformation{
-	if(PropI(@"video") >= 0 && PropI(@"video") < NUMVIDEOS){
+	if(PropI(@"video") > 0 && PropI(@"video") <= NUMVIDEOS){
 		
 		//	NSLog(@"Draw");
-		int i = PropF(@"video");
+		int i = PropI(@"video")-1;
 		
 		if(currentFrame[i] != nil ){		
 			//Draw video
@@ -280,12 +359,13 @@
 			ofSetColor(255,255, 255, 255);						
 			glPushMatrix();
 			
+			float aspect = Aspect(@"Wall",0);
 			[GetPlugin(Keystoner)  applySurface:@"Wall" projectorNumber:0 viewNumber:ViewNumber];
 			//		ApplySurface(([NSString stringWithFormat:@"Skærm%i",i+1])){
 			glBegin(GL_QUADS);{
 				glTexCoord2f(topLeft[0], topLeft[1]);  glVertex2f(0, 0);
-				glTexCoord2f(topRight[0], topRight[1]);     glVertex2f(1,  0);
-				glTexCoord2f(bottomRight[0], bottomRight[1]);    glVertex2f(1,  1);
+				glTexCoord2f(topRight[0], topRight[1]);     glVertex2f(aspect,  0);
+				glTexCoord2f(bottomRight[0], bottomRight[1]);    glVertex2f(aspect,  1);
 				glTexCoord2f(bottomLeft[0], bottomLeft[1]); glVertex2f( 0, 1);
 			}glEnd();
 			

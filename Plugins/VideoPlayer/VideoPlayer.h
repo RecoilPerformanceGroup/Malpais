@@ -25,6 +25,10 @@
 	NSMutableArray * loadedFiles;
 	IBOutlet NSArrayController * loadedFilesController;
 	BOOL cancelReboot;
+	
+	IBOutlet NSPopUpButton * videoSelector;
+	IBOutlet NSPopUpButton * chapterSelector;
+
 }
 
 @property (readwrite, retain) NSMutableArray * loadedFiles;
