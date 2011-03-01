@@ -15,9 +15,9 @@
 -(void) initPlugin{
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"rollSmooth"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"rollSpread"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"roll"];
-	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"spread"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"rollPos"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2.0] named:@"drawMode"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"amplitude"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"alpha"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1000.0] named:@"resolution"];
@@ -45,7 +45,7 @@
 	waves = [NSMutableArray array];
 	
 	for (int i = 0; i < NUM_VOICES+1; i++) {
-		waveForm[i] =  new MSA::Interpolator1D;
+		waveForm[i] = new MSA::Interpolator1D;
 		waveForm[i]->reserve((int)roundf(PropF(@"resolution")));
 		
 		NSMutableArray * aVoice = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
@@ -55,6 +55,8 @@
 		}
 		
 		[waves addObject:aVoice];
+		waveFormYpos[i] = PropF(@"rollPos");
+		
 	}
 	
 }
@@ -63,6 +65,16 @@
 -(void) update:(NSDictionary *)drawingInformation{
 	
 	int resolution = (int)roundf(PropF(@"resolution"));
+	
+	float rollPos = PropF(@"rollPos");
+	
+	cout << rollPos << endl;
+	
+	rollPosHistory.push_back(rollPos);
+	
+	if (rollPosHistory.size() > ROLL_POS_HISTORY_LENGTH) {
+		rollPosHistory.erase(rollPosHistory.begin());
+	}
 	
 	for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
 		
@@ -103,26 +115,39 @@
 
 -(void) draw:(NSDictionary *)drawingInformation{
 	
+	float spread = PropF(@"spread");
+	double rollPosSmoothing = 1.0-powf((1.0-sqrt(PropF(@"rollSmooth"))), 2.5);
 	
 	ApplySurface(@"Floor");{
 		
-		ofSetColor(255, 255, 255, 255);
+		ofSetColor(255, 255, 255, 255*PropF(@"alpha"));
 		ofFill();
-		ofRect(0, -PropF(@"floorDepth"), [self aspect], 1+PropF(@"floorDepth"));
-
-		ofSetColor(0, 0, 0, 255);
 		
 		glPushMatrix();{
-			glTranslated(0, 0.5/(NUM_VOICES+1), 0);
 			
 			for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
+				
+				int myHistoryIndex = ROLL_POS_HISTORY_LENGTH-(int)roundf(spread*(ROLL_POS_HISTORY_LENGTH/(NUM_VOICES+1.0))*(iVoice+1));
+				
+				float newYpos;
+				
+				if (rollPosHistory.size() > myHistoryIndex) {
+					newYpos = rollPosHistory[myHistoryIndex];
+				} else {
+					newYpos = rollPosHistory[0];
+				}
+				
+				waveFormYpos[iVoice] = (rollPosSmoothing*waveFormYpos[iVoice])+((1.0-rollPosSmoothing)*newYpos);
+				
+				if (iVoice > 0) {
+					waveFormYpos[iVoice] = ((rollPosSmoothing*0.1)*waveFormYpos[iVoice-1])+((1.0-(rollPosSmoothing*0.1))*waveFormYpos[iVoice]); 
+				}
 				
 				NSString * waveOnStr = [NSString stringWithFormat:@"wave%iOn",iVoice];
 				
 				if (PropB(waveOnStr)) {
-					float yPos = (1.0/(NUM_VOICES+1))*iVoice;
-					ofxPoint2f * startP = new ofxPoint2f(0,yPos);
-					ofxPoint2f * endP = new ofxPoint2f(1.0*[self aspect],yPos);
+					ofxPoint2f * startP = new ofxPoint2f(0,waveFormYpos[iVoice]);
+					ofxPoint2f * endP = new ofxPoint2f(1.0*[self aspect],waveFormYpos[iVoice]);
 					[self drawWave:iVoice from:startP to:endP];
 					delete startP;
 					delete endP;
@@ -130,7 +155,6 @@
 			}
 			
 		} glPopMatrix();
-		
 		
 		ofSetColor(0,0,0,255);
 		ofFill();
@@ -152,15 +176,15 @@
 	
 	ofBeginShape();
 	
-	ofVertex(0, [self aspect]);
+	ofVertex([self aspect], 0);
 	ofVertex(0, 0);
 	
 	glPushMatrix();{
 		
 		ofFill();
 		
-//		glTranslated(begin->x,begin->y, 0);
-//		glRotated(-v1.angle(v2)+90, 0, 0, 1);
+		//		glTranslated(begin->x,begin->y, 0);
+		//		glRotated(-v1.angle(v2)+90, 0, 0, 1);
 		
 		int resolution = PropI(@"resolution");
 		float amplitude = PropF(@"amplitude");
@@ -169,7 +193,7 @@
 			float x = 1.0/resolution*i;
 			
 			if (i < resolution) {
-				ofxPoint2f p = ofxPoint2f(x*length, waveForm[iVoice]->sampleAt(x)*amplitude);
+				ofxPoint2f p = ofxPoint2f(x*length, (begin->y+(waveForm[iVoice]->sampleAt(x))*amplitude));
 				ofVertex(p.x, p.y);
 			}
 			
@@ -177,8 +201,8 @@
 		
 	} glPopMatrix();
 	
-	ofEndShape();
-
+	ofEndShape(true);
+	
 }
 
 -(float) aspect{
