@@ -12,11 +12,14 @@
 #include "Wave.h"
 #include "ofxPoint2f.h"
 
+#define ROLL_POS_HISTORY_LENGTH 600
+
 @interface Beach : ofPlugin {
 	
 	MSA::Interpolator1D	* waveForm[NUM_VOICES+1];
-	
+	float waveFormYpos[NUM_VOICES+1];
 	NSMutableArray * waves;
+	vector<float> rollPosHistory;
 	
 }
 
