@@ -32,7 +32,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1000.0] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:10.0] named:@"frequency"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10.0 minValue:-10.0 maxValue:10.0] named:@"drift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.02 minValue:-2.0 maxValue:2.0] named:@"drift"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-1.0 maxValue:1.0] named:@"direction"];
 	for (int i = 0; i < NUM_VOICES+1; i++) {
 		[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named: 
@@ -41,7 +41,7 @@
 		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:
 		 [NSString stringWithFormat:@"wave%iChannel",i]
 		 ];
-		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:
+		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:
 		 [NSString stringWithFormat:@"wave%ilength",i]
 		 ];
 	}
@@ -59,11 +59,21 @@
 
 -(void) setup{	
 	
+	waves = [NSMutableArray arrayWithCapacity:NUM_VOICES+1];
+	
 	for (int i = 0; i < NUM_VOICES+1; i++) {
 		distortion[i] = new MSA::Interpolator1D;
 		distortion[i]->reserve((int)roundf(PropF(@"resolution")));
 		waveForm[i] =  new MSA::Interpolator1D;
 		waveForm[i]->reserve((int)roundf(PropF(@"resolution")));
+		
+		NSMutableArray * aVoice = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
+		
+		for(int i=0;i<MAX_RESOLUTION;i++){
+			[aVoice addObject:[NSNumber numberWithDouble:0.0]];
+		}
+		
+		[waves addObject:aVoice];
 		
 		bool notOk = true;
 		while(notOk){
@@ -96,7 +106,7 @@
 			for(int i=0;i<PropI(@"resolution");i++){
 				float x = (float)i/PropI(@"resolution");
 				float offset = 0;			
-				if(PropF(@"endpointPushForce") > 0){
+				if(PropF(@"endpointPushForce") > 0 && iVoice != 0){
 					//Ved det er snyd, men skal finde afstand til endpoint, og snyder
 					ofxPoint2f thisPoint = ofxPoint2f(waveX[iVoice], x);
 					float dir = 1;
@@ -145,9 +155,11 @@
 					freqeuncy:PropF(@"frequency")
 					random:0
 					offset:0
-					withFormerArray:waves[iVoice]
+					withFormerArray:[waves objectAtIndex:iVoice]
 					];
 						
+			[waves replaceObjectAtIndex:iVoice withObject:wave]; 
+			
 			float direction = PropF(@"direction");
 			
 			if(direction < 0){
@@ -157,6 +169,7 @@
 					newDistortion->push_back(distortion[iVoice]->getData()[i]);
 				}
 				distortion[iVoice]->clear();
+				delete distortion[iVoice];
 				distortion[iVoice] = newDistortion;
 			}
 			
@@ -177,6 +190,7 @@
 					newDistortion->push_back(distortion[iVoice]->getData()[i]);
 				}
 				distortion[iVoice]->clear();
+				delete distortion[iVoice];
 				distortion[iVoice] = newDistortion;
 			}
 			
@@ -187,6 +201,7 @@
 					newDistortion->push_back(distortion[iVoice]->getData()[i]);
 				}
 				distortion[iVoice]->clear();
+				delete distortion[iVoice];
 				distortion[iVoice] = newDistortion;
 			}
 			
@@ -198,6 +213,7 @@
 				newDistortion->push_back(distortion[iVoice]->getData()[i]);
 			}
 			distortion[iVoice]->clear();
+			delete distortion[iVoice];
 			distortion[iVoice] = newDistortion;			
 		}	
 		
@@ -265,7 +281,7 @@
 			
 			if (i < segments) {
 				float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
-				ofxPoint2f p = ofxPoint2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
+				ofxPoint2f p = ofxPoint2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x*length)*(1.0-weighLiveOrBuffer)))*amplitude*f);
 				ofxVec2f v = p - lastPoint;
 				ofxVec2f h = ofxVec2f(-v.y,v.x);
 				h.normalize();
@@ -333,7 +349,7 @@
 	
 	if(mouseh != -1){
 		ofEnableAlphaBlending();
-		if(mouseh){
+		if(mouseh != 0){
 			ofNoFill();
 		} else {
 			ofFill();
@@ -341,11 +357,13 @@
 		ofSetColor(255, 255, 0,100);
 		ofEllipse(mousex*200.0*(1.0/[self aspect]), mousey*400.0, 15, 15);
 	}
-	
+
+	ofFill();
+
 	ofSetColor(255, 0, 255,100);
 	ofEllipse(startPos.x*200*(1.0/[self aspect]), startPos.y*400, 15, 15);
 	ofEllipse(endPos.x*200*(1.0/[self aspect]), endPos.y*400, 15, 15);
-	
+
 	
 	glPushMatrix();{
 		

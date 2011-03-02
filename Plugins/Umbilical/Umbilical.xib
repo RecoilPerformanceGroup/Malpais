@@ -214,7 +214,7 @@
 					<object class="NSSlider" id="310895917">
 						<reference key="NSNextResponder" ref="1005"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{30, 275}, {25, 260}}</string>
+						<string key="NSFrame">{{30, 114}, {25, 444}}</string>
 						<reference key="NSSuperview" ref="1005"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSSliderCell" key="NSCell" id="874786342">
