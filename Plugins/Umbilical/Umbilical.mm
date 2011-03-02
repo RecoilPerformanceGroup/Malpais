@@ -41,6 +41,9 @@
 		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:
 		 [NSString stringWithFormat:@"wave%iChannel",i]
 		 ];
+		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:
+		 [NSString stringWithFormat:@"wave%ilength",i]
+		 ];
 	}
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0.0 maxValue:1.0] named:@"startPosX"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"startPosY"];
@@ -142,6 +145,7 @@
 					freqeuncy:PropF(@"frequency")
 					random:0
 					offset:0
+					withFormerArray:waves[iVoice]
 					];
 						
 			float direction = PropF(@"direction");
@@ -284,8 +288,12 @@
 		[self drawWave:0 from:startPos to:endPos];
 		
 		for (int iVoice = 1; iVoice < NUM_VOICES+1; iVoice++) {
+			NSString * voiceLengthStr = [NSString stringWithFormat:@"wave%ilength",iVoice];
+			
+			float voiceLength = PropF(voiceLengthStr);
+			
 			ofxVec2f start = ofxVec2f(waveX[iVoice], 0.0);
-			ofxVec2f end = ofxVec2f(waveX[iVoice], 1.0);
+			ofxVec2f end = ofxVec2f(waveX[iVoice], voiceLength);
 			[self drawWave:iVoice from:start to:end];
 		}
 		

@@ -11,6 +11,7 @@
 
 	MSA::Interpolator1D		* distortion[NUM_VOICES+1];
 	MSA::Interpolator1D		* waveForm[NUM_VOICES+1];
+	MSA::Interpolator1D		* waves[NUM_VOICES+1];
 	
 	vector<float> offsets[NUM_VOICES +1];
 	
