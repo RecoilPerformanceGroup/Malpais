@@ -295,14 +295,14 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>17</integer>
-									<integer>15</integer>
+									<integer>45</integer>
+									<integer>39</integer>
 									<integer>14</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 10}, {284, 1024}}</string>
+							<string>{{0, 194}, {284, 1024}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -337,7 +337,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>7FBF1B3D12E49996009E32EF</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>Voice.mm</string>
+								<string>Wave.mm</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -345,11 +345,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>7FBF1B3E12E49996009E32EF</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>Voice.mm</string>
+										<string>Wave.mm</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7FAE27E7132010AB00F38926</string>
+										<string>7FAE27F31320180100F38926</string>
 										<key>history</key>
 										<array>
 											<string>7FBF1BBD12E49CC3009E32EF</string>
@@ -508,8 +508,8 @@
 											<string>7FAE2740131FEDBE00F38926</string>
 											<string>7FAE2748131FEDE800F38926</string>
 											<string>7FAE2750131FF08C00F38926</string>
-											<string>7FAE27E5132010AB00F38926</string>
-											<string>7FAE27E6132010AB00F38926</string>
+											<string>7FAE27ED1320165700F38926</string>
+											<string>7FAE27EE1320165700F38926</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -826,7 +826,6 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7FAE27E8132010AB00F38926</string>
 		<string>7FAE26D6131FB71C00F38926</string>
 		<string>7FAE26D7131FB71C00F38926</string>
 		<string>/Users/ole/Development/openFrameworks/apps/recoil/Malpais/malpais.xcodeproj</string>

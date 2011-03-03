@@ -501,7 +501,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 476";
 		rLen = 66;
-		rLoc = 13320;
+		rLoc = 13319;
 		rType = 0;
 		vrLen = 1376;
 		vrLoc = 12596;
@@ -863,9 +863,9 @@
 	};
 	7F8F6BA4130565580097D302 /* Wave.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1475, 8723}}";
-			sepNavSelRange = "{14254, 0}";
-			sepNavVisRange = "{10076, 815}";
+			sepNavIntBoundsRect = "{{0, 0}, {1475, 7761}}";
+			sepNavSelRange = "{5049, 0}";
+			sepNavVisRange = "{4530, 1432}";
 		};
 	};
 	7F8F6BF813057A710097D302 /* PBXTextBookmark */ = {
@@ -1114,7 +1114,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1475, 1469}}";
 			sepNavSelRange = "{2944, 0}";
-			sepNavVisRange = "{1821, 832}";
+			sepNavVisRange = "{1855, 865}";
 		};
 	};
 	7FAE26E8131FC82E00F38926 /* PBXTextBookmark */ = {
@@ -1281,7 +1281,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 453";
 		rLen = 0;
-		rLoc = 12620;
+		rLoc = 12619;
 		rType = 0;
 		vrLen = 819;
 		vrLoc = 12183;
@@ -1454,7 +1454,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 526";
 		rLen = 312;
-		rLoc = 14636;
+		rLoc = 14635;
 		rType = 0;
 		vrLen = 949;
 		vrLoc = 14763;
@@ -1556,7 +1556,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 544";
 		rLen = 0;
-		rLoc = 15252;
+		rLoc = 15251;
 		rType = 0;
 		vrLen = 819;
 		vrLoc = 12183;
@@ -1586,7 +1586,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 526";
 		rLen = 25;
-		rLoc = 14636;
+		rLoc = 14635;
 		rType = 0;
 		vrLen = 925;
 		vrLoc = 14436;
@@ -1763,7 +1763,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 526";
 		rLen = 58;
-		rLoc = 14616;
+		rLoc = 14615;
 		rType = 0;
 		vrLen = 724;
 		vrLoc = 14990;
@@ -1773,7 +1773,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 530";
 		rLen = 0;
-		rLoc = 14794;
+		rLoc = 14793;
 		rType = 0;
 		vrLen = 755;
 		vrLoc = 15059;
@@ -1913,7 +1913,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 453";
 		rLen = 0;
-		rLoc = 12620;
+		rLoc = 12619;
 		rType = 0;
 		vrLen = 954;
 		vrLoc = 14687;
@@ -1950,7 +1950,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 530";
 		rLen = 0;
-		rLoc = 14794;
+		rLoc = 14793;
 		rType = 0;
 		vrLen = 804;
 		vrLoc = 15059;
@@ -2000,7 +2000,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 122";
 		rLen = 0;
-		rLoc = 5031;
+		rLoc = 5030;
 		rType = 0;
 		vrLen = 1344;
 		vrLoc = 4633;
@@ -2020,7 +2020,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 411";
 		rLen = 0;
-		rLoc = 11493;
+		rLoc = 11492;
 		rType = 0;
 		vrLen = 1006;
 		vrLoc = 10895;
@@ -2030,7 +2030,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 403";
 		rLen = 0;
-		rLoc = 11270;
+		rLoc = 11269;
 		rType = 0;
 		vrLen = 1085;
 		vrLoc = 11091;
@@ -2040,7 +2040,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 403";
 		rLen = 0;
-		rLoc = 11270;
+		rLoc = 11269;
 		rType = 0;
 		vrLen = 1085;
 		vrLoc = 11091;
@@ -2050,7 +2050,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 497";
 		rLen = 0;
-		rLoc = 14117;
+		rLoc = 14116;
 		rType = 0;
 		vrLen = 1129;
 		vrLoc = 13532;
@@ -2060,7 +2060,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 495";
 		rLen = 0;
-		rLoc = 13996;
+		rLoc = 13995;
 		rType = 0;
 		vrLen = 1057;
 		vrLoc = 13623;
@@ -2070,7 +2070,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 495";
 		rLen = 0;
-		rLoc = 13996;
+		rLoc = 13995;
 		rType = 0;
 		vrLen = 1014;
 		vrLoc = 13685;
@@ -2080,7 +2080,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 495";
 		rLen = 0;
-		rLoc = 13996;
+		rLoc = 13995;
 		rType = 0;
 		vrLen = 1011;
 		vrLoc = 13696;
@@ -2090,7 +2090,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 495";
 		rLen = 0;
-		rLoc = 14117;
+		rLoc = 14116;
 		rType = 0;
 		vrLen = 1079;
 		vrLoc = 13532;
@@ -2100,7 +2100,7 @@
 		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
 		name = "Wave.mm: 503";
 		rLen = 0;
-		rLoc = 14254;
+		rLoc = 14253;
 		rType = 0;
 		vrLen = 815;
 		vrLoc = 10076;
@@ -2124,6 +2124,46 @@
 		rType = 0;
 		vrLen = 832;
 		vrLoc = 1821;
+	};
+	7FAE27ED1320165700F38926 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7FAE26E0131FBC0500F38926 /* Voice.mm */;
+		name = "Voice.mm: 94";
+		rLen = 0;
+		rLoc = 2944;
+		rType = 0;
+		vrLen = 865;
+		vrLoc = 1855;
+	};
+	7FAE27EE1320165700F38926 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
+		name = "Wave.mm: 503";
+		rLen = 0;
+		rLoc = 14253;
+		rType = 0;
+		vrLen = 809;
+		vrLoc = 10082;
+	};
+	7FAE27EF1320165700F38926 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
+		name = "Wave.mm: 122";
+		rLen = 0;
+		rLoc = 5032;
+		rType = 0;
+		vrLen = 1369;
+		vrLoc = 4530;
+	};
+	7FAE27F31320180100F38926 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 7F8F6BA4130565580097D302 /* Wave.mm */;
+		name = "Wave.mm: 122";
+		rLen = 0;
+		rLoc = 5049;
+		rType = 0;
+		vrLen = 1432;
+		vrLoc = 4530;
 	};
 	7FAEBA76130E9153009A1AEB /* PlistBookmark */ = {
 		isa = PlistBookmark;
@@ -3927,6 +3967,10 @@
 			7FAE27E5132010AB00F38926 /* PBXTextBookmark */ = 7FAE27E5132010AB00F38926 /* PBXTextBookmark */;
 			7FAE27E6132010AB00F38926 /* PBXTextBookmark */ = 7FAE27E6132010AB00F38926 /* PBXTextBookmark */;
 			7FAE27E7132010AB00F38926 /* PBXTextBookmark */ = 7FAE27E7132010AB00F38926 /* PBXTextBookmark */;
+			7FAE27ED1320165700F38926 /* PBXTextBookmark */ = 7FAE27ED1320165700F38926 /* PBXTextBookmark */;
+			7FAE27EE1320165700F38926 /* PBXTextBookmark */ = 7FAE27EE1320165700F38926 /* PBXTextBookmark */;
+			7FAE27EF1320165700F38926 /* PBXTextBookmark */ = 7FAE27EF1320165700F38926 /* PBXTextBookmark */;
+			7FAE27F31320180100F38926 /* PBXTextBookmark */ = 7FAE27F31320180100F38926 /* PBXTextBookmark */;
 			7FAEBA76130E9153009A1AEB = 7FAEBA76130E9153009A1AEB /* PlistBookmark */;
 			7FAEBA77130E9153009A1AEB = 7FAEBA77130E9153009A1AEB /* PBXBookmark */;
 			7FAEBA78130E9153009A1AEB = 7FAEBA78130E9153009A1AEB /* PBXTextBookmark */;

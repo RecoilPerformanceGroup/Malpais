@@ -119,7 +119,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		liveFFT.powerSpectrum(0, (int)liveSamples/2, [liveVoice getWaveData]-liveSamples, (int)liveSamples, &magnitude[0], &phase[0], &power[0], &avg_power);
 		float amplification = PropF(@"liveVoiceAmplification");
 		
-		int thresholds[] = {0,6,7,8,10,80,150,liveSamples/2};
+		int thresholds[] = {0,6,7,8,10,15,60,liveSamples/4};
 		
 		for (int iBand=0; iBand < NUM_BANDS; iBand++) {
 			float bandMagnitude= 0;
