@@ -68,8 +68,6 @@
 	
 	float rollPos = PropF(@"rollPos");
 	
-	cout << rollPos << endl;
-	
 	rollPosHistory.push_back(rollPos);
 	
 	if (rollPosHistory.size() > ROLL_POS_HISTORY_LENGTH) {

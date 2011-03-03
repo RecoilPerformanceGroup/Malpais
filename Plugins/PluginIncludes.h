@@ -13,6 +13,7 @@
 #include "VideoPlayer.h"
 #include "Statestik.h"
 #include "Beach.h"
+#include "Voice.h"
 
 #include "SceneX.h"
 //#include "Tracking.h"

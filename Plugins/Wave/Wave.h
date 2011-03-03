@@ -55,7 +55,7 @@
 								  offset:(float)offset
 						 withFormerArray:(NSMutableArray*)formerArray;
 
-- (NSMutableArray*) getWaveFormsWithIndex:(int)index 
+- (NSMutableArray*) getWaveFormBandsWithIndex:(int)index 
 								amplitude:(float)amplitude 
 							   driftSpeed:(float)driftSpeed
 								smoothing:(float)smoothing

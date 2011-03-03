@@ -53,6 +53,8 @@
 		7F521A7C12FB26AB00FEDF19 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 7F521A7B12FB26AB00FEDF19 /* icon.icns */; };
 		7F6A56A9130E7A3500844BEF /* ofxFbole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F6A56A7130E7A3500844BEF /* ofxFbole.cpp */; };
 		7F8F6BA5130565580097D302 /* Wave.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F8F6BA4130565580097D302 /* Wave.mm */; };
+		7FAE26E2131FBC0500F38926 /* Voice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE26E0131FBC0500F38926 /* Voice.mm */; };
+		7FAE26E3131FBC0500F38926 /* Voice.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7FAE26E1131FBC0500F38926 /* Voice.xib */; };
 		7FBF1BAA12E49AD2009E32EF /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C1C512AD16C000197290 /* BWToolkitFramework.framework */; };
 		7FBF1BD212E49E6F009E32EF /* libdc1394.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C19412AD16C000197290 /* libdc1394.a */; };
 		7FD2E9661306D51600B274C9 /* fft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FD2E9641306D51600B274C9 /* fft.cpp */; };
@@ -330,6 +332,9 @@
 		7F6A56A8130E7A3500844BEF /* ofxFbole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxFbole.h; sourceTree = "<group>"; };
 		7F8F6BA3130565580097D302 /* Wave.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Wave.h; sourceTree = "<group>"; };
 		7F8F6BA4130565580097D302 /* Wave.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Wave.mm; sourceTree = "<group>"; };
+		7FAE26DF131FBC0500F38926 /* Voice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Voice.h; path = Plugins/Voice/Voice.h; sourceTree = SOURCE_ROOT; };
+		7FAE26E0131FBC0500F38926 /* Voice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Voice.mm; path = Plugins/Voice/Voice.mm; sourceTree = SOURCE_ROOT; };
+		7FAE26E1131FBC0500F38926 /* Voice.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Voice.xib; path = Plugins/Voice/Voice.xib; sourceTree = SOURCE_ROOT; };
 		7FD2E9041306D0D700B274C9 /* AudioDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDevice.cpp; sourceTree = "<group>"; };
 		7FD2E9051306D0D700B274C9 /* AudioDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioDevice.h; sourceTree = "<group>"; };
 		7FD2E9061306D0D700B274C9 /* AudioDeviceList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDeviceList.cpp; sourceTree = "<group>"; };
@@ -960,6 +965,17 @@
 			);
 			path = src;
 			sourceTree = "<group>";
+		};
+		7FAE26DE131FBC0500F38926 /* Voice */ = {
+			isa = PBXGroup;
+			children = (
+				7FAE26DF131FBC0500F38926 /* Voice.h */,
+				7FAE26E0131FBC0500F38926 /* Voice.mm */,
+				7FAE26E1131FBC0500F38926 /* Voice.xib */,
+			);
+			name = Voice;
+			path = Plugins/Voice;
+			sourceTree = SOURCE_ROOT;
 		};
 		7FD2EC491309824700B274C9 /* Umbilical */ = {
 			isa = PBXGroup;
@@ -1840,6 +1856,7 @@
 		DDC8EA5D113809B100574926 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				7FAE26DE131FBC0500F38926 /* Voice */,
 				7F204759131AEBE900388BC3 /* Beach */,
 				33F793D41313D4DC009414EA /* Statestik */,
 				3363CC171312EF9B004ABBA2 /* SceneX */,
@@ -2286,6 +2303,7 @@
 				33F7944F1313E55C009414EA /* ApexNew-Ultra.otf in Resources */,
 				33F794501313E55C009414EA /* ApexNew-UltraItalic.otf in Resources */,
 				7F20475E131AEBEA00388BC3 /* Beach.xib in Resources */,
+				7FAE26E3131FBC0500F38926 /* Voice.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2417,6 +2435,7 @@
 				33F793D91313D4EB009414EA /* Statestik.mm in Sources */,
 				DD040ABF131AEF86004F7AFE /* QLabController.mm in Sources */,
 				7F20475D131AEBEA00388BC3 /* Beach.mm in Sources */,
+				7FAE26E2131FBC0500F38926 /* Voice.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

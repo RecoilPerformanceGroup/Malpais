@@ -52,7 +52,6 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"weighLiveOrBuffer"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:@"numberOfFixedStrings"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"stretch"];
-	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"endpointPushForce"];
 	[self assignMidiChannel:7];
 }
@@ -88,7 +87,7 @@
 		}		
 	}
 	
-	mousex = 0.5;
+	mousex = 0.5 * [self aspect];
 	mousey = 0.0;
 }
 
@@ -126,7 +125,6 @@
 					
 				}
 				
-
 				offsets[iVoice][i] += (offset - offsets[iVoice][i]) * pow([self aspect]*0.5 - midDist,2)*9;
 			}
 		}
@@ -371,8 +369,13 @@
 		[self drawWave:0 from:startPos to:endPos];
 		
 		for (int iVoice = 1; iVoice < NUM_VOICES+1; iVoice++) {
+			
+			NSString * voiceLengthStr = [NSString stringWithFormat:@"wave%ilength",iVoice];
+			
+			float voiceLength = PropF(voiceLengthStr);
+			
 			ofxVec2f start = ofxVec2f(waveX[iVoice], 0.0);
-			ofxVec2f end = ofxVec2f(waveX[iVoice], 1.0);
+			ofxVec2f end = ofxVec2f(waveX[iVoice], voiceLength);
 			[self drawWave:iVoice from:start to:end];
 		}
 		

@@ -119,7 +119,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		liveFFT.powerSpectrum(0, (int)liveSamples/2, [liveVoice getWaveData]-liveSamples, (int)liveSamples, &magnitude[0], &phase[0], &power[0], &avg_power);
 		float amplification = PropF(@"liveVoiceAmplification");
 		
-		int thresholds[] = {0,4,6,10,16,24,150,liveSamples/2};
+		int thresholds[] = {0,6,7,8,10,80,150,liveSamples/2};
 		
 		for (int iBand=0; iBand < NUM_BANDS; iBand++) {
 			float bandMagnitude= 0;
@@ -400,7 +400,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		ofSetColor(255, 255, 255, 255.0*0.75);
 		
 		for(int i=0;i<liveSamples/2;i++){
-			float x = (ofGetWidth()/liveSamples)*i*2.0;
+			float x = ((ofGetWidth()*1.0)/liveSamples)*i*2.0;
 			ofLine(x, 0, x, -bandHeight*(magnitude[i]*(10.0/liveSamples)));
 		}
 		
@@ -408,9 +408,9 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		ofSetLineWidth(1.5);
 		ofNoFill();
 		ofRect(0, 0, ofGetWidth(), -bandHeight*2.0);
-		
-		
+
 		if (PropB(@"recordLive")) {
+			ofSetLineWidth(2.0);
 			
 			glTranslated(0, -bandHeight, 0);
 			ofSetColor(0,0,0, 255.0*0.5);
