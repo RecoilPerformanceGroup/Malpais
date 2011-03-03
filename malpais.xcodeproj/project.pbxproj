@@ -55,6 +55,8 @@
 		7F8F6BA5130565580097D302 /* Wave.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F8F6BA4130565580097D302 /* Wave.mm */; };
 		7FAE26E2131FBC0500F38926 /* Voice.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7FAE26E0131FBC0500F38926 /* Voice.mm */; };
 		7FAE26E3131FBC0500F38926 /* Voice.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7FAE26E1131FBC0500F38926 /* Voice.xib */; };
+		7FAE285F1320326900F38926 /* AudioDeviceList.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FD2E9061306D0D700B274C9 /* AudioDeviceList.cpp */; };
+		7FAE28601320326A00F38926 /* AudioDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FD2E9041306D0D700B274C9 /* AudioDevice.cpp */; };
 		7FBF1BAA12E49AD2009E32EF /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C1C512AD16C000197290 /* BWToolkitFramework.framework */; };
 		7FBF1BD212E49E6F009E32EF /* libdc1394.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DDB7C19412AD16C000197290 /* libdc1394.a */; };
 		7FD2E9661306D51600B274C9 /* fft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7FD2E9641306D51600B274C9 /* fft.cpp */; };
@@ -335,6 +337,8 @@
 		7FAE26DF131FBC0500F38926 /* Voice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Voice.h; path = Plugins/Voice/Voice.h; sourceTree = SOURCE_ROOT; };
 		7FAE26E0131FBC0500F38926 /* Voice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Voice.mm; path = Plugins/Voice/Voice.mm; sourceTree = SOURCE_ROOT; };
 		7FAE26E1131FBC0500F38926 /* Voice.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Voice.xib; path = Plugins/Voice/Voice.xib; sourceTree = SOURCE_ROOT; };
+		7FAE282913202E6D00F38926 /* CAAutoDisposer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CAAutoDisposer.h; sourceTree = "<group>"; };
+		7FAE282A13202E6D00F38926 /* CABitOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CABitOperations.h; sourceTree = "<group>"; };
 		7FD2E9041306D0D700B274C9 /* AudioDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDevice.cpp; sourceTree = "<group>"; };
 		7FD2E9051306D0D700B274C9 /* AudioDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioDevice.h; sourceTree = "<group>"; };
 		7FD2E9061306D0D700B274C9 /* AudioDeviceList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDeviceList.cpp; sourceTree = "<group>"; };
@@ -1142,6 +1146,8 @@
 		DD6DCDED12E9B4FC00F2B664 /* Public Utility */ = {
 			isa = PBXGroup;
 			children = (
+				7FAE282913202E6D00F38926 /* CAAutoDisposer.h */,
+				7FAE282A13202E6D00F38926 /* CABitOperations.h */,
 				DD0A229B12EF1CA10068DCF1 /* CARingBuffer.cpp */,
 				DD0A229C12EF1CA10068DCF1 /* CARingBuffer.h */,
 				DD6DCDEE12E9B4FC00F2B664 /* AUOutputBL.cpp */,
@@ -2436,6 +2442,8 @@
 				DD040ABF131AEF86004F7AFE /* QLabController.mm in Sources */,
 				7F20475D131AEBEA00388BC3 /* Beach.mm in Sources */,
 				7FAE26E2131FBC0500F38926 /* Voice.mm in Sources */,
+				7FAE285F1320326900F38926 /* AudioDeviceList.cpp in Sources */,
+				7FAE28601320326A00F38926 /* AudioDevice.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2463,6 +2471,8 @@
 				ENABLE_OPENMP_SUPPORT = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_MODEL_TUNING = G5;
@@ -2483,6 +2493,7 @@
 					../../../addons/,
 				);
 				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
 					"-lpthread",
@@ -2582,6 +2593,8 @@
 				ENABLE_OPENMP_SUPPORT = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_MODEL_TUNING = G5;
@@ -2602,6 +2615,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = /usr/lib;
 				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
 					"-lpthread",
@@ -2622,6 +2636,8 @@
 				ENABLE_OPENMP_SUPPORT = YES;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_ENABLE_SSE42_EXTENSIONS = YES;
 				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_MODEL_TUNING = G5;
@@ -2644,6 +2660,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = /usr/lib;
 				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_CPLUSPLUSFLAGS = (
 					"-D__MACOSX_CORE__",
 					"-lpthread",

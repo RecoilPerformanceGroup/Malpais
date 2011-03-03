@@ -8,6 +8,12 @@
 #pragma once
 
 #include "Plugin.h"
+#include <CoreAudio/CoreAudio.h>
+#include <AudioToolbox/AudioToolbox.h>
+#include <AudioUnit/AudioUnit.h>
+#include "CARingBuffer.h"
+#include "AudioDevice.h"
+#include "CAStreamBasicDescription.h"
 #include "AudioDeviceList.h"
 #include "WaveObject.h"
 #include "fft.h"
@@ -25,9 +31,7 @@
 	NSMutableArray * voiceWaveForms;
 	
 	float voiceSourceWaves[NUM_VOICES+1][NUM_BANDS][MAX_RESOLUTION];
-	
-	float voiceUpdateTimes[NUM_VOICES+1];
-	
+		
 	float frameRateDeltaTime;
 	float lastUpdateTime;
 	
@@ -40,8 +44,8 @@
 	float avg_power;		
 	
 	IBOutlet NSPopUpButton *		mInputDevices;
-	//	AudioDeviceList *				mInputDeviceList;
-	//	AudioDeviceID					inputDevice;
+	AudioDeviceList *				mInputDeviceList;
+	AudioDeviceID					inputDevice;
 	
 }
 

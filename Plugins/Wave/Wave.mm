@@ -11,8 +11,8 @@
 
 
 @implementation Wave
-static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, AudioDeviceID initSel);
 
+static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, AudioDeviceID initSel);
 
 -(void) initPlugin{
 	
@@ -20,9 +20,6 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	
 	[voiceWaveForms retain];
 	
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"alphaWall"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"alphaFloor"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:10.0] named:@"lineWidth"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"random"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"amplitude"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0 maxValue:10.0] named:@"frequency"];
@@ -30,7 +27,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"smoothing"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:MAX_RESOLUTION minValue:1.0 maxValue:MAX_RESOLUTION] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10 minValue:1 maxValue:10] named:@"liveVoiceSamples"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10 minValue:1 maxValue:100] named:@"liveVoiceAmplification"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:90 minValue:1 maxValue:100] named:@"liveVoiceAmplification"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"recordLive"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"updateWaveForms"];
 	
@@ -63,9 +60,9 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		PluginProperty * p = [NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0];
 		[self addProperty:p named:[NSString stringWithFormat:@"voice%iOffset", iVoice+1]];
 	}
-	
-	//	mInputDeviceList = new AudioDeviceList(true);
-	
+		
+	mInputDeviceList = new AudioDeviceList(true);
+
 	liveVoice = [[WaveObject alloc] init];
 	[liveVoice loadMic];
 	
@@ -73,11 +70,11 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 
 -(void) setup{
 	
-	//	UInt32 propsize=0;
-	//	propsize = sizeof(AudioDeviceID);
-	//	verify_noerr (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &propsize, &inputDevice));
-	//	BuildDeviceMenu(mInputDeviceList, mInputDevices, inputDevice);
-		
+	UInt32 propsize=0;
+	propsize = sizeof(AudioDeviceID);
+	verify_noerr (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &propsize, &inputDevice));
+	BuildDeviceMenu(mInputDeviceList, mInputDevices, inputDevice);
+	
 	// bind midi channels and controlnumbers
 	
 	int midiControlNumber;
@@ -158,7 +155,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				propStr = [NSString stringWithFormat:@"liveVoiceOffset"];
 			else 
 				propStr = [NSString stringWithFormat:@"voice%iOffset", iVoice];
-						
+			
 			aVoice = [self getWaveFormWithIndex:iVoice 
 									  amplitude:1.0 
 									 driftSpeed:PropF(@"drift")
@@ -181,74 +178,75 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 
 -(void) draw:(NSDictionary *)drawingInformation{
 	
-	float resolution = roundf(PropF(@"resolution"));
-	
-	ofSetColor(255, 255, 255);
-	ofNoFill();
-	ofSetLineWidth(PropF(@"lineWidth"));
-	
-	ApplySurface(@"Floor"); {
-		
-		if (PropF(@"alphaFloor") > 0) {
-			
-			ofSetColor(255, 255, 255, 255.0*PropF(@"alphaFloor"));
-			
-			NSMutableArray * aVoice;
-			
-			glTranslated(0, -0.5/NUM_VOICES+1, 0);
-			
-			
-			for(aVoice in voiceWaveForms){
-				
-				glTranslated(0, 1.0/NUM_VOICES+1, 0);
-				
-				NSNumber * anAmplitude;
-				
-				glBegin(GL_LINE_STRIP);
-				
-				int i = 0;
-				
-				for(anAmplitude in aVoice){
-					
-					glVertex2d((Aspect(@"Floor",0)/resolution)*i, [anAmplitude doubleValue]*PropF(@"amplitude"));
-					i++;
-				} 
-				
-				glEnd();
-				
-			}
-		}
-		
-	} PopSurface();
-	
-	ApplySurface(@"Wall"); {
-		
-		if (PropF(@"alphaWall") > 0) {
-			
-			ofSetColor(255, 255, 255, 255.0*PropF(@"alphaWall"));
-			
-			NSMutableArray * aVoice = [voiceWaveForms objectAtIndex:0];
-			
-			glTranslated(0, 0.5, 0);
-			
-			NSNumber * anAmplitude;
-			
-			glBegin(GL_LINE_STRIP);
-			
-			int i = 0;
-			
-			for(anAmplitude in aVoice){
-				
-				glVertex2d((Aspect(@"Wall",0)/resolution)*i, [anAmplitude doubleValue]*PropF(@"amplitude"));
-				i++;
-			} 
-			
-			glEnd();
-			
-		}
-		
-	} PopSurface();
-	
+	/**
+	 float resolution = roundf(PropF(@"resolution"));
+	 
+	 ofSetColor(255, 255, 255);
+	 ofNoFill();
+	 ofSetLineWidth(PropF(@"lineWidth"));
+	 
+	 ApplySurface(@"Floor"); {
+	 
+	 if (PropF(@"alphaFloor") > 0) {
+	 
+	 ofSetColor(255, 255, 255, 255.0*PropF(@"alphaFloor"));
+	 
+	 NSMutableArray * aVoice;
+	 
+	 glTranslated(0, -0.5/NUM_VOICES+1, 0);
+	 
+	 
+	 for(aVoice in voiceWaveForms){
+	 
+	 glTranslated(0, 1.0/NUM_VOICES+1, 0);
+	 
+	 NSNumber * anAmplitude;
+	 
+	 glBegin(GL_LINE_STRIP);
+	 
+	 int i = 0;
+	 
+	 for(anAmplitude in aVoice){
+	 
+	 glVertex2d((Aspect(@"Floor",0)/resolution)*i, [anAmplitude doubleValue]*PropF(@"amplitude"));
+	 i++;
+	 } 
+	 
+	 glEnd();
+	 
+	 }
+	 }
+	 
+	 } PopSurface();
+	 
+	 ApplySurface(@"Wall"); {
+	 
+	 if (PropF(@"alphaWall") > 0) {
+	 
+	 ofSetColor(255, 255, 255, 255.0*PropF(@"alphaWall"));
+	 
+	 NSMutableArray * aVoice = [voiceWaveForms objectAtIndex:0];
+	 
+	 glTranslated(0, 0.5, 0);
+	 
+	 NSNumber * anAmplitude;
+	 
+	 glBegin(GL_LINE_STRIP);
+	 
+	 int i = 0;
+	 
+	 for(anAmplitude in aVoice){
+	 
+	 glVertex2d((Aspect(@"Wall",0)/resolution)*i, [anAmplitude doubleValue]*PropF(@"amplitude"));
+	 i++;
+	 } 
+	 
+	 glEnd();
+	 
+	 }
+	 
+	 } PopSurface();
+	 **/
 }
 
 -(void) controlDraw:(NSDictionary *)drawingInformation{
@@ -397,18 +395,25 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		ofRect(0, 0, ofGetWidth(), -bandHeight*2.0);
 		ofNoFill();
 		ofSetLineWidth(2.0);
-		ofSetColor(255, 255, 255, 255.0*0.75);
 		
+		//magnitude
+		ofSetColor(0,0, 255, 255.0);
 		for(int i=0;i<liveSamples/2;i++){
 			float x = ((ofGetWidth()*1.0)/liveSamples)*i*2.0;
 			ofLine(x, 0, x, -bandHeight*(magnitude[i]*(10.0/liveSamples)));
+		}
+		//power
+		ofSetColor(255,0,0, 255.0*0.5);
+		for(int i=0;i<liveSamples/2;i++){
+			float x = ((ofGetWidth()*1.0)/liveSamples)*i*2.0;
+			ofLine(x, 0, x, -bandHeight*(power[i]*(10.0/liveSamples)));
 		}
 		
 		ofSetColor(0, 0, 0,127);
 		ofSetLineWidth(1.5);
 		ofNoFill();
 		ofRect(0, 0, ofGetWidth(), -bandHeight*2.0);
-
+		
 		if (PropB(@"recordLive")) {
 			ofSetLineWidth(2.0);
 			
@@ -438,9 +443,9 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 {
 	
 	NSMutableArray * aVoice;
-
+	
 	if ([voiceWaveForms count]>index) {
-				
+		
 		int voiceLength = [[voiceWaveForms objectAtIndex:index] count];
 		
 		int voiceOffset = roundf(offset * voiceLength);
@@ -456,14 +461,10 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		
 		float now = ofGetElapsedTimef();
 		
-		//	if(now - voiceUpdateTimes[index] > 1.0/60){
-		
-		voiceUpdateTimes[index] = now;
-		
 		for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
-						
+			
 			NSString * propStr;
-
+			
 			if(index == 0)
 				propStr = [NSString stringWithFormat:@"liveVoiceBand%i", iBand+1];
 			else 
@@ -493,13 +494,13 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 										  ];
 				
 				voiceSourceWaves[index][iBand][i] = (voiceSourceWaves[index][iBand][i]*smoothingFactor) + (amp * (1.0-smoothingFactor));
-
+				
 				[aVoice replaceObjectAtIndex:i withObject:anAmplitude];
 				
 			}
 			
 		}
-	
+		
 		NSMutableArray * aNewVoice = [NSMutableArray arrayWithCapacity:voiceLength];
 		
 		iFrom = voiceOffset%voiceLength;
@@ -511,14 +512,14 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		
 		formerArray = aNewVoice;
 		aVoice = formerArray;
-				
+		
 		
 	} else {
 		aVoice = [NSMutableArray array];
 	}
 	
 	[aVoice retain];
-
+	
 	return aVoice;
 	
 }
@@ -588,26 +589,24 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	 **/
 }
 
-/*****
- static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, AudioDeviceID initSel)
- {
- [menu removeAllItems];
- 
- AudioDeviceList::DeviceList &thelist = devlist->GetList();
- int index = 0;
- for (AudioDeviceList::DeviceList::iterator i = thelist.begin(); i != thelist.end(); ++i, ++index) {
- while([menu itemWithTitle:[NSString stringWithCString: (*i).mName encoding:NSASCIIStringEncoding]] != nil) {
- strcat((*i).mName, " ");
- }
- 
- if([menu itemWithTitle:[NSString stringWithCString: (*i).mName encoding:NSASCIIStringEncoding]] == nil) {
- [menu insertItemWithTitle: [NSString stringWithCString: (*i).mName encoding:NSASCIIStringEncoding] atIndex:index];
- 
- if (initSel == (*i).mID)
- [menu selectItemAtIndex: index];
- }
- }
- }
- **/
+static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, AudioDeviceID initSel)
+{
+	[menu removeAllItems];
+	
+	AudioDeviceList::DeviceList &thelist = devlist->GetList();
+	int index = 0;
+	for (AudioDeviceList::DeviceList::iterator i = thelist.begin(); i != thelist.end(); ++i, ++index) {
+		while([menu itemWithTitle:[NSString stringWithCString: (*i).mName encoding:NSASCIIStringEncoding]] != nil) {
+			strcat((*i).mName, " ");
+		}
+		
+		if([menu itemWithTitle:[NSString stringWithCString: (*i).mName encoding:NSASCIIStringEncoding]] == nil) {
+			[menu insertItemWithTitle: [NSString stringWithCString: (*i).mName encoding:NSASCIIStringEncoding] atIndex:index];
+			
+			if (initSel == (*i).mID)
+				[menu selectItemAtIndex: index];
+		}
+	}
+}
 
 @end
