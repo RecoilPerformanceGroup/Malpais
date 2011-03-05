@@ -257,13 +257,14 @@
 
 -(void) draw:(NSDictionary *)drawingInformation{
 	
+	ofEnableAlphaBlending();
 	
 	ApplySurface(@"Floor");{
 		
 		fbo.begin();{
 			
-			ofSetColor(0, 0, 0, 255);
 			ofBackground(0, 0, 0);
+			ofSetColor(0, 0, 0, 255);
 			
 			glScaled(kFBOHeight, kFBOHeight, 0);
 			
