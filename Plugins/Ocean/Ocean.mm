@@ -30,6 +30,9 @@
 		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:
 		 [NSString stringWithFormat:@"wave%iChannel",i]
 		 ];
+		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:
+		 [NSString stringWithFormat:@"wave%iLength",i]
+		 ];
 	}
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"drag"];
@@ -327,6 +330,10 @@
 		
 		int resolution = PropI(@"resolution");
 		float amplitude = PropF(@"amplitude");
+		
+		NSString * waveLengthStr = [NSString stringWithFormat:@"wave%iLength",iVoice];
+
+		int length = PropF(waveLengthStr) * resolution;
 		
 		glBegin(GL_QUAD_STRIP);
 		ofxPoint2f lastPoint = ofxPoint2f(0,0);		

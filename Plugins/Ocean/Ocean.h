@@ -19,7 +19,6 @@
 
 @interface Ocean : ofPlugin {
 
-	ofxPhysics2d*physics;
 	ofxParticle* mouseParticle;
 	ofxSpring*mouseSpring;
 	ofxParticle* dragParticle;
@@ -29,6 +28,7 @@
 	bool bCreateParticles;
 	float newParticleIncrement;
 	
+	ofxPhysics2d*physics;
 	vector<ofxParticle*>wallParticles;
 	vector<ofxSpring*>wallSprings;
 	vector<ofxSpring*>springs;
