@@ -53,6 +53,14 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:@"numberOfFixedStrings"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"stretch"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"endpointPushForce"];
+
+	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.002] named:@"springForce"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.002] named:@"springSecondaryForce"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.002] named:@"springGlueForce"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.002] named:@"springGlueEndForce"];	
+		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"springRepulsion"];	
+	
 	[self assignMidiChannel:7];
 }
 
@@ -89,9 +97,123 @@
 	
 	mousex = 0.5 * [self aspect];
 	mousey = 0.0;
+	
+	endPos = ofxPoint2f(0,1);
+	
+	
+	physics = new ofxPhysics2d(ofPoint(0,0.0005));
+	physics->checkBounds(true);
+	physics->enableCollisions(true);
+	physics->setNumIterations(150);
+	
+	if(particles){
+		delete particles;
+	}
+	particlesLength = 7;
+	numStrings = 1;
+	particles = new ofxParticle*[numStrings];
+	for(int i=0;i<numStrings;i++){
+		particles[i] = new ofxParticle[particlesLength];
+		for(int x = 0 ; x < particlesLength ;x++)
+		{
+			ofPoint particlePos = ofPoint(100.0*PropF(@"startPosX"),100.0*(float)x*1.0/particlesLength);
+			ofxParticle* p = new ofxParticle(particlePos, 0.00);
+			particles[i][x] = *p;
+		
+			
+			if(x == particlesLength-1){
+				p->setRadius(10);
+			}
+			
+			physics->add(&particles[0][x]);	
+			
+			if(x > 0){
+				ofxParticle *p1 = &particles[i][x-1];
+				ofxParticle *p2 = &particles[i][x];
+				float rest = p1->distanceTo(p2);
+				
+				ofxSpring* s = new ofxSpring(p1, p2, 0, 0);
+				physics->add(s);
+				if(i == 0){
+					springs.push_back(s);				
+					p->setMass(1000);
+				}
+				else 
+					secondarySprings.push_back(s);									
+			}
+			
+			if(i > 0){
+				ofxParticle *p1 = &particles[i][x];
+				ofxParticle *p2 = &particles[0][x];
+				float rest = p1->distanceTo(p2);
+				
+				ofxSpring* s = new ofxSpring(p1, p2, 1, 0);
+				physics->add(s);
+				
+				if(x < particlesLength - 1)
+					glueSprings.push_back(s);	
+				else 
+					glueEndSprings.push_back(s);						
+				
+			}
+		}
+		
+		moveForce.push_back(ofRandom(0.1, 3.5));
+	}
+	
+	particles[0][particlesLength-1].setMass(100);
+	
 }
 
 -(void) update:(NSDictionary *)drawingInformation{
+	startPos = ofxVec2f(PropF(@"startPosX"), PropF(@"startPosY"));
+
+	
+	
+	for(int i=0;i<springs.size();i++){
+		springs[i]->setStrength(PropF(@"springForce"));
+	}
+	for(int i=0;i<secondarySprings.size();i++){
+		secondarySprings[i]->setStrength(PropF(@"springSecondaryForce"));
+	}
+	for(int i=0;i<glueSprings.size();i++){
+		glueSprings[i]->setStrength(PropF(@"springGlueForce")*moveForce[i/numStrings]);
+	}
+	for(int i=0;i<glueEndSprings.size();i++){
+		glueEndSprings[i]->setStrength(PropF(@"springGlueEndForce")*moveForce[i]);
+	}
+	
+	for(int i=0;i<numStrings;i++){
+		
+		particles[i][0].moveTo(PropF(@"startPosX")*100.0, 0);
+		particles[i][0].stopMotion();
+		
+		
+		if(i == 0){
+			ofPoint p = endPos;
+			p *= 100;			
+			if(p.y > 0)
+				particles[i][particlesLength-1].moveTo(p);
+		} else {
+			for(int u=0;u<numStrings;u++){
+			//&	particles[i][particlesLength-1].applyRepulsionForce(particles[u][particlesLength-1], PropF(@"springRepulsion"));
+			}
+
+		}
+	}
+	//
+
+	physics->update();
+
+	/*for(int i=0;i<numStrings;i++){		
+		if(i == 0){
+			ofPoint p = endPos;
+			p *= 100;			
+			if(p.y > 0)
+				particles[i][particlesLength-1].moveTo(p);
+		}
+	}*/
+	
 	
 	int resolution = (int)roundf(PropF(@"resolution"));
 	
@@ -155,7 +277,7 @@
 					offset:0
 					withFormerArray:[waves objectAtIndex:iVoice]
 					];
-						
+			
 			[waves replaceObjectAtIndex:iVoice withObject:wave]; 
 			
 			float direction = PropF(@"direction");
@@ -218,7 +340,6 @@
 	}
 	
 	
-	startPos = ofxVec2f(PropF(@"startPosX"), PropF(@"startPosY"));
 	
 	if(mouseh < 0){
 		
@@ -247,6 +368,36 @@
 	ofxVec2f v2 = ofxVec2f(0,1.0);
 	
 	float length = v1.length();
+	
+	
+	ofSetColor(255, 255, 255);
+	for(int i=0;i<numStrings;i++){
+		glLineWidth(1);
+		glBegin(GL_LINE_STRIP);
+		for(int x = 0 ; x < particlesLength ;x++)
+		{
+			ofxParticle *p1 = &particles[i][x];
+			glVertex2f(p1->x/100.0, p1->y/100.0);
+		}
+		glEnd();
+	}
+	
+	
+	glPointSize(8);
+	ofSetColor(255, 0, 0);
+	glBegin(GL_POINTS);
+	for(int i=0;i<numStrings;i++){		
+		for(int x = 0 ; x < particlesLength ;x++)
+		{
+			ofxParticle *p1 = &particles[i][x];
+			glVertex2f(p1->x/100.0, p1->y/100.0);
+		}
+	}
+	glEnd();
+	
+	glPointSize(1);
+	
+	
 	
 	glPushMatrix();{
 		
@@ -286,7 +437,7 @@
 				h *= 0.003;
 				glVertex2f((p+h).x, (p+h).y);
 				glVertex2f((p-h).x, (p-h).y);				
-//				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
+				//				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
 				lastPoint = p;
 			}
 		}
@@ -311,32 +462,6 @@
 			[self drawWave:iVoice from:start to:end];
 		}
 		
-		/** interpolation nonsense
-		 
-		 ofNoFill();
-		 ofSetLineWidth(1.5);
-		 
-		 ofSetColor(0, 64, 172, 127);
-		 glBegin(GL_LINE_STRIP);
-		 for (int i = 0; i < cord->size(); i++) {
-		 MSA::Vec2f v = cord->getData()[i];
-		 glVertex2d(v.x, v.y);
-		 }
-		 glEnd();
-		 
-		 ofSetLineWidth(2.5);
-		 
-		 ofSetColor(255, 64, 172, 127);
-		 ofBeginShape();
-		 int steps = 100;
-		 for (int i = 0; i <= steps; i++) {
-		 MSA::Vec2f v = cord->sampleAt(1.0*i/steps);
-		 ofCurveVertex(v.x, v.y);
-		 }
-		 ofEndShape(false);
-		 **/
-		
-		
 	}PopSurface();
 }
 
@@ -355,13 +480,13 @@
 		ofSetColor(255, 255, 0,100);
 		ofEllipse(mousex*200.0*(1.0/[self aspect]), mousey*400.0, 15, 15);
 	}
-
+	
 	ofFill();
-
+	
 	ofSetColor(255, 0, 255,100);
 	ofEllipse(startPos.x*200*(1.0/[self aspect]), startPos.y*400, 15, 15);
 	ofEllipse(endPos.x*200*(1.0/[self aspect]), endPos.y*400, 15, 15);
-
+	
 	
 	glPushMatrix();{
 		

@@ -6,6 +6,8 @@
 #include "Wave.h"
 #include "ofxPhysics2d.h"
 
+#include "ofxPhysics2d.h"
+
 @interface Umbilical : ofPlugin {
 	
 	float mousex,mousey,mouseh;
@@ -30,6 +32,17 @@
 	
 	float waveX[NUM_VOICES+1];
 	
+	ofxPhysics2d*physics;
+	ofxParticle ** particles;
+
+	vector<ofxSpring*>springs;
+	vector<ofxSpring*>secondarySprings;
+	vector<ofxSpring*>glueSprings;
+	vector<ofxSpring*>glueEndSprings;
+	
+	vector<float> moveForce;
+	int particlesLength;
+	int numStrings;
 }
 
 -(float) aspect;
