@@ -53,13 +53,13 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:@"numberOfFixedStrings"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"stretch"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"endpointPushForce"];
-
+	
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.002] named:@"springForce"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.002] named:@"springSecondaryForce"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.002] named:@"springGlueForce"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.002] named:@"springGlueEndForce"];	
-		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"springRepulsion"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"springRepulsion"];	
 	
 	[self assignMidiChannel:7];
 }
@@ -76,7 +76,7 @@
 		
 		NSMutableArray * aVoice = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
 		
-		for(int i=0;i<MAX_RESOLUTION;i++){
+		for(int u=0;u<MAX_RESOLUTION;u++){
 			[aVoice addObject:[NSNumber numberWithDouble:0.0]];
 		}
 		
@@ -110,8 +110,14 @@
 		delete particles;
 	}
 	particlesLength = 7;
+#ifdef SINGELMODE
 	numStrings = 1;
+#else
+	numStrings = 10;
+#endif
 	particles = new ofxParticle*[numStrings];
+	springInterpolator = new MSA::Interpolator2D*[numStrings];
+	
 	for(int i=0;i<numStrings;i++){
 		particles[i] = new ofxParticle[particlesLength];
 		for(int x = 0 ; x < particlesLength ;x++)
@@ -119,7 +125,7 @@
 			ofPoint particlePos = ofPoint(100.0*PropF(@"startPosX"),100.0*(float)x*1.0/particlesLength);
 			ofxParticle* p = new ofxParticle(particlePos, 0.00);
 			particles[i][x] = *p;
-		
+			
 			
 			if(x == particlesLength-1){
 				p->setRadius(10);
@@ -158,16 +164,25 @@
 			}
 		}
 		
-		moveForce.push_back(ofRandom(0.1, 3.5));
+		moveForce.push_back(ofRandom(0.3, 3.5));
+		
+		springInterpolator[i] = new MSA::Interpolator2D;
+		springInterpolator[i]->reserve(particlesLength);
+		springInterpolator[i]->setUseLength(YES);
+		
 	}
 	
 	particles[0][particlesLength-1].setMass(100);
+	
+	gradient.loadImage([[[NSBundle mainBundle] pathForResource:@"gradient" ofType:@"png" inDirectory:@""] cString]);
+	
+	
 	
 }
 
 -(void) update:(NSDictionary *)drawingInformation{
 	startPos = ofxVec2f(PropF(@"startPosX"), PropF(@"startPosY"));
-
+	
 	
 	
 	for(int i=0;i<springs.size();i++){
@@ -184,6 +199,16 @@
 	}
 	
 	for(int i=0;i<numStrings;i++){
+		for(int u=0;u<particlesLength;u++){
+			ofPoint vel = particles[i][u].getVel();
+			float velMag = sqrtf(vel.x*vel.x + vel.y*vel.y);
+			
+			float max = 0.01;
+			if(velMag > max)
+				particles[i][u].setSpeed(max);
+		}
+		
+		
 		
 		particles[i][0].moveTo(PropF(@"startPosX")*100.0, 0);
 		particles[i][0].stopMotion();
@@ -196,23 +221,35 @@
 				particles[i][particlesLength-1].moveTo(p);
 		} else {
 			for(int u=0;u<numStrings;u++){
-			//&	particles[i][particlesLength-1].applyRepulsionForce(particles[u][particlesLength-1], PropF(@"springRepulsion"));
+				//&	particles[i][particlesLength-1].applyRepulsionForce(particles[u][particlesLength-1], PropF(@"springRepulsion"));
 			}
-
+			
 		}
+		
+		springInterpolator[i]->clear();
+		for(int u=0;u<particlesLength;u++){
+			springInterpolator[i]->push_back(MSA::Vec2<float>(particles[i][u].x/100.0,particles[i][u].y/100.0));
+		}
+		
 	}
 	//
-
+	
 	physics->update();
-
+	
+	
+	
+	
+	
+	
+	
 	/*for(int i=0;i<numStrings;i++){		
-		if(i == 0){
-			ofPoint p = endPos;
-			p *= 100;			
-			if(p.y > 0)
-				particles[i][particlesLength-1].moveTo(p);
-		}
-	}*/
+	 if(i == 0){
+	 ofPoint p = endPos;
+	 p *= 100;			
+	 if(p.y > 0)
+	 particles[i][particlesLength-1].moveTo(p);
+	 }
+	 }*/
 	
 	
 	int resolution = (int)roundf(PropF(@"resolution"));
@@ -364,86 +401,119 @@
 
 
 -(void) drawWave:(int)iVoice from:(ofxPoint2f)begin to:(ofxPoint2f)end{
+	ofEnableAlphaBlending();
+	
 	ofxVec2f v1 = end-begin;
 	ofxVec2f v2 = ofxVec2f(0,1.0);
 	
 	float length = v1.length();
 	
 	
-	ofSetColor(255, 255, 255);
-	for(int i=0;i<numStrings;i++){
-		glLineWidth(1);
-		glBegin(GL_LINE_STRIP);
-		for(int x = 0 ; x < particlesLength ;x++)
-		{
-			ofxParticle *p1 = &particles[i][x];
-			glVertex2f(p1->x/100.0, p1->y/100.0);
-		}
-		glEnd();
+	int segments = distortion[iVoice]->size();
+	int resolution = PropF(@"resolution");
+	float amplitude = PropF(@"amplitude");
+	float weighLiveOrBuffer = PropF(@"weighLiveOrBuffer");
+	
+	int startSegment, endSegment;
+	
+	if (PropB(@"stretch")) {
+		startSegment = segments*begin.y;
+		endSegment = segments*end.y;
+	} else {
+		startSegment = resolution*begin.y;
+		endSegment = resolution*end.y;
 	}
 	
 	
-	glPointSize(8);
-	ofSetColor(255, 0, 0);
-	glBegin(GL_POINTS);
-	for(int i=0;i<numStrings;i++){		
-		for(int x = 0 ; x < particlesLength ;x++)
-		{
-			ofxParticle *p1 = &particles[i][x];
-			glVertex2f(p1->x/100.0, p1->y/100.0);
-		}
-	}
-	glEnd();
-	
-	glPointSize(1);
 	
 	
-	
-	glPushMatrix();{
-		
-		ofNoFill();
-		ofSetLineWidth(4);
-		
-		ofSetColor(255, 255, 255, 255);
-		
-		glTranslated(begin.x,begin.y, 0);
-		glRotated(-v1.angle(v2)+90, 0, 0, 1);
-		
-		int segments = distortion[iVoice]->size();
-		int resolution = PropF(@"resolution");
-		float amplitude = PropF(@"amplitude");
-		float weighLiveOrBuffer = PropF(@"weighLiveOrBuffer");
-		
-		int startSegment, endSegment;
-		
-		if (PropB(@"stretch")) {
-			startSegment = segments*begin.y;
-			endSegment = segments*end.y;
-		} else {
-			startSegment = resolution*begin.y;
-			endSegment = resolution*end.y;
-		}
-		glBegin(GL_QUAD_STRIP);
-		ofxPoint2f lastPoint = ofxPoint2f(0,0);		
-		for (int i = startSegment;i< endSegment; i++) {
-			float x = 1.0/(endSegment-startSegment)*(i-startSegment);
+	if(iVoice==0){
+		int u=0;
+		if(numStrings > 1)
+			u = 1;
+		for(u;u<numStrings;u++){
+			endSegment = segments*springInterpolator[u]->getLength();
 			
-			if (i < segments) {
-				float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
-				ofxPoint2f p = ofxPoint2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x*length)*(1.0-weighLiveOrBuffer)))*amplitude*f);
-				ofxVec2f v = p - lastPoint;
-				ofxVec2f h = ofxVec2f(-v.y,v.x);
-				h.normalize();
-				h *= 0.003;
-				glVertex2f((p+h).x, (p+h).y);
-				glVertex2f((p-h).x, (p-h).y);				
-				//				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
-				lastPoint = p;
-			}
+			ofSetColor(255, 255, 255);
+			
+			glPushMatrix();{
+				
+				ofNoFill();
+				
+				ofSetColor(255, 255, 255, 150);
+				
+				gradient.getTextureReference().bind();
+				glBegin(GL_QUAD_STRIP);
+				ofxPoint2f lastPoint = ofxPoint2f(0,0);		
+				for (int i = startSegment;i< endSegment; i++) {
+					float x = 1.0/(endSegment-startSegment)*(i-startSegment);
+					if (i < segments) {
+						float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
+						ofxPoint2f p = ofxPoint2f(offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x*length)*(1.0-weighLiveOrBuffer)))*amplitude*f, 0);
+						MSA::Vec2<float> springP = springInterpolator[u]->sampleAt(x);
+						p += ofxPoint2f(springP.x, springP.y);
+						ofxVec2f v = p - lastPoint;
+						ofxVec2f h = ofxVec2f(-v.y,v.x);
+						h.normalize();
+						h *= 0.003;
+						
+						glTexCoord2f(0,x*300);
+						glVertex2f((p+h).x, (p+h).y);
+						glTexCoord2f(100,x*300);
+						glVertex2f((p-h).x, (p-h).y);				
+						//				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
+						lastPoint = p;
+					}
+				}
+				glEnd();
+				
+				gradient.getTextureReference().unbind();
+			} glPopMatrix();
+			
 		}
-		glEnd();
 		
-	} glPopMatrix();
+	} else {
+		
+		
+		glPushMatrix();{
+			
+			ofNoFill();
+			ofSetLineWidth(4);
+			
+			ofSetColor(255, 255, 255, 255);
+			
+			glTranslated(begin.x,begin.y, 0);
+			glRotated(-v1.angle(v2)+90, 0, 0, 1);
+			
+			gradient.getTextureReference().bind();
+
+			glBegin(GL_QUAD_STRIP);
+			ofxPoint2f lastPoint = ofxPoint2f(0,0);		
+			for (int i = startSegment;i< endSegment; i++) {
+				float x = 1.0/(endSegment-startSegment)*(i-startSegment);
+				
+				if (i < segments) {
+					float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
+					ofxPoint2f p = ofxPoint2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x*length)*(1.0-weighLiveOrBuffer)))*amplitude*f);
+					ofxVec2f v = p - lastPoint;
+					ofxVec2f h = ofxVec2f(-v.y,v.x);
+					h.normalize();
+					h *= 0.003;
+					glTexCoord2f(0,0);
+					glVertex2f((p+h).x, (p+h).y);
+					glTexCoord2f(100,0);
+					glVertex2f((p-h).x, (p-h).y);				
+					//				glVertex2f(x*length, offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x)*(1.0-weighLiveOrBuffer)))*amplitude*f);
+					lastPoint = p;
+				}
+			}
+			glEnd();
+			gradient.getTextureReference().unbind();
+
+			
+		} glPopMatrix();
+		
+	}
 }
 
 -(void) draw:(NSDictionary*)drawingInformation{

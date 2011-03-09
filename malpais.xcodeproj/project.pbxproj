@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		330CC62412FB3067000283DE /* TrackingElements.mm in Sources */ = {isa = PBXBuildFile; fileRef = 330CC62212FB3067000283DE /* TrackingElements.mm */; };
 		330CC62512FB3067000283DE /* TrackingElements.xib in Resources */ = {isa = PBXBuildFile; fileRef = 330CC62312FB3067000283DE /* TrackingElements.xib */; };
+		335239451327A59300AFC8BB /* gradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 335239441327A59300AFC8BB /* gradient.png */; };
 		3363CC1B1312EFA4004ABBA2 /* SceneX.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3363CC1A1312EFA4004ABBA2 /* SceneX.mm */; };
 		3363CC1D1312EFB5004ABBA2 /* SceneX.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3363CC1C1312EFB5004ABBA2 /* SceneX.xib */; };
 		3363CC2C1312F3F5004ABBA2 /* scenex0.png in Resources */ = {isa = PBXBuildFile; fileRef = 3363CC291312F3F5004ABBA2 /* scenex0.png */; };
@@ -259,6 +260,7 @@
 		330CC62112FB3067000283DE /* TrackingElements.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackingElements.h; sourceTree = "<group>"; };
 		330CC62212FB3067000283DE /* TrackingElements.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TrackingElements.mm; sourceTree = "<group>"; };
 		330CC62312FB3067000283DE /* TrackingElements.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TrackingElements.xib; sourceTree = "<group>"; };
+		335239441327A59300AFC8BB /* gradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = gradient.png; path = bin/data/gradient.png; sourceTree = SOURCE_ROOT; };
 		3363CC191312EFA4004ABBA2 /* SceneX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneX.h; sourceTree = "<group>"; };
 		3363CC1A1312EFA4004ABBA2 /* SceneX.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SceneX.mm; sourceTree = "<group>"; };
 		3363CC1C1312EFB5004ABBA2 /* SceneX.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SceneX.xib; sourceTree = "<group>"; };
@@ -1882,6 +1884,7 @@
 		DDF87490114AB2D0004B2FE2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				335239441327A59300AFC8BB /* gradient.png */,
 				33F9CCEA130DB03F0036EF0B /* SendToQlab.scpt */,
 				7F0F77DE130C25DC009A31C0 /* floortest.jpg */,
 				7F0F77E0130C25E6009A31C0 /* LucidaGrande.ttc */,
@@ -2262,6 +2265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				335239451327A59300AFC8BB /* gradient.png in Resources */,
 				3363CC2C1312F3F5004ABBA2 /* scenex0.png in Resources */,
 				3363CC2D1312F3F5004ABBA2 /* scenex1.png in Resources */,
 				3363CC2E1312F3F5004ABBA2 /* scenex2.png in Resources */,
