@@ -1,6 +1,7 @@
 #import "Umbilical.h"
 #import "Keystoner.h"
 #import "Kinect.h"
+#import "SceneX.h"
 
 @implementation Umbilical
 
@@ -102,7 +103,7 @@
 	
 	
 	physics = new ofxPhysics2d(ofPoint(0,0.0005));
-	physics->checkBounds(true);
+	physics->checkBounds(NO);
 	physics->enableCollisions(true);
 	physics->setNumIterations(150);
 	
@@ -210,7 +211,7 @@
 		
 		
 		
-		particles[i][0].moveTo(PropF(@"startPosX")*100.0, 0);
+		particles[i][0].moveTo(PropF(@"startPosX")*100.0, 100.0*[GetPlugin(SceneX) getBackline:1]);
 		particles[i][0].stopMotion();
 		
 		
@@ -403,6 +404,7 @@
 -(void) drawWave:(int)iVoice from:(ofxPoint2f)begin to:(ofxPoint2f)end{
 	ofEnableAlphaBlending();
 	
+	
 	ofxVec2f v1 = end-begin;
 	ofxVec2f v2 = ofxVec2f(0,1.0);
 	
@@ -424,15 +426,13 @@
 		endSegment = resolution*end.y;
 	}
 	
-	
-	
-	
+
 	if(iVoice==0){
 		int u=0;
 		if(numStrings > 1)
 			u = 1;
 		for(u;u<numStrings;u++){
-			endSegment = segments*springInterpolator[u]->getLength();
+			endSegment = segments;
 			
 			ofSetColor(255, 255, 255);
 			
@@ -472,8 +472,16 @@
 			
 		}
 		
+	/*	for(int i=0;i<particlesLength;i++){
+			ofSetColor(255, 0, 0,255);
+			ofFill();
+			ofCircle(particles[0][i].x/100.0, particles[0][i].y/100.0, 0.05);
+		}
+	*/	
 	} else {
+		begin.y = [GetPlugin(SceneX) getBackline:1];
 		
+
 		
 		glPushMatrix();{
 			
@@ -484,6 +492,7 @@
 			
 			glTranslated(begin.x,begin.y, 0);
 			glRotated(-v1.angle(v2)+90, 0, 0, 1);
+			glScaled(1.0-[GetPlugin(SceneX) getBackline:1], 1, 1);
 			
 			gradient.getTextureReference().bind();
 
