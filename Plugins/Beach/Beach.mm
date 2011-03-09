@@ -116,6 +116,8 @@
 	float spread = PropF(@"spread");
 	double rollPosSmoothing = 1.0-powf((1.0-sqrt(PropF(@"rollSmooth"))), 2.5);
 	
+	ofEnableAlphaBlending();
+
 	ApplySurface(@"Floor");{
 		
 		ofSetColor(255, 255, 255, 255*PropF(@"alpha"));

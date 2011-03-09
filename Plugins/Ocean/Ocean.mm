@@ -297,7 +297,7 @@
 		glPushMatrix();{
 			glTranslated(0, -PropF(@"floorDepth"),0);
 			glScaled(1.0/400.0, (1.0+PropF(@"floorDepth"))/400.0,0);
-			[self drawCloth:&fbo.getTexture(0) showGrid:NO];
+			[self drawCloth:&fbo.getTexture(0) showGrid:NO folds:0];
 		}glPopMatrix();
 		
 		ofSetColor(0,0,0,255);
@@ -312,6 +312,10 @@
 }
 
 -(void) drawWave:(int)iVoice from:(ofxPoint2f*)begin to:(ofxPoint2f*)end{
+	
+#pragma mark -
+// TODO: draw folds as vertical springs that show when their perpendicular springs are shortened
+#pragma mark -
 	
 	ofxVec2f v1 = ofxVec2f(end->x, end->y)-ofxVec2f(begin->x, begin->y);
 	ofxVec2f v2 = ofxVec2f(0,1.0);
@@ -333,11 +337,11 @@
 		
 		NSString * waveLengthStr = [NSString stringWithFormat:@"wave%iLength",iVoice];
 
-		int length = PropF(waveLengthStr) * resolution;
+		int arrayLength = PropF(waveLengthStr) * resolution;
 		
 		glBegin(GL_QUAD_STRIP);
 		ofxPoint2f lastPoint = ofxPoint2f(0,0);		
-		for (int i = 0;i< resolution; i++) {
+		for (int i = 0;i< arrayLength; i++) {
 			float x = 1.0/resolution*i;
 			
 			if (i < resolution) {
@@ -357,7 +361,7 @@
 	} glPopMatrix();
 }
 
-- (void) drawCloth:(ofTexture*)ref showGrid:(bool) showGrid{
+- (void) drawCloth:(ofTexture*)ref showGrid:(bool) showGrid folds:(float)folds{
 	
 	//glEnable(GL_DEPTH_TEST);
 	
