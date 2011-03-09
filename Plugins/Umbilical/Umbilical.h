@@ -7,12 +7,16 @@
 
 #include "ofxPhysics2d.h"
 
+//#define SINGELMODE
+
 @interface Umbilical : ofPlugin {
 	
 	float mousex,mousey,mouseh;
 
 	MSA::Interpolator1D		* distortion[NUM_VOICES+1];
 	MSA::Interpolator1D		* waveForm[NUM_VOICES+1];
+	
+
 
 	vector<float> offsets[NUM_VOICES +1];
 	
@@ -38,6 +42,9 @@
 	vector<float> moveForce;
 	int particlesLength;
 	int numStrings;
+	
+	MSA::Interpolator2D ** springInterpolator;
+	ofImage gradient;
 }
 
 -(float) aspect;

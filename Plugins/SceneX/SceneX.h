@@ -5,4 +5,6 @@
 	ofImage * images[NUMIMAGES];
 }
 
+-(float) getBackline:(int)n;
+
 @end
