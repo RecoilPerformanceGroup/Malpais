@@ -126,8 +126,12 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			bandMagnitude *= 1.0/(thresholds[iBand+1]-thresholds[iBand]);
 			NSString * propStr = [NSString stringWithFormat:@"liveVoiceBand%i", iBand+1];
 			
+			// linear amplification
 			bandMagnitude = (bandMagnitude/liveSamples)*amplification;
 			
+			// logaritmisk transmogrif
+			bandMagnitude = 1.0+(log(bandMagnitude)*.5);
+						
 			[[properties objectForKey:propStr] setFloatValue:bandMagnitude];
 		}
 	}

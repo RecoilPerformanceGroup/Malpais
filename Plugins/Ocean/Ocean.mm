@@ -461,7 +461,7 @@
 		
 		glTranslated((0.5-[self aspect])*200, 0, 0);
 		ofSetColor(255, 255, 255,127);
-		[self drawCloth:&fbo.getTexture(0) showGrid:YES];
+		[self drawCloth:&fbo.getTexture(0) showGrid:YES folds:0];
 	} glPopMatrix();
 	
 	glPushMatrix();{
