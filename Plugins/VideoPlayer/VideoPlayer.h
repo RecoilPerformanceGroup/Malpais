@@ -12,7 +12,7 @@
 //#import "ArduinoController.h"
 
 @class QTMovie;
-#define NUMVIDEOS 4
+#define NUMVIDEOS 3
 
 @interface VideoPlayer : ofPlugin {
 	QTMovie     		*movie[NUMVIDEOS];

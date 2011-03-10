@@ -67,6 +67,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	liveVoice = [[WaveObject alloc] init];
 	[liveVoice loadMic];
 	
+	[self assignMidiChannel:1];
+	
 }
 
 -(void) setup{
@@ -84,11 +86,10 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		midiControlNumber = iVoice*10;
 		for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
 			PluginProperty * p = [properties objectForKey:[NSString stringWithFormat:@"voice%iBand%i", iVoice+1, iBand+1]];
-			[p setMidiChannel:[NSNumber numberWithInt:MIDI_CHANNEL]];
 			if(midiControlNumber==0){
-				[p setMidiNumber:[NSNumber numberWithInt:7]]; // undtagelse der bekræfter reglen, da nummer 0 ikke kan bruges
+				[p setManualMidiNumber:[NSNumber numberWithInt:7]]; // undtagelse der bekræfter reglen, da nummer 0 ikke kan bruges
 			} else {
-				[p setMidiNumber:[NSNumber numberWithInt:midiControlNumber]];
+				[p setManualMidiNumber:[NSNumber numberWithInt:midiControlNumber]];
 			}
 			midiControlNumber++;
 		}

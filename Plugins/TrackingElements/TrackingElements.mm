@@ -19,7 +19,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1000] named:@"handscale"];	
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:2 minValue:0.1 maxValue:3] named:@"rulerScale"];	
-	
+	[self assignMidiChannel:6];
 }
 
 -(void) setup{
