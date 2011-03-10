@@ -36,7 +36,7 @@
 		 ];
 	}
 	
-	//	[self assignMidiChannel:9];
+	[self assignMidiChannel:10];
 	
 }
 

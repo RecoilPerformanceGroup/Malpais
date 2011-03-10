@@ -24,6 +24,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"random"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:@"waveChannel"];
 	
+	[self assignMidiChannel:11];
 }
 
 -(void) setup{

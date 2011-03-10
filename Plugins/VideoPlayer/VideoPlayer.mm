@@ -7,9 +7,11 @@
 
 -(void) initPlugin{	
 	NSLog(@"Init videplayer");
+	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:NUMVIDEOS] named:@"video"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"chapter"];	
 	
+	[self assignMidiChannel:8];	
 	lastFramesVideo = 0;
 	forceDrawNextFrame = NO;
 	
@@ -37,7 +39,7 @@
 				[chapterSelector addItemWithTitle:@" - No Chapters - "];
 				[((NumberProperty*) Prop(@"chapter")) setMaxValue:[NSNumber numberWithInt:0]];
 				[Prop(@"chapter") setIntValue:0];
-
+				
 			});			
 		} else {
 			dispatch_async(dispatch_get_main_queue(), ^{	
@@ -76,7 +78,7 @@
 					NSLog(@"Change chapter");
 					[mov setCurrentTime:[mov startTimeOfChapter:PropI(@"chapter")]];
 					[mov setRate:1.0];
-
+					
 				});
 			}
 		}
@@ -136,11 +138,6 @@
 			return YES;
 		}
 		
-		/*if([movie[PropI(@"video")-1] rate] != 1){
-			dispatch_async(dispatch_get_main_queue(), ^{				
-				[movie[PropI(@"video")-1] setRate:1]; 
-			});
-		}*/
 		
 		const CVTimeStamp * outputTime;
 		[[drawingInformation objectForKey:@"outputTime"] getValue:&outputTime];
@@ -157,9 +154,11 @@
 //
 
 -(void) setup{	
+	
 	NSLog(@"Setup video");
 	[Prop(@"video") setFloatValue:0];
 	dispatch_async(dispatch_get_main_queue(), ^{	
+		
 		NSError * error = [NSError alloc];			
 		
 		NSMutableDictionary * dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -260,35 +259,36 @@
 	// check for new frame
 	const CVTimeStamp * outputTime;
 	[[drawingInformation objectForKey:@"outputTime"] getValue:&outputTime];	
-	
-	if([movie[PropI(@"video")-1] currentTime].timeValue >= [movie[PropI(@"video")-1] duration].timeValue-0.1*[movie[PropI(@"video")-1] duration].timeScale){
-		//Videoen er nået til ende, så gå til næste video
-		[Prop(@"video") setIntValue:0];
-	}		
-	
-	
-	
-	if([movie[PropI(@"video")-1] hasChapters]){
-	//	NSLog(@"Selected chapter: %i,  number chapter: %i,  currentChapter: %i",PropI(@"chapter"), [movie[PropI(@"video")-1] chapterCount], [movie[PropI(@"video")-1] chapterIndexForTime:[movie[PropI(@"video")-1] currentTime]] );
-		int currentChapter = [movie[PropI(@"video")-1] chapterIndexForTime:QTTimeIncrement([movie[PropI(@"video")-1] currentTime],QTMakeTime(1, 30))];
-		int numberChapters = [movie[PropI(@"video")-1] chapterCount];
-		int selectedChapter = PropI(@"chapter");
-		if(currentChapter == numberChapters)
-			currentChapter --;
+	if(PropI(@"video")-1 >= 0){
+		if([movie[PropI(@"video")-1] currentTime].timeValue >= [movie[PropI(@"video")-1] duration].timeValue-0.1*[movie[PropI(@"video")-1] duration].timeScale){
+			//Videoen er nået til ende, så gå til næste video
+			[Prop(@"video") setIntValue:0];
+		}		
 		
-		if(currentChapter == selectedChapter + 1){
-			dispatch_async(dispatch_get_main_queue(), ^{
-				
-				if(selectedChapter + 1 < numberChapters){					
-					[movie[PropI(@"video")-1] setCurrentTime:QTTimeDecrement([movie[PropI(@"video")-1] startTimeOfChapter:PropI(@"chapter")+1],QTMakeTime(2, 30))];
-				}
-				
-				[movie[PropI(@"video")-1] setRate:0.0];
-				NSLog(@"End of chapter.");
-			});
+		
+		
+		if([movie[PropI(@"video")-1] hasChapters]){
+			//	NSLog(@"Selected chapter: %i,  number chapter: %i,  currentChapter: %i",PropI(@"chapter"), [movie[PropI(@"video")-1] chapterCount], [movie[PropI(@"video")-1] chapterIndexForTime:[movie[PropI(@"video")-1] currentTime]] );
+			int currentChapter = [movie[PropI(@"video")-1] chapterIndexForTime:QTTimeIncrement([movie[PropI(@"video")-1] currentTime],QTMakeTime(1, 30))];
+			int numberChapters = [movie[PropI(@"video")-1] chapterCount];
+			int selectedChapter = PropI(@"chapter");
+			if(currentChapter == numberChapters)
+				currentChapter --;
+			
+			if(currentChapter == selectedChapter + 1){
+				dispatch_async(dispatch_get_main_queue(), ^{
+					
+					if(selectedChapter + 1 < numberChapters){					
+						[movie[PropI(@"video")-1] setCurrentTime:QTTimeDecrement([movie[PropI(@"video")-1] startTimeOfChapter:PropI(@"chapter")+1],QTMakeTime(2, 30))];
+					}
+					
+					[movie[PropI(@"video")-1] setRate:0.0];
+					NSLog(@"End of chapter.");
+				});
+			}
+			
+			
 		}
-		
-		
 	}
 	
 	

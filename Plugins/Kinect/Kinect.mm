@@ -218,6 +218,8 @@
 	
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:1.0] named:@"blobTracking"];
 	
+	[self assignMidiChannel:2];
+	
 	if([customProperties valueForKey:@"point0a"] == nil){
 		[self reset];
 	}
