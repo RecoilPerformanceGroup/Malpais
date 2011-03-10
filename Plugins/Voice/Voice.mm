@@ -55,7 +55,8 @@
 	
 	waveForms = [GetPlugin(Wave)getWaveFormBandsWithIndex:(int)roundf(PropF(@"waveChannel"))
 												amplitude:1.0 
-											   driftSpeed:PropF(@"drift")
+												 preDrift:PropF(@"drift")*0.25
+												postDrift:PropF(@"drift")
 												smoothing:PropF(@"smoothing")
 												freqeuncy:PropF(@"frequency")
 												   random:PropF(@"random")
@@ -68,7 +69,7 @@
 -(void) draw:(NSDictionary *)drawingInformation{
 	
 	float amplitude = PropF(@"amplitude");
-
+	
 	float lineWidth = PropF(@"lineWidth");
 	
 	ApplySurface(@"Wall");{
@@ -81,7 +82,7 @@
 			glTranslated(0, 0.5, 0);
 			
 			for (int iBand = 0;iBand<NUM_BANDS; iBand++) {
-
+				
 				int resolution = [[waveForms objectAtIndex:iBand] count];
 				
 				glBegin(GL_QUAD_STRIP);

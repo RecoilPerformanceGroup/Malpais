@@ -23,7 +23,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"random"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"amplitude"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0 maxValue:10.0] named:@"frequency"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-2.0 maxValue:2.0] named:@"drift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-2.0 maxValue:2.0] named:@"preDrift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-1.0 maxValue:1.0] named:@"postDrift"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"smoothing"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:MAX_RESOLUTION minValue:1.0 maxValue:MAX_RESOLUTION] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10 minValue:1 maxValue:10] named:@"liveVoiceSamples"];
@@ -60,9 +61,9 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		PluginProperty * p = [NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0];
 		[self addProperty:p named:[NSString stringWithFormat:@"voice%iOffset", iVoice+1]];
 	}
-		
+	
 	mInputDeviceList = new AudioDeviceList(true);
-
+	
 	liveVoice = [[WaveObject alloc] init];
 	[liveVoice loadMic];
 	
@@ -129,9 +130,10 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			// linear amplification
 			bandMagnitude = (bandMagnitude/liveSamples)*amplification;
 			
-			// logaritmisk transmogrif
-			bandMagnitude = 1.0+(log(bandMagnitude)*.5);
-						
+			// 'logaritmisk' transmogrif
+//			bandMagnitude = fmin(bandMagnitude, 1.0); // the formula below goes 0 at values > 1.0
+//			bandMagnitude = 1.0-powf((1.0-sqrt(bandMagnitude)), 1.5);;
+			
 			[[properties objectForKey:propStr] setFloatValue:bandMagnitude];
 		}
 	}
@@ -162,7 +164,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			
 			aVoice = [self getWaveFormWithIndex:iVoice 
 									  amplitude:1.0 
-									 driftSpeed:PropF(@"drift")
+									   preDrift:PropF(@"preDrift")
+									   postDrift:PropF(@"postDrift")
 									  smoothing:PropF(@"smoothing")
 									  freqeuncy:PropF(@"frequency")
 										 random:PropF(@"random")
@@ -438,7 +441,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 
 - (NSMutableArray*) getWaveFormWithIndex:(int)index 
 							   amplitude:(float)amplitude 
-							  driftSpeed:(float)driftSpeed
+								preDrift:(float)preDrift
+							   postDrift:(float)postDrift
 							   smoothing:(float)smoothing
 							   freqeuncy:(float)frequency
 								  random:(float)randomFactor
@@ -456,10 +460,12 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		
 		int iFrom = (voiceLength-voiceOffset)%voiceLength;
 		
-		aVoice = [NSMutableArray arrayWithCapacity:voiceLength];
-		
+		NSMutableArray * anOldVoice = [NSMutableArray arrayWithCapacity:voiceLength];
+		NSMutableArray * aNewVoice = [NSMutableArray arrayWithCapacity:voiceLength];
+
+		// reset offset before regeneration
 		for (int iTo = 0; iTo < voiceLength; iTo++) {
-			[aVoice addObject:[formerArray objectAtIndex: iFrom]];
+			[anOldVoice addObject:[formerArray objectAtIndex: iFrom]];
 			iFrom = (iFrom+1)%voiceLength;
 		}
 		
@@ -476,8 +482,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			
 			float bandValue = PropF(propStr);
 			
-			//			double drift = PropF(@"drift")*ofGetElapsedTimef()*(2.0*((iBand-(NUM_BANDS/2))+1.0));
-			double drift = driftSpeed*ofGetElapsedTimef()*(iBand+1.0/NUM_BANDS)*2.0*PI;
+			//			double drift = PropF(@"preDrift")*ofGetElapsedTimef()*(2.0*((iBand-(NUM_BANDS/2))+1.0));
+			double drift = preDrift*ofGetElapsedTimef()*(iBand+1.0/NUM_BANDS)*2.0*PI;
 			double smoothingFactor = 1.0-powf((1.0-sqrt(smoothing)), 2.5);
 			double ampRnd = ofRandom(0,randomFactor);
 			
@@ -485,38 +491,60 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				
 				float formerAmplitude;
 				if (iBand == 0) {
-					formerAmplitude = smoothingFactor*[[aVoice objectAtIndex:i] floatValue];
+					//when doing first band we take the former value
+					formerAmplitude = smoothingFactor*[[anOldVoice objectAtIndex:i] floatValue];
 				} else {
-					formerAmplitude = [[aVoice objectAtIndex:i] floatValue];
+					//when doing other bands we take our own value, which is why we scale by 1.0/NUM_BANDS when adding the bands up
+					formerAmplitude = [[aNewVoice objectAtIndex:i] floatValue];
 				}
 				
 				float amp = sinf((((1.0*i)/voiceLength)*(1.0+iBand))*frequency*PI*2.0/*+(1.0/(1+iBand))*/-drift) * fmaxf(bandValue, ampRnd);
 				
 				NSNumber * anAmplitude = [NSNumber numberWithFloat:
-										  ((1.0/NUM_BANDS) * amp * (1.0-smoothingFactor))
-										  +formerAmplitude 
+										  ((1.0/NUM_BANDS) * amp * (1.0-smoothingFactor))	// scaling with 1.0/NUM_BANDS so the sum of bands will be normalised
+										  +formerAmplitude									// when adding the formerAmplitude, that we got from the if clause above
 										  ];
 				
 				voiceSourceWaves[index][iBand][i] = (voiceSourceWaves[index][iBand][i]*smoothingFactor) + (amp * (1.0-smoothingFactor));
-				
-				[aVoice replaceObjectAtIndex:i withObject:anAmplitude];
+
+				if (iBand == 0) {
+					[aNewVoice addObject:anAmplitude];
+				} else {
+					[aNewVoice replaceObjectAtIndex:i withObject:anAmplitude];
+				}
 				
 			}
 			
 		}
+
+		//post drift
 		
-		NSMutableArray * aNewVoice = [NSMutableArray arrayWithCapacity:voiceLength];
+		for (int i = 0; i < voiceLength; i++) {
+
+			int iFrom = i;
+			if(postDrift != 0){
+				iFrom += (postDrift<0)?-1:1;
+				iFrom = (iFrom+voiceLength)%voiceLength;
+			}
+			float postDriftBalance = fabs(postDrift);
+			[aNewVoice replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:
+														  ((1.0-postDriftBalance)*[[aNewVoice objectAtIndex:i] floatValue])+
+														  ((postDriftBalance)*[[anOldVoice objectAtIndex:iFrom] floatValue])
+														  ]];
+			
+		}
+
+		aVoice = [NSMutableArray arrayWithCapacity:voiceLength];
 		
+		
+		
+		// apply offset after wave generation
 		iFrom = voiceOffset%voiceLength;
 		
 		for (int iTo = 0; iTo < voiceLength; iTo++) {
-			[aNewVoice addObject:[aVoice objectAtIndex: iFrom]];
+			[aVoice addObject:[aNewVoice objectAtIndex: iFrom]];
 			iFrom = (iFrom+1)%voiceLength;
 		}
-		
-		formerArray = aNewVoice;
-		aVoice = formerArray;
-		
 		
 	} else {
 		aVoice = [NSMutableArray array];
@@ -530,7 +558,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 
 - (NSMutableArray*) getWaveFormBandsWithIndex:(int)index 
 									amplitude:(float)amplitude 
-								   driftSpeed:(float)driftSpeed
+									 preDrift:(float)preDrift
+									postDrift:(float)postDrift
 									smoothing:(float)smoothing
 									freqeuncy:(float)frequency
 									   random:(float)randomFactor
@@ -540,7 +569,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	
 	NSMutableArray * aVoice = [self getWaveFormWithIndex:index 
 											   amplitude:amplitude
-											  driftSpeed:driftSpeed
+												preDrift:preDrift
+											   postDrift:postDrift
 											   smoothing:smoothing
 											   freqeuncy:frequency
 												  random:randomFactor

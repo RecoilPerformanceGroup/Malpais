@@ -87,7 +87,7 @@
 			NSMutableArray * newWave = [GetPlugin(Wave)
 										getWaveFormWithIndex:(int)roundf(PropF(waveChannelStr))
 										amplitude:1.0 
-										driftSpeed:PropF(@"drift")
+										preDrift:PropF(@"drift")
 										smoothing:PropF(@"smoothing")
 										freqeuncy:PropF(@"frequency")
 										random:0

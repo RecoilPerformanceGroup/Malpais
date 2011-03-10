@@ -234,11 +234,12 @@
 			NSMutableArray * newWave = [GetPlugin(Wave)
 										getWaveFormWithIndex:(int)roundf(PropF(waveChannelStr))
 										amplitude:1.0 
-										driftSpeed:PropF(@"drift")
+										preDrift:PropF(@"drift")
+										postDrift:0
 										smoothing:PropF(@"smoothing")
 										freqeuncy:PropF(@"frequency")
 										random:0
-										offset: fmodf((ofGetElapsedTimef()*PropF(@"offset"))+(iVoice/(NUM_VOICES+1.0)), 1.0)
+										offset: fmodf((iVoice/(NUM_VOICES+1.0))*PropF(@"offset"), 1.0)
 										withFormerArray:currentWave
 										];
 			
