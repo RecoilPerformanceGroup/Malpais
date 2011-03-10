@@ -132,8 +132,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			bandMagnitude = (bandMagnitude/liveSamples)*amplification;
 			
 			// 'logaritmisk' transmogrif
-//			bandMagnitude = fmin(bandMagnitude, 1.0); // the formula below goes 0 at values > 1.0
-//			bandMagnitude = 1.0-powf((1.0-sqrt(bandMagnitude)), 1.5);;
+			bandMagnitude = fmin(bandMagnitude, 1.0); // the formula below goes 0 at values > 1.0
+			bandMagnitude = 1.0-powf((1.0-sqrt(bandMagnitude)), 1.1);;
 			
 			[[properties objectForKey:propStr] setFloatValue:bandMagnitude];
 		}
@@ -588,9 +588,8 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		NSMutableArray * aWave = [NSMutableArray arrayWithCapacity:voiceLength];
 		
 		for (int i = 0; i < voiceLength; i++) {
-			
-			[aWave addObject:[NSNumber numberWithFloat:voiceSourceWaves[index][iBand][i]] 
-			 ];
+		
+			[aWave addObject:[NSNumber numberWithFloat:voiceSourceWaves[index][iBand][i]] ];
 			
 		}
 		

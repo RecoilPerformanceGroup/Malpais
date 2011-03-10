@@ -20,7 +20,8 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:10.0] named:@"frequency"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.05] named:@"lineWidth"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-5.0 maxValue:5.0] named:@"drift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-1.0 maxValue:1.0] named:@"preDrift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-1.0 maxValue:1.0] named:@"drift"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"random"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:@"waveChannel"];
 	
@@ -54,10 +55,10 @@
 	
 	int resolution = (int)roundf(PropF(@"resolution"));
 	
-	waveForms = [GetPlugin(Wave)getWaveFormBandsWithIndex:(int)roundf(PropF(@"waveChannel"))
+	NSMutableArray * newWaveForms = [GetPlugin(Wave)getWaveFormBandsWithIndex:(int)roundf(PropF(@"waveChannel"))
 												amplitude:1.0 
-												 preDrift:PropF(@"drift")*0.25
-												postDrift:PropF(@"drift")
+												 preDrift:PropF(@"preDrift")
+												postDrift:0//PropF(@"drift")
 												smoothing:PropF(@"smoothing")
 												freqeuncy:PropF(@"frequency")
 												   random:PropF(@"random")
@@ -65,9 +66,45 @@
 										  withFormerArray:wave
 				 ];
 	
+	int voiceLength = [[newWaveForms objectAtIndex:0] count];
+	
+	NSMutableArray * oldWaveForms = [NSMutableArray arrayWithArray:waveForms];	
+	
+	[waveForms removeAllObjects];
+	
+	float postDrift = PropF(@"drift");
+	
+	for(int iBand=0;iBand<NUM_BANDS;iBand++){
+		
+		NSMutableArray * aBand = [NSMutableArray arrayWithCapacity:voiceLength];
+		
+		for (int iAmplitude=0; iAmplitude<voiceLength; iAmplitude++) {
+			
+			int iFrom = iAmplitude;
+			if(postDrift != 0){
+				iFrom += (postDrift>0)?-1:1;
+				iFrom = (iFrom+voiceLength)%voiceLength;
+			}
+			
+			double postDriftBalance = 1.0-powf((1.0-sqrt(fabs(postDrift))), 2.0);
+
+			
+			[aBand addObject:[NSNumber numberWithFloat:
+								  ((1.0-postDriftBalance)*[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue])+
+								  ((postDriftBalance)*[[[oldWaveForms objectAtIndex:iBand] objectAtIndex:iFrom] floatValue])
+								  ]];
+					
+
+		}
+		
+		[waveForms addObject:aBand];
+	}
+	
 }
 
 -(void) draw:(NSDictionary *)drawingInformation{
+	
+	ofEnableAlphaBlending();
 	
 	float amplitude = PropF(@"amplitude");
 	
