@@ -41,6 +41,12 @@
 			});			
 		} else {
 			dispatch_async(dispatch_get_main_queue(), ^{	
+				for(int i=0;i<NUMVIDEOS;i++){				
+					if(movie[i]){
+						[movie[i] gotoBeginning];				
+						[movie[i] setRate:0.0];							
+					}
+				}
 				if(movie[PropI(@"video")-1]){
 					QTMovie * mov = movie[PropI(@"video")-1];
 					
@@ -55,8 +61,7 @@
 						[chapterSelector addItemWithTitle:@" - No Chapters - "];
 						[((NumberProperty*) Prop(@"chapter")) setMaxValue:[NSNumber numberWithInt:0]];
 						[Prop(@"chapter") setIntValue:0];
-					}
-					
+					}				
 				}
 			});			
 			
