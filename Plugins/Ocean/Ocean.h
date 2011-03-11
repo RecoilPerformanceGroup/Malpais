@@ -57,7 +57,7 @@
 	
 	float mousex, mousey, mouseh;
 		
-	NSMutableArray * waves;
+	NSMutableArray * voices;
 	
 }
 

@@ -18,7 +18,7 @@
 	
 	MSA::Interpolator1D	* waveForm[NUM_VOICES+1];
 	float waveFormYpos[NUM_VOICES+1];
-	NSMutableArray * waves;
+	NSMutableArray * voices;
 	vector<float> rollPosHistory;
 	
 }

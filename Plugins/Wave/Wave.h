@@ -28,10 +28,8 @@
 	
 	WaveObject * liveVoice;
 	
-	NSMutableArray * voiceWaveForms;
-	
-	float voiceSourceWaves[NUM_VOICES+1][NUM_BANDS][MAX_RESOLUTION];
-	
+	NSMutableArray * voices;
+
 	float frameRateDeltaTime;
 	float lastUpdateTime;
 	
@@ -50,25 +48,19 @@
 }
 
 - (IBAction)inputDeviceSelected:(id)sender;
-- (NSMutableArray*) getWaveFormWithIndex:(int)index 
-							   amplitude:(float)amplitude 
-								preDrift:(float)preDrift
-							   postDrift:(float)postDrift
-							   smoothing:(float)smoothing
-							   freqeuncy:(float)frequency
-								  random:(float)randomFactor
-								  offset:(float)offset
-						 withFormerArray:(NSMutableArray*)formerArray;
 
-- (NSMutableArray*) getWaveFormBandsWithIndex:(int)index 
-									amplitude:(float)amplitude 
-									 preDrift:(float)preDrift
-									postDrift:(float)postDrift
-									smoothing:(float)smoothing
-									freqeuncy:(float)frequency
-									   random:(float)randomFactor								  
-									   offset:(float)offset
-							  withFormerArray:(NSMutableArray*)formerArray;
+- (NSDictionary*) getVoiceWithIndex:(int)index 
+						  amplitude:(float)amplitude 
+						   preDrift:(float)preDrift
+						  postDrift:(float)postDrift
+					  smoothingRise:(float)smoothingRise
+					  smoothingFall:(float)smoothingFall
+						  smoothing:(float)smoothing
+						  freqeuncy:(float)frequency
+						 resolution:(int)resolution
+							 random:(float)randomFactor
+							 offset:(float)offset
+			   withFormerDictionary:(NSDictionary*)formerDictionary;
 
 
 @end

@@ -16,9 +16,11 @@
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"amplitude"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"alpha"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1000.0] named:@"resolution"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:1.0 maxValue:MAX_RESOLUTION] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:10.0] named:@"frequency"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.1 minValue:0.0 maxValue:1.0] named:@"smoothingRise"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothingFall"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.2 minValue:0.0 maxValue:1.0] named:@"smoothing"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.05] named:@"lineWidth"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-1.0 maxValue:1.0] named:@"preDrift"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-1.0 maxValue:1.0] named:@"drift"];
@@ -30,12 +32,9 @@
 
 -(void) setup{
 	
-	waveForms = [NSMutableArray arrayWithCapacity:NUM_BANDS];
-	wave = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
+	voice = nil;
 	
-	for (int iAmplitude=0; iAmplitude<MAX_RESOLUTION; iAmplitude++) {
-		[wave addObject:[NSNumber numberWithDouble:0.0]];
-	}
+	waveForms = [NSMutableArray arrayWithCapacity:NUM_BANDS];
 	
 	for(int iBand=0;iBand<NUM_BANDS;iBand++){
 		
@@ -48,6 +47,7 @@
 		[waveForms addObject:aBand];
 	}
 	
+	[waveForms retain];
 }
 
 
@@ -55,17 +55,23 @@
 	
 	int resolution = (int)roundf(PropF(@"resolution"));
 	
-	NSMutableArray * newWaveForms = [GetPlugin(Wave)getWaveFormBandsWithIndex:(int)roundf(PropF(@"waveChannel"))
-												amplitude:1.0 
-												 preDrift:PropF(@"preDrift")
-												postDrift:0//PropF(@"drift")
-												smoothing:PropF(@"smoothing")
-												freqeuncy:PropF(@"frequency")
-												   random:PropF(@"random")
-												   offset:0
-										  withFormerArray:wave
-				 ];
+	voice = [GetPlugin(Wave)getVoiceWithIndex:(int)roundf(PropF(@"waveChannel"))
+									amplitude:1.0
+									 preDrift:PropF(@"preDrift")
+									postDrift:0
+								smoothingRise:PropF(@"smoothingRise")
+								smoothingFall:PropF(@"smoothingFall")
+									smoothing:PropF(@"smoothing")
+									freqeuncy:PropF(@"frequency")
+								   resolution:PropF(@"resolution")
+									   random:PropF(@"random")
+									   offset:0
+						 withFormerDictionary:[voice copy]
+			 ];
 	
+	[voice retain];
+	
+	NSMutableArray * newWaveForms = [voice objectForKey:@"bandLines"];	
 	int voiceLength = [[newWaveForms objectAtIndex:0] count];
 	
 	NSMutableArray * oldWaveForms = [NSMutableArray arrayWithArray:waveForms];	
@@ -87,14 +93,17 @@
 			}
 			
 			double postDriftBalance = 1.0-powf((1.0-sqrt(fabs(postDrift))), 2.0);
+			
+			if([[newWaveForms objectAtIndex:iBand] count] == [[oldWaveForms objectAtIndex:iBand] count]){
+				[aBand addObject:[NSNumber numberWithFloat:
+							  ((1.0-postDriftBalance)*[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue])+
+							  ((postDriftBalance)*[[[oldWaveForms objectAtIndex:iBand] objectAtIndex:iFrom] floatValue])
+							  ]];
+			} else {
+				[aBand addObject:[NSNumber numberWithFloat:[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue]]];
+			}
 
 			
-			[aBand addObject:[NSNumber numberWithFloat:
-								  ((1.0-postDriftBalance)*[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue])+
-								  ((postDriftBalance)*[[[oldWaveForms objectAtIndex:iBand] objectAtIndex:iFrom] floatValue])
-								  ]];
-					
-
 		}
 		
 		[waveForms addObject:aBand];

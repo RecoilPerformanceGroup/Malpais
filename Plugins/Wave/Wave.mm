@@ -16,15 +16,17 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 
 -(void) initPlugin{
 	
-	voiceWaveForms = [NSMutableArray arrayWithCapacity:NUM_VOICES];
+	voices = [NSMutableArray arrayWithCapacity:NUM_VOICES+1];
 	
-	[voiceWaveForms retain];
+	[voices retain];
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"random"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"amplitude"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0 maxValue:10.0] named:@"frequency"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-2.0 maxValue:2.0] named:@"preDrift"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:-1.0 maxValue:1.0] named:@"postDrift"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"smoothingRise"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"smoothingFall"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"smoothing"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:MAX_RESOLUTION minValue:1.0 maxValue:MAX_RESOLUTION] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10 minValue:1 maxValue:10] named:@"liveVoiceSamples"];
@@ -32,32 +34,27 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"recordLive"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"updateWaveForms"];
 	
+	//make properties for live voice
 	for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
 		PluginProperty * p = [NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0];
 		[self addProperty:p named:[NSString stringWithFormat:@"liveVoiceBand%i", iBand+1]];
 	}
 	
-	NSMutableArray * aVoice = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
-	for(int i=0;i<MAX_RESOLUTION;i++){
-		[aVoice addObject:[NSNumber numberWithDouble:0.0]];
-	}
-	[voiceWaveForms addObject:aVoice];
-	
 	PluginProperty * p = [NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0];
 	[self addProperty:p named:@"liveVoiceOffset"];
 	
+	[voices addObject:[NSNull null]];
+	
+	
+	//make properties for rest of voices
 	for(int iVoice = 0; iVoice < NUM_VOICES; iVoice++){
+		
+		[voices addObject:[NSNull null]];
+		
 		for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
 			PluginProperty * p = [NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0];
 			[self addProperty:p named:[NSString stringWithFormat:@"voice%iBand%i", iVoice+1, iBand+1]];
 		}
-		NSMutableArray * aVoice = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
-		
-		for(int i=0;i<MAX_RESOLUTION;i++){
-			[aVoice addObject:[NSNumber numberWithDouble:0.0]];
-		}
-		
-		[voiceWaveForms addObject:aVoice];
 		PluginProperty * p = [NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0];
 		[self addProperty:p named:[NSString stringWithFormat:@"voice%iOffset", iVoice+1]];
 	}
@@ -77,6 +74,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	propsize = sizeof(AudioDeviceID);
 	verify_noerr (AudioHardwareGetProperty(kAudioHardwarePropertyDefaultInputDevice, &propsize, &inputDevice));
 	BuildDeviceMenu(mInputDeviceList, mInputDevices, inputDevice);
+	[mInputDevices setEnabled:NO];
 	
 	// bind midi channels and controlnumbers
 	
@@ -95,13 +93,40 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		}
 	}
 	
-	for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
-		for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
-			for (int i = 0; i < MAX_RESOLUTION; i++) {
-				voiceSourceWaves[iVoice][iBand][i] = 0.0;
-			}
-		}
+	[self updateAllVoices];
+}
+
+-(void) updateAllVoices{
+	
+	NSMutableArray *newVoices = [NSMutableArray arrayWithCapacity:NUM_VOICES+1];
+	
+	for (int iVoice = 0; iVoice < NUM_VOICES+1;iVoice++) {
+		
+		NSString * propStr;
+		
+		if(iVoice == 0)
+			propStr = [NSString stringWithFormat:@"liveVoiceOffset"];
+		else 
+			propStr = [NSString stringWithFormat:@"voice%iOffset", iVoice];
+		
+		[newVoices addObject:
+		 [self getVoiceWithIndex:iVoice 
+					   amplitude:PropF(@"amplitude") 
+						preDrift:PropF(@"preDrift")
+					   postDrift:PropF(@"postDrift")
+				   smoothingRise:PropF(@"smoothingRise")
+				   smoothingFall:PropF(@"smoothingFall")
+					   smoothing:PropF(@"smoothing")
+					   freqeuncy:PropF(@"frequency")
+					  resolution:PropF(@"resolution")
+						  random:PropF(@"random")
+						  offset:PropF(propStr)
+			withFormerDictionary:[voices objectAtIndex:iVoice]]
+		 ];
+		
 	}
+	
+	voices = [newVoices retain];
 	
 }
 
@@ -140,45 +165,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	}
 	
 	if(PropB(@"updateWaveForms")){
-		float resolution = roundf(PropF(@"resolution"));
-		
-		for(int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++){
-			
-			NSMutableArray * aVoice = [voiceWaveForms objectAtIndex:iVoice];
-			
-			if(resolution != [aVoice count]){
-				
-				[aVoice removeAllObjects];
-				
-				for(int i=0;i<resolution;i++){
-					[aVoice addObject:[NSNumber numberWithDouble:0.0]];
-				}
-				
-			}
-			
-			NSString * propStr;
-			
-			if(iVoice == 0)
-				propStr = [NSString stringWithFormat:@"liveVoiceOffset"];
-			else 
-				propStr = [NSString stringWithFormat:@"voice%iOffset", iVoice];
-			
-			aVoice = [self getWaveFormWithIndex:iVoice 
-									  amplitude:1.0 
-									   preDrift:PropF(@"preDrift")
-									   postDrift:PropF(@"postDrift")
-									  smoothing:PropF(@"smoothing")
-									  freqeuncy:PropF(@"frequency")
-										 random:PropF(@"random")
-										 offset:PropF(propStr)
-								withFormerArray:[voiceWaveForms objectAtIndex:iVoice]
-					  ];
-			
-			
-			[voiceWaveForms replaceObjectAtIndex:iVoice withObject:aVoice];
-			
-		}
-		
+		[self updateAllVoices];
 	}
 	
 }
@@ -270,7 +257,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	
 	for(int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++){
 		
-		NSMutableArray * aVoice = [voiceWaveForms objectAtIndex:iVoice];
+		NSMutableArray * aVoice = [[voices objectAtIndex:iVoice] objectForKey:@"waveLine"];
 		float resolution = [aVoice count];
 		
 		glPushMatrix(); {
@@ -324,14 +311,6 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 						   (bandHeight*0.4)
 						   );
 					
-					ofSetColor(0, 0, 0,127);
-					ofSetLineWidth(1.5);
-					ofNoFill();
-					ofRect(0, 0, 
-						   (levelsWidth/(NUM_VOICES+1.0))*PropF(propStr),
-						   (bandHeight*0.4)
-						   );
-					
 					// sines
 					
 					ofNoFill();
@@ -341,10 +320,31 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 					glBegin(GL_LINE_STRIP);
 					
 					for(int a = 0; a < resolution; a++){
-						glVertex2d(((levelsWidth/(NUM_VOICES+1.0))/(resolution-1))*a, (bandHeight*0.4*0.5)+(voiceSourceWaves[iVoice][iBand][a]*bandHeight*0.2));
+						
+						float aBandAmplitude = [[[[[voices objectAtIndex:iVoice] objectForKey:@"bandLines"] objectAtIndex:iBand] objectAtIndex:a] floatValue];
+						
+						
+						glVertex2d(((levelsWidth/(NUM_VOICES+1.0))/(resolution-1))*a, (bandHeight*0.4*0.5)+(aBandAmplitude*bandHeight*0.2));
 					} 
 					
 					glEnd();
+					
+					// smoothed level
+					
+					ofSetColor(255, 255, 255, 127);
+					ofSetLineWidth(1.5);
+					ofNoFill();
+					float smoothLevel = [[[[voices objectAtIndex:iVoice] objectForKey:@"bandLevels"] objectAtIndex:iBand] floatValue];
+					ofLine((levelsWidth/(NUM_VOICES+1.0))*smoothLevel, 0, 
+						   (levelsWidth/(NUM_VOICES+1.0))*smoothLevel, bandHeight*0.4);
+					
+					ofSetColor(0, 0, 0,127);
+					ofSetLineWidth(1.5);
+					ofNoFill();
+					ofRect(0, 0, 
+						   (levelsWidth/(NUM_VOICES+1.0))*PropF(propStr),
+						   (bandHeight*0.4)
+						   );
 					
 					glTranslated(0,bandHeight*0.5, 0);
 					
@@ -434,175 +434,230 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				glVertex2f(x, [liveVoice simplifiedCurve]->at([liveVoice simplifiedCurve]->size()-i-1)*bandHeight);	
 			}
 			glEnd();
-		}
+		}   
 		
 	}glPopMatrix();
 	
 }
 
-- (NSMutableArray*) getWaveFormWithIndex:(int)index 
-							   amplitude:(float)amplitude 
-								preDrift:(float)preDrift
-							   postDrift:(float)postDrift
-							   smoothing:(float)smoothing
-							   freqeuncy:(float)frequency
-								  random:(float)randomFactor
-								  offset:(float)offset
-						 withFormerArray:(NSMutableArray*)formerArray
+- (NSDictionary*) getVoiceWithIndex:(int)index 
+						  amplitude:(float)amplitude 
+						   preDrift:(float)preDrift
+						  postDrift:(float)postDrift
+					  smoothingRise:(float)smoothingRise
+					  smoothingFall:(float)smoothingFall
+						  smoothing:(float)smoothing
+						  freqeuncy:(float)frequency
+						 resolution:(int)resolution
+							 random:(float)randomFactor
+							 offset:(float)offset
+			   withFormerDictionary:(NSDictionary*)formerDictionary
 {
 	
-	NSMutableArray * aVoice;
+	NSMutableDictionary * newVoice = [NSMutableDictionary dictionaryWithObjectsAndKeys:
+									  [NSNumber numberWithInt:index],@"index", 
+									  [NSNumber numberWithFloat:amplitude],@"amplitude", 
+									  [NSNumber numberWithFloat:preDrift],@"preDrift",
+									  [NSNumber numberWithFloat:postDrift],@"postDrift",
+									  [NSNumber numberWithFloat:smoothingRise],@"smoothingRise",
+									  [NSNumber numberWithFloat:smoothingFall],@"smoothingFall",
+									  [NSNumber numberWithFloat:smoothing],@"smoothing",
+									  [NSNumber numberWithFloat:frequency],@"frequency",
+									  [NSNumber numberWithInt:resolution],@"resolution",
+									  [NSNumber numberWithFloat:randomFactor],@"randomFactor",
+									  [NSNumber numberWithFloat:offset],@"offset",
+									  [NSMutableArray arrayWithCapacity:NUM_BANDS], @"bandLevels",
+									  [NSMutableArray arrayWithCapacity:NUM_BANDS], @"bandLines",
+									  [NSMutableArray arrayWithCapacity:MAX_RESOLUTION], @"waveLine",
+									  nil];
 	
-	if ([voiceWaveForms count]>index) {
+	if (NUM_VOICES+1>index) {
 		
-		int voiceLength = [[voiceWaveForms objectAtIndex:index] count];
+		NSMutableArray * oldBandLevels = [NSMutableArray arrayWithCapacity:NUM_BANDS];
 		
-		int voiceOffset = roundf(offset * voiceLength);
+		NSMutableArray * oldBandLines = [NSMutableArray arrayWithCapacity:resolution];
+		NSMutableArray * newBandLines = [NSMutableArray arrayWithCapacity:resolution];
 		
-		int iFrom = (voiceLength-voiceOffset)%voiceLength;
+		NSMutableArray * oldWaveLine = [NSMutableArray arrayWithCapacity:resolution];
+		NSMutableArray * newWaveLine = [NSMutableArray arrayWithCapacity:resolution];
 		
-		NSMutableArray * anOldVoice = [NSMutableArray arrayWithCapacity:voiceLength];
-		NSMutableArray * aNewVoice = [NSMutableArray arrayWithCapacity:voiceLength];
-
-		// reset offset before regeneration
-		for (int iTo = 0; iTo < voiceLength; iTo++) {
-			[anOldVoice addObject:[formerArray objectAtIndex: iFrom]];
-			iFrom = (iFrom+1)%voiceLength;
+		
+		if (formerDictionary != nil && ![[NSNull null] isEqualTo:formerDictionary] ) {
+			
+			// we have former values - now to be read without offset
+			
+			int iFrom;
+			int formerResolution = [[formerDictionary objectForKey:@"resolution"] intValue];
+			float formerOffset = [[formerDictionary objectForKey:@"offset"] floatValue];
+			int formerOffsetIndex = roundf(formerResolution * formerOffset);
+			
+			// de-offset oldWaveLine
+			iFrom = (formerResolution-formerOffsetIndex)%formerResolution;
+			for (int iTo = 0; iTo < formerResolution; iTo++) {
+				[oldWaveLine addObject:[[formerDictionary objectForKey:@"waveLine"] objectAtIndex: iFrom]];
+				iFrom = (iFrom+1)%formerResolution;
+			}
+			if(formerResolution < resolution){ // handle increasing resolution by padding zeros 
+				for(int i=0; i < resolution - formerResolution; i++){
+					[oldWaveLine addObject:[NSNumber numberWithFloat:0.0]];
+				}
+			}
+			
+			// de-offset oldBandLines
+			for(int iBand = 0; iBand < NUM_BANDS; iBand++){
+				
+				NSMutableArray * formerBandLine = [[formerDictionary objectForKey:@"bandLines"] objectAtIndex:iBand];
+				NSMutableArray * oldBandLine = [NSMutableArray arrayWithCapacity:formerResolution];
+				
+				iFrom = (formerResolution-formerOffsetIndex)%formerResolution;
+				for (int iTo = 0; iTo < formerResolution; iTo++) {
+					[oldBandLine addObject:[formerBandLine objectAtIndex:iFrom]];
+					iFrom = (iFrom+1)%formerResolution;
+				}
+				if(formerResolution < resolution){ // handle increasing resolution by padding zeros 
+					for(int i=0; i < resolution - formerResolution; i++){
+						[oldBandLine addObject:[NSNumber numberWithFloat:0.0]];
+					}
+				}
+				[oldBandLines addObject:oldBandLine];
+			}
+			
+			// fill oldBandLeves
+			
+			oldBandLevels = [formerDictionary objectForKey:@"bandLevels"];
+			
+		} else {
+			// we don't have former values - so we make a zero'ed history
+			
+			//create empty oldWaveLine
+			for (int i = 0; i < resolution; i++) {
+				[oldWaveLine addObject:[NSNumber numberWithFloat:0.0]];
+			}
+			//create empty oldBandLines				
+			for(int iBand = 0; iBand < NUM_BANDS; iBand++){
+				NSMutableArray * oldBandLine = [NSMutableArray arrayWithCapacity:resolution];
+				for (int i = 0; i < resolution; i++) {
+					[oldBandLine addObject:[NSNumber numberWithFloat:0.0]];
+				}
+				[oldBandLines addObject:oldBandLine];
+				[oldBandLevels addObject:[NSNumber numberWithFloat:0.0]];
+			}
 		}
+		
+		double smoothingFactor = 1.0-powf((1.0-sqrt(smoothing)), 2.5);
+		double smoothingRiseFactor = 1.0-powf((1.0-sqrt(smoothingRise)), 2.5);
+		double smoothingFallFactor = 1.0-powf((1.0-sqrt(smoothingFall)), 2.5);
+		double ampRnd = ofRandom(0,randomFactor);
 		
 		float now = ofGetElapsedTimef();
 		
 		for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
 			
-			NSString * propStr;
+			double drift = preDrift*ofGetElapsedTimef()*(iBand+1.0/NUM_BANDS)*2.0*PI;
 			
+			// set the band level smoothed
+			NSString * propStr;
 			if(index == 0)
 				propStr = [NSString stringWithFormat:@"liveVoiceBand%i", iBand+1];
 			else 
 				propStr = [NSString stringWithFormat:@"voice%iBand%i", index, iBand+1];
+			float oldBandLevel = [[oldBandLevels objectAtIndex:iBand] floatValue];
+			float newBandLevel = PropF(propStr);
+			if (newBandLevel > oldBandLevel) {
+				newBandLevel = (smoothingRiseFactor*oldBandLevel)+((1.0-smoothingRiseFactor)*newBandLevel);
+			} else {
+				newBandLevel = (smoothingFallFactor*oldBandLevel)+((1.0-smoothingFallFactor)*newBandLevel);
+			}
+
+			[[newVoice objectForKey:@"bandLevels"] addObject:[NSNumber numberWithFloat:newBandLevel]];
 			
-			float bandValue = PropF(propStr);
+			NSMutableArray * newBandLine = [NSMutableArray arrayWithCapacity:resolution];
 			
-			//			double drift = PropF(@"preDrift")*ofGetElapsedTimef()*(2.0*((iBand-(NUM_BANDS/2))+1.0));
-			double drift = preDrift*ofGetElapsedTimef()*(iBand+1.0/NUM_BANDS)*2.0*PI;
-			double smoothingFactor = 1.0-powf((1.0-sqrt(smoothing)), 2.5);
-			double ampRnd = ofRandom(0,randomFactor);
-			
-			for (int i = 0; i < voiceLength; i++) {
+			for (int i = 0; i < resolution; i++) {
 				
 				float formerAmplitude;
 				if (iBand == 0) {
 					//when doing first band we take the former value
-					formerAmplitude = smoothingFactor*[[anOldVoice objectAtIndex:i] floatValue];
+					formerAmplitude = smoothingFactor*[[oldWaveLine objectAtIndex:i] floatValue];
+					//formerAmplitude = 0;
 				} else {
 					//when doing other bands we take our own value, which is why we scale by 1.0/NUM_BANDS when adding the bands up
-					formerAmplitude = [[aNewVoice objectAtIndex:i] floatValue];
+					formerAmplitude = [[newWaveLine objectAtIndex:i] floatValue];
 				}
 				
-				float amp = sinf((((1.0*i)/voiceLength)*(1.0+iBand))*frequency*PI*2.0/*+(1.0/(1+iBand))*/-drift) * fmaxf(bandValue, ampRnd);
+				float amp = sinf((((1.0*i)/resolution)*(1.0+iBand))*frequency*PI*2.0/*+(1.0/(1+iBand))*/-drift) * fmaxf(newBandLevel, ampRnd) * amplitude;
 				
 				NSNumber * anAmplitude = [NSNumber numberWithFloat:
-										  ((1.0/NUM_BANDS) * amp * (1.0-smoothingFactor))	// scaling with 1.0/NUM_BANDS so the sum of bands will be normalised
-										  +formerAmplitude									// when adding the formerAmplitude, that we got from the if clause above
+										  ((1.0/NUM_BANDS) * amp			// scaling with 1.0/NUM_BANDS so the sum of bands will be normalised
+										   * (1.0-smoothingFactor)
+										   )+formerAmplitude					// when adding the formerAmplitude, that we got from the if clause above
 										  ];
 				
-				voiceSourceWaves[index][iBand][i] = (voiceSourceWaves[index][iBand][i]*smoothingFactor) + (amp * (1.0-smoothingFactor));
-
+				
 				if (iBand == 0) {
-					[aNewVoice addObject:anAmplitude];
+					[newWaveLine addObject:anAmplitude];
 				} else {
-					[aNewVoice replaceObjectAtIndex:i withObject:anAmplitude];
+					[newWaveLine replaceObjectAtIndex:i withObject:anAmplitude];
 				}
 				
+				[newBandLine addObject:[NSNumber numberWithFloat:amp]];
+				
 			}
+			[newBandLines addObject:newBandLine];
 			
 		}
-
-		//post drift
 		
-		for (int i = 0; i < voiceLength; i++) {
-
-			int iFrom = i;
-			if(postDrift != 0){
-				iFrom += (postDrift<0)?-1:1;
-				iFrom = (iFrom+voiceLength)%voiceLength;
-			}
-			float postDriftBalance = fabs(postDrift);
-			[aNewVoice replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:
-														  ((1.0-postDriftBalance)*[[aNewVoice objectAtIndex:i] floatValue])+
-														  ((postDriftBalance)*[[anOldVoice objectAtIndex:iFrom] floatValue])
-														  ]];
+		/*//post drift
+		 for (int i = 0; i < resolution; i++) {
+		 
+		 int iFrom = i;
+		 if(postDrift != 0){
+		 iFrom += (postDrift<0)?-1:1;
+		 iFrom = (iFrom+resolution)%resolution;
+		 }
+		 float postDriftBalance = fabs(postDrift);
+		 [newWaveLine replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:
+		 ((1.0-postDriftBalance)*[[newWaveLine objectAtIndex:i] floatValue])+
+		 ((postDriftBalance)*[[oldWaveLine objectAtIndex:iFrom] floatValue])
+		 ]];
+		 
+		 }
+		 */
+		
+		int iFrom;
+		int offsetIndex = roundf(resolution * offset);
+		
+		// offset newWaveLine
+		iFrom = offsetIndex%resolution;
+		for (int iTo = 0; iTo < resolution; iTo++) {
+			[[newVoice objectForKey:@"waveLine"] addObject:[newWaveLine objectAtIndex: iFrom]];
+			iFrom = (iFrom+1)%resolution;
+		}
+		
+		// offset newBandLines
+		for(int iBand = 0; iBand < NUM_BANDS; iBand++){
 			
+			NSMutableArray * newBandLineWithOffset = [NSMutableArray arrayWithCapacity:resolution];
+			iFrom = offsetIndex%resolution;
+			
+			for (int iTo = 0; iTo < resolution; iTo++) {
+				[newBandLineWithOffset addObject:[[newBandLines objectAtIndex:iBand] objectAtIndex:iFrom]];
+				iFrom = (iFrom+1)%resolution;
+			}
+			[[newVoice objectForKey:@"bandLines"] addObject:newBandLineWithOffset];
 		}
-
-		aVoice = [NSMutableArray arrayWithCapacity:voiceLength];
 		
+		[newVoice retain];
 		
+		[voices replaceObjectAtIndex:index withObject:newVoice];
 		
-		// apply offset after wave generation
-		iFrom = voiceOffset%voiceLength;
-		
-		for (int iTo = 0; iTo < voiceLength; iTo++) {
-			[aVoice addObject:[aNewVoice objectAtIndex: iFrom]];
-			iFrom = (iFrom+1)%voiceLength;
-		}
+		return newVoice;
 		
 	} else {
-		aVoice = [NSMutableArray array];
+		return nil;
 	}
 	
-	[aVoice retain];
-	
-	return aVoice;
-	
 }
-
-- (NSMutableArray*) getWaveFormBandsWithIndex:(int)index 
-									amplitude:(float)amplitude 
-									 preDrift:(float)preDrift
-									postDrift:(float)postDrift
-									smoothing:(float)smoothing
-									freqeuncy:(float)frequency
-									   random:(float)randomFactor
-									   offset:(float)offset
-							  withFormerArray:(NSMutableArray*)formerArray
-{
-	
-	NSMutableArray * aVoice = [self getWaveFormWithIndex:index 
-											   amplitude:amplitude
-												preDrift:preDrift
-											   postDrift:postDrift
-											   smoothing:smoothing
-											   freqeuncy:frequency
-												  random:randomFactor
-												  offset:offset
-										 withFormerArray:formerArray
-							   ];
-	
-	NSMutableArray * waveFormBands = [NSMutableArray arrayWithCapacity:NUM_BANDS];
-	
-	int voiceLength = [aVoice count]; 
-	
-	for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
-		
-		NSMutableArray * aWave = [NSMutableArray arrayWithCapacity:voiceLength];
-		
-		for (int i = 0; i < voiceLength; i++) {
-		
-			[aWave addObject:[NSNumber numberWithFloat:voiceSourceWaves[index][iBand][i]] ];
-			
-		}
-		
-		[waveFormBands addObject:aWave];
-		
-	}
-	
-	return waveFormBands;
-	
-}
-
-
-
 
 - (BOOL) autoresizeControlview{
 	return YES;	

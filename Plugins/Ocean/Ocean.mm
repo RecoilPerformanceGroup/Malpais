@@ -16,8 +16,10 @@
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"amplitude"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"alpha"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1000.0] named:@"resolution"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:1.0 maxValue:MAX_RESOLUTION] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:10.0] named:@"frequency"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.1 minValue:0.0 maxValue:1.0] named:@"smootingRise"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.35 minValue:0.0 maxValue:1.0] named:@"smoothingFall"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2.0] named:@"floorDepth"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-5.0 maxValue:5.0] named:@"drift"];
@@ -47,19 +49,13 @@
 
 -(void) setup{
 	
-	waves = [NSMutableArray array];
+	voices = [NSMutableArray array];
 	
 	for (int i = 0; i < NUM_VOICES+1; i++) {
 		waveForm[i] =  new MSA::Interpolator1D;
 		waveForm[i]->reserve((int)roundf(PropF(@"resolution")));
 		
-		NSMutableArray * aVoice = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
-		
-		for(int i=0;i<MAX_RESOLUTION;i++){
-			[aVoice addObject:[NSNumber numberWithDouble:0.0]];
-		}
-		
-		[waves addObject:aVoice];
+		[voices addObject:[NSNull null]];
 	}
 	mouseParticle = new ofxParticle();
 	mouseParticle->setActive(false);
@@ -229,22 +225,26 @@
 			
 			NSString * waveChannelStr = [NSString stringWithFormat:@"wave%iChannel",iVoice];
 			
-			NSMutableArray * currentWave = [waves objectAtIndex:iVoice];
+			NSDictionary * currentVoice = [voices objectAtIndex:iVoice];
 			
-			NSMutableArray * newWave = [GetPlugin(Wave)
-										getWaveFormWithIndex:(int)roundf(PropF(waveChannelStr))
-										amplitude:1.0 
-										preDrift:PropF(@"drift")
-										postDrift:0
-										smoothing:PropF(@"smoothing")
-										freqeuncy:PropF(@"frequency")
-										random:0
-										offset: fmodf((iVoice/(NUM_VOICES+1.0))*PropF(@"offset"), 1.0)
-										withFormerArray:currentWave
-										];
+			NSDictionary * newVoice = [GetPlugin(Wave)getVoiceWithIndex:(int)roundf(PropF(waveChannelStr))
+															  amplitude:1.0
+															   preDrift:PropF(@"drift")
+															  postDrift:0
+														  smoothingRise:PropF(@"smoothingRise")
+														  smoothingFall:PropF(@"smoothingFall")
+															  smoothing:PropF(@"smoothing")
+															  freqeuncy:PropF(@"frequency")
+															 resolution:PropF(@"resolution")
+																 random:0
+																 offset:fmodf((iVoice/(NUM_VOICES+1.0))*PropF(@"offset"), 1.0)
+												   withFormerDictionary:currentVoice
+									   ];
 			
-			[waves replaceObjectAtIndex:iVoice withObject:newWave];
+			[voices replaceObjectAtIndex:iVoice withObject:newVoice];
 			
+			NSMutableArray * newWave = [newVoice objectForKey:@"waveLine"];
+
 			if ([newWave count] > 0) {
 				waveForm[iVoice]->clear();
 				for (int i=0; i < [newWave count]; i++) {

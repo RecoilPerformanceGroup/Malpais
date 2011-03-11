@@ -14,9 +14,9 @@
 
 @interface Voice : ofPlugin {
 	
+	NSDictionary * voice;
 	NSMutableArray * waveForms;
-	NSMutableArray * wave;
-
+	
 }
 
 - (float) aspect;
