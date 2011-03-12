@@ -28,7 +28,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"smoothingRise"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"smoothingFall"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:1.0] named:@"smoothing"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:MAX_RESOLUTION minValue:1.0 maxValue:MAX_RESOLUTION] named:@"resolution"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:70.0 minValue:1.0 maxValue:MAX_RESOLUTION] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:10 minValue:1 maxValue:10] named:@"liveVoiceSamples"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:90 minValue:1 maxValue:100] named:@"liveVoiceAmplification"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"recordLive"];

@@ -30,8 +30,10 @@
 
 -(void) initPlugin{
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"amplitude"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1000.0] named:@"resolution"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:70.0 minValue:1.0 maxValue:MAX_RESOLUTION] named:@"resolution"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:10.0] named:@"frequency"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.1 minValue:0.0 maxValue:1.0] named:@"smootingRise"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.35 minValue:0.0 maxValue:1.0] named:@"smoothingFall"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.02 minValue:-2.0 maxValue:2.0] named:@"drift"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-1.0 maxValue:1.0] named:@"direction"];
@@ -67,7 +69,7 @@
 
 -(void) setup{	
 	
-	waves = [NSMutableArray arrayWithCapacity:NUM_VOICES+1];
+	voices = [NSMutableArray arrayWithCapacity:NUM_VOICES+1];
 	
 	for (int i = 0; i < NUM_VOICES+1; i++) {
 		distortion[i] = new MSA::Interpolator1D;
@@ -75,13 +77,7 @@
 		waveForm[i] =  new MSA::Interpolator1D;
 		waveForm[i]->reserve((int)roundf(PropF(@"resolution")));
 		
-		NSMutableArray * aVoice = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
-		
-		for(int u=0;u<MAX_RESOLUTION;u++){
-			[aVoice addObject:[NSNumber numberWithDouble:0.0]];
-		}
-		
-		[waves addObject:aVoice];
+		[voices addObject:[NSNull null]];
 		
 		bool notOk = true;
 		while(notOk){
@@ -305,19 +301,25 @@
 			
 			NSString * waveChannelStr = [NSString stringWithFormat:@"wave%iChannel",iVoice];
 			
-			wave = [GetPlugin(Wave)
-					getWaveFormWithIndex:(int)roundf(PropF(waveChannelStr))
-					amplitude:1.0 
-					preDrift:PropF(@"drift")
-					postDrift:0
-					smoothing:PropF(@"smoothing")
-					freqeuncy:PropF(@"frequency")
-					random:0
-					offset:0
-					withFormerArray:[waves objectAtIndex:iVoice]
-					];
+			NSDictionary * currentVoice = [voices objectAtIndex:iVoice];
 			
-			[waves replaceObjectAtIndex:iVoice withObject:wave]; 
+			NSDictionary * newVoice = [GetPlugin(Wave)getVoiceWithIndex:(int)roundf(PropF(waveChannelStr))
+															  amplitude:1.0
+															   preDrift:PropF(@"drift")
+															  postDrift:0
+														  smoothingRise:PropF(@"smoothingRise")
+														  smoothingFall:PropF(@"smoothingFall")
+															  smoothing:PropF(@"smoothing")
+															  freqeuncy:PropF(@"frequency")
+															 resolution:PropF(@"resolution")
+																 random:0
+																 offset:0
+												   withFormerDictionary:currentVoice
+									   ];
+			
+			[voices replaceObjectAtIndex:iVoice withObject:newVoice];
+			
+			wave = [newVoice objectForKey:@"waveLine"];
 			
 			float direction = PropF(@"direction");
 			

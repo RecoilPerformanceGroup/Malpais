@@ -18,10 +18,10 @@
 
 
 	vector<float> offsets[NUM_VOICES +1];
-	
+
 	NSMutableArray * wave;
 	
-	NSMutableArray * waves;
+	NSMutableArray * voices;
 	
 	bool reversed;
 	
