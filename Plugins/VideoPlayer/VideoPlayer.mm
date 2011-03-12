@@ -263,11 +263,7 @@
 		if([movie[PropI(@"video")-1] currentTime].timeValue >= [movie[PropI(@"video")-1] duration].timeValue-0.1*[movie[PropI(@"video")-1] duration].timeScale){
 			//Videoen er nået til ende, så gå til næste video
 			[Prop(@"video") setIntValue:0];
-		}		
-		
-		
-		
-		if([movie[PropI(@"video")-1] hasChapters]){
+		} else if([movie[PropI(@"video")-1] hasChapters]){
 			//	NSLog(@"Selected chapter: %i,  number chapter: %i,  currentChapter: %i",PropI(@"chapter"), [movie[PropI(@"video")-1] chapterCount], [movie[PropI(@"video")-1] chapterIndexForTime:[movie[PropI(@"video")-1] currentTime]] );
 			int currentChapter = [movie[PropI(@"video")-1] chapterIndexForTime:QTTimeIncrement([movie[PropI(@"video")-1] currentTime],QTMakeTime(1, 30))];
 			int numberChapters = [movie[PropI(@"video")-1] chapterCount];

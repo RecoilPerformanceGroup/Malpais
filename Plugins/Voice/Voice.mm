@@ -10,7 +10,22 @@
 #import "Keystoner.h"
 
 
+
+
+
 @implementation Voice
+
+
+-(float) falloff:(float)p{
+	if(p >= 1)
+		return 1;
+	if(p<=0)
+		return 0;
+	p *= 6;
+	p -= 3;
+	
+	return 1.0/(1.0+pow(5,-p));
+}
 
 -(void) initPlugin{
 	
@@ -26,6 +41,10 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-1.0 maxValue:1.0] named:@"drift"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"random"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:@"waveChannel"];
+	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"falloff"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"falloffStrength"];
+
 	
 	[self assignMidiChannel:11];
 }
@@ -141,6 +160,7 @@
 					float x = ([self aspect]*i)/resolution;
 					//					float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
 					ofxPoint2f p = ofxPoint2f(x, [[[waveForms objectAtIndex:iBand] objectAtIndex:i] floatValue]*amplitude);
+					p.y *= 1*(1-PropF(@"falloffStrength")) + PropF(@"falloffStrength")*[self falloff:x*1.0/PropF(@"falloff")]*[self falloff:([self aspect]-x)*1.0/PropF(@"falloff")];
 					ofxVec2f v = p - lastPoint;
 					ofxVec2f h = ofxVec2f(-v.y,v.x);
 					h.normalize();
