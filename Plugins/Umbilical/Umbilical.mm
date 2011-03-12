@@ -65,6 +65,22 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"springRepulsion"];	
 	
 	[self assignMidiChannel:7];
+	
+	
+	waveForms = [NSMutableArray arrayWithCapacity:NUM_BANDS];
+	
+	for(int iBand=0;iBand<NUM_BANDS;iBand++){
+		
+		NSMutableArray * aBand = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
+		
+		for (int iAmplitude=0; iAmplitude<MAX_RESOLUTION; iAmplitude++) {
+			[aBand addObject:[NSNumber numberWithDouble:0.0]];
+		}
+		
+		[waveForms addObject:aBand];
+	}
+	
+	[waveForms retain];
 }
 
 -(void) setup{	
@@ -319,6 +335,49 @@
 			
 			[voices replaceObjectAtIndex:iVoice withObject:newVoice];
 			
+			if(iVoice == 0){
+				
+				NSMutableArray * newWaveForms = [newVoice objectForKey:@"bandLines"];	
+				int voiceLength = [[newWaveForms objectAtIndex:0] count];
+				
+				NSMutableArray * oldWaveForms = [NSMutableArray arrayWithArray:waveForms];	
+				
+				[waveForms removeAllObjects];
+				
+				float postDrift = PropF(@"drift");
+				
+				for(int iBand=0;iBand<NUM_BANDS;iBand++){
+					
+					NSMutableArray * aBand = [NSMutableArray arrayWithCapacity:voiceLength];
+					
+					for (int iAmplitude=0; iAmplitude<voiceLength; iAmplitude++) {
+						
+						int iFrom = iAmplitude;
+						if(postDrift != 0){
+							iFrom += (postDrift>0)?-1:1;
+							iFrom = (iFrom+voiceLength)%voiceLength;
+						}
+						
+						double postDriftBalance = 1.0-powf((1.0-sqrt(fabs(postDrift))), 2.0);
+						
+						if([[newWaveForms objectAtIndex:iBand] count] == [[oldWaveForms objectAtIndex:iBand] count]){
+							[aBand addObject:[NSNumber numberWithFloat:
+											  ((1.0-postDriftBalance)*[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue])+
+											  ((postDriftBalance)*[[[oldWaveForms objectAtIndex:iBand] objectAtIndex:iFrom] floatValue])
+											  ]];
+						} else {
+							[aBand addObject:[NSNumber numberWithFloat:[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue]]];
+						}
+						
+						
+					}
+					
+					[waveForms addObject:aBand];
+				}
+				
+				
+			}
+			
 			wave = [newVoice objectForKey:@"waveLine"];
 			
 			float direction = PropF(@"direction");
@@ -429,13 +488,50 @@
 		endSegment = resolution*end.y;
 	}
 	
-
+	
 	if(iVoice==0){
 		int u=0;
 		if(numStrings > 1)
 			u = 1;
+		
+		
+		
+		//---&
+		/*
+		 for (int iBand = 0;iBand<NUM_BANDS; iBand++) {
+		 
+		 int resolution = [[waveForms objectAtIndex:iBand] count];
+		 
+		 glBegin(GL_QUAD_STRIP);
+		 ofxPoint2f lastPoint = ofxPoint2f(0,0);
+		 for (int i = 0;i< resolution; i++) {
+		 
+		 float aspect = [self aspect];
+		 
+		 float x = ([self aspect]*i)/resolution;
+		 //					float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
+		 ofxPoint2f p = ofxPoint2f(x, [[[waveForms objectAtIndex:iBand] objectAtIndex:i] floatValue]*amplitude);
+		 p.y *= 1*(1-PropF(@"falloffStrength")) + PropF(@"falloffStrength")*[self falloff:x*1.0/PropF(@"falloff")]*[self falloff:([self aspect]-x)*1.0/PropF(@"falloff")];
+		 ofxVec2f v = p - lastPoint;
+		 ofxVec2f h = ofxVec2f(-v.y,v.x);
+		 h.normalize();
+		 h *= lineWidth;
+		 glVertex2f((p+h).x, (p+h).y);
+		 glVertex2f((p-h).x, (p-h).y);				
+		 lastPoint = p;
+		 }
+		 
+		 glEnd();
+		 
+		 }*/
+		//---/
+		
+		
+		
 		for(u;u<numStrings;u++){
 			endSegment = segments;
+			
+			int band = u % 6 + 1;
 			
 			ofSetColor(255, 255, 255);
 			
@@ -452,7 +548,10 @@
 					float x = 1.0/(endSegment-startSegment)*(i-startSegment);
 					if (i < segments) {
 						float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
-						ofxPoint2f p = ofxPoint2f(offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x*length)*(1.0-weighLiveOrBuffer)))*amplitude*f, 0);
+						float val = [[[waveForms objectAtIndex:band] objectAtIndex:i] floatValue]*amplitude*f;
+						
+						//	ofxPoint2f p = ofxPoint2f(offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x*length)*(1.0-weighLiveOrBuffer)))*amplitude*f, 0);
+						ofxPoint2f p = ofxPoint2f(val, 0);
 						MSA::Vec2<float> springP = springInterpolator[u]->sampleAt(x);
 						p += ofxPoint2f(springP.x, springP.y);
 						ofxVec2f v = p - lastPoint;
@@ -475,16 +574,16 @@
 			
 		}
 		
-	/*	for(int i=0;i<particlesLength;i++){
-			ofSetColor(255, 0, 0,255);
-			ofFill();
-			ofCircle(particles[0][i].x/100.0, particles[0][i].y/100.0, 0.05);
-		}
-	*/	
+		/*	for(int i=0;i<particlesLength;i++){
+		 ofSetColor(255, 0, 0,255);
+		 ofFill();
+		 ofCircle(particles[0][i].x/100.0, particles[0][i].y/100.0, 0.05);
+		 }
+		 */	
 	} else {
 		begin.y = [GetPlugin(SceneX) getBackline:1];
 		
-
+		
 		
 		glPushMatrix();{
 			
@@ -498,7 +597,7 @@
 			glScaled(1.0-[GetPlugin(SceneX) getBackline:1], 1, 1);
 			
 			gradient.getTextureReference().bind();
-
+			
 			glBegin(GL_QUAD_STRIP);
 			ofxPoint2f lastPoint = ofxPoint2f(0,0);		
 			for (int i = startSegment;i< endSegment; i++) {
@@ -521,7 +620,7 @@
 			}
 			glEnd();
 			gradient.getTextureReference().unbind();
-
+			
 			
 		} glPopMatrix();
 		
@@ -532,8 +631,9 @@
 	ApplySurface(@"Floor");{
 		//	glScaled([self aspect], 1, 1);
 		
-		[self drawWave:0 from:startPos to:endPos];
-		
+		if(PropB(@"wave0On")){
+			[self drawWave:0 from:startPos to:endPos];
+		}
 		for (int iVoice = 1; iVoice < NUM_VOICES+1; iVoice++) {
 			NSString * voiceLengthStr = [NSString stringWithFormat:@"wave%ilength",iVoice];
 			

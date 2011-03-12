@@ -22,7 +22,8 @@
 	NSMutableArray * wave;
 	
 	NSMutableArray * voices;
-	
+	NSMutableArray * waveForms;
+
 	bool reversed;
 	
 	ofxVec2f startPos;
