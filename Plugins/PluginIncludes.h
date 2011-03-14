@@ -14,6 +14,7 @@
 #include "Statestik.h"
 #include "Beach.h"
 #include "Voice.h"
+#include "Box.h"
 
 #include "SceneX.h"
 //#include "Tracking.h"

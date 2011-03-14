@@ -45,6 +45,8 @@
 		33F9CD11130DB0620036EF0B /* VideoPlayer.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33F9CD0F130DB0620036EF0B /* VideoPlayer.xib */; };
 		4BA258A61153B0800008D49C /* BWToolkitFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
 		4BA259911153B98B0008D49C /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
+		7F06013D132E66FD003F5CE8 /* Box.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F06013B132E66FD003F5CE8 /* Box.mm */; };
+		7F06013E132E66FD003F5CE8 /* Box.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F06013C132E66FD003F5CE8 /* Box.xib */; };
 		7F0F7752130C1A3F009A31C0 /* Ocean.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */; };
 		7F0F777A130C20A7009A31C0 /* Ocean.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F7779130C20A7009A31C0 /* Ocean.xib */; };
 		7F0F77DF130C25DC009A31C0 /* floortest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F77DE130C25DC009A31C0 /* floortest.jpg */; };
@@ -323,6 +325,9 @@
 		4BA258A31153B0790008D49C /* GRPieDataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRPieDataSet.h; sourceTree = "<group>"; };
 		4BA258A41153B0790008D49C /* GRXYDataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRXYDataSet.h; sourceTree = "<group>"; };
 		4BA258A51153B0800008D49C /* BWToolkitFramework.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BWToolkitFramework.framework; path = ../../../addons/ofxCocoaPlugins/src/Libs/BWToolkitFramework.framework; sourceTree = "<group>"; };
+		7F06013A132E66FD003F5CE8 /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box.h; sourceTree = "<group>"; };
+		7F06013B132E66FD003F5CE8 /* Box.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Box.mm; sourceTree = "<group>"; };
+		7F06013C132E66FD003F5CE8 /* Box.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Box.xib; sourceTree = "<group>"; };
 		7F0F7750130C1A3F009A31C0 /* Ocean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ocean.h; sourceTree = "<group>"; };
 		7F0F7751130C1A3F009A31C0 /* Ocean.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Ocean.mm; sourceTree = "<group>"; };
 		7F0F7779130C20A7009A31C0 /* Ocean.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Ocean.xib; sourceTree = "<group>"; };
@@ -932,6 +937,16 @@
 			);
 			name = GraphKitHeaders;
 			path = ../../../addons/ofxCocoaPlugins/src/Libs/GraphKitHeaders;
+			sourceTree = "<group>";
+		};
+		7F060139132E66FD003F5CE8 /* Box */ = {
+			isa = PBXGroup;
+			children = (
+				7F06013A132E66FD003F5CE8 /* Box.h */,
+				7F06013B132E66FD003F5CE8 /* Box.mm */,
+				7F06013C132E66FD003F5CE8 /* Box.xib */,
+			);
+			path = Box;
 			sourceTree = "<group>";
 		};
 		7F0F774F130C1A29009A31C0 /* Ocean */ = {
@@ -1864,6 +1879,7 @@
 		DDC8EA5D113809B100574926 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				7F060139132E66FD003F5CE8 /* Box */,
 				7FAE26DE131FBC0500F38926 /* Voice */,
 				7F204759131AEBE900388BC3 /* Beach */,
 				33F793D41313D4DC009414EA /* Statestik */,
@@ -2314,6 +2330,7 @@
 				33F794501313E55C009414EA /* ApexNew-UltraItalic.otf in Resources */,
 				7F20475E131AEBEA00388BC3 /* Beach.xib in Resources */,
 				7FAE26E3131FBC0500F38926 /* Voice.xib in Resources */,
+				7F06013E132E66FD003F5CE8 /* Box.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2448,6 +2465,7 @@
 				7FAE26E2131FBC0500F38926 /* Voice.mm in Sources */,
 				7FAE285F1320326900F38926 /* AudioDeviceList.cpp in Sources */,
 				7FAE28601320326A00F38926 /* AudioDevice.cpp in Sources */,
+				7F06013D132E66FD003F5CE8 /* Box.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

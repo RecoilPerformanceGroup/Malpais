@@ -547,12 +547,13 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		double smoothingFactor = 1.0-powf((1.0-sqrt(smoothing)), 2.5);
 		double smoothingRiseFactor = 1.0-powf((1.0-sqrt(smoothingRise)), 2.5);
 		double smoothingFallFactor = 1.0-powf((1.0-sqrt(smoothingFall)), 2.5);
-		double ampRnd = ofRandom(0,randomFactor);
 		
 		float now = ofGetElapsedTimef();
 		
 		for (int iBand = 0; iBand < NUM_BANDS; iBand++) {
-			
+
+			double ampRnd = ofRandom(0,randomFactor);
+
 			double drift = preDrift*ofGetElapsedTimef()*(iBand+1.0/NUM_BANDS)*2.0*PI;
 			
 			// set the band level smoothed
@@ -563,11 +564,13 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				propStr = [NSString stringWithFormat:@"voice%iBand%i", index, iBand+1];
 			float oldBandLevel = [[oldBandLevels objectAtIndex:iBand] floatValue];
 			float newBandLevel = PropF(propStr);
+			newBandLevel = fmaxf(newBandLevel, ampRnd);
 			if (newBandLevel > oldBandLevel) {
 				newBandLevel = (smoothingRiseFactor*oldBandLevel)+((1.0-smoothingRiseFactor)*newBandLevel);
 			} else {
 				newBandLevel = (smoothingFallFactor*oldBandLevel)+((1.0-smoothingFallFactor)*newBandLevel);
 			}
+			
 
 			[[newVoice objectForKey:@"bandLevels"] addObject:[NSNumber numberWithFloat:newBandLevel]];
 			
@@ -585,7 +588,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 					formerAmplitude = [[newWaveLine objectAtIndex:i] floatValue];
 				}
 				
-				float amp = sinf((((1.0*i)/resolution)*(1.0+iBand))*frequency*PI*2.0/*+(1.0/(1+iBand))*/-drift) * fmaxf(newBandLevel, ampRnd) * amplitude;
+				float amp = sinf((((1.0*i)/resolution)*(1.0+iBand))*frequency*PI*2.0/*+(1.0/(1+iBand))*/-drift) * newBandLevel * amplitude;
 				
 				NSNumber * anAmplitude = [NSNumber numberWithFloat:
 										  ((1.0/NUM_BANDS) * amp			// scaling with 1.0/NUM_BANDS so the sum of bands will be normalised
