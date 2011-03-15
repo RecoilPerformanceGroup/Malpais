@@ -27,12 +27,12 @@ extern ofAppBaseWindow * window;
 	//[pluginManagerController addPlugin:[[Leaking alloc] init]];
 	[pluginManagerController addPlugin:[[TrackingElements alloc] init]];
 	[pluginManagerController addPlugin:[[Umbilical alloc] init]];
-	[pluginManagerController addPlugin:[[VideoPlayer alloc] init]];
 	[pluginManagerController addPlugin:[[Ocean alloc] init]];
 	[pluginManagerController addPlugin:[[Beach alloc] init]];
 	[pluginManagerController addPlugin:[[Voice alloc] init]];
 	[pluginManagerController addPlugin:[[Statestik alloc] init]];
 	[pluginManagerController addPlugin:[[Box alloc] init]];
+	[pluginManagerController addPlugin:[[VideoPlayer alloc] init]];
 
 	[pluginManagerController addPlugin:[[SceneX alloc] init]];
 }
