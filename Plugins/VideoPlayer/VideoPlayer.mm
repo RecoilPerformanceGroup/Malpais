@@ -34,7 +34,7 @@
 					}
 				}
 				forceDrawNextFrame = YES;
-				
+				lastFramesVideo = 0;
 				[chapterSelector removeAllItems];
 				[chapterSelector addItemWithTitle:@" - No Chapters - "];
 				[((NumberProperty*) Prop(@"chapter")) setMaxValue:[NSNumber numberWithInt:0]];
@@ -297,10 +297,11 @@
 				//NSLog(@"Change video %i to %i",lastFramesVideo, i);
 				
 				dispatch_async(dispatch_get_main_queue(), ^{		
-					forceDrawNextFrame = YES;						
-					
-					[movie[lastFramesVideo] setRate:0.0];	
-					[movie[lastFramesVideo] gotoBeginning];				
+					forceDrawNextFrame = YES;	
+					if(lastFramesVideo > 0){
+						[movie[lastFramesVideo] setRate:0.0];	
+						[movie[lastFramesVideo] gotoBeginning];				
+					}
 					[movie[i] gotoBeginning];				
 					[movie[i] setRate:1.0];					
 				});
