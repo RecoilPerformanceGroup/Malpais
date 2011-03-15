@@ -16,17 +16,6 @@
 @implementation Box
 
 
--(float) falloff:(float)p{
-	if(p >= 1)
-		return 1;
-	if(p<=0)
-		return 0;
-	p *= 6;
-	p -= 3;
-	
-	return 1.0/(1.0+pow(5,-p));
-}
-
 -(void) initPlugin{
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"alpha"];

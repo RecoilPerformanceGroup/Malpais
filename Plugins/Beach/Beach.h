@@ -20,6 +20,7 @@
 	float waveFormYpos[NUM_VOICES+1];
 	NSMutableArray * voices;
 	vector<float> rollPosHistory;
+	ofImage gradient;
 	
 }
 

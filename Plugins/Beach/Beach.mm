@@ -38,11 +38,13 @@
 		 ];
 	}
 	
-	[self assignMidiChannel:10];
+	[self assignMidiChannel:12];
 	
 }
 
 -(void) setup{
+	
+	gradient.loadImage([[[NSBundle mainBundle] pathForResource:@"gradient wave" ofType:@"png" inDirectory:@""] cString]);
 	
 	voices = [NSMutableArray array];
 	
@@ -80,18 +82,18 @@
 			NSDictionary * currentVoice = [voices objectAtIndex:iVoice];
 			
 			NSDictionary * newVoice = [GetPlugin(Wave)getVoiceWithIndex:(int)roundf(PropF(waveChannelStr))
-											amplitude:1.0
-											 preDrift:PropF(@"drift")
-											postDrift:0
-										smoothingRise:PropF(@"smoothingRise")
-										smoothingFall:PropF(@"smoothingFall")
-											smoothing:PropF(@"smoothing")
-											freqeuncy:PropF(@"frequency")
-										   resolution:PropF(@"resolution")
-											   random:0
-											   offset:fmodf((ofGetElapsedTimef()*PropF(@"offset"))+(iVoice/(NUM_VOICES+1.0)), 1.0)
-								 withFormerDictionary:currentVoice
-					 ];
+															  amplitude:1.0
+															   preDrift:PropF(@"drift")
+															  postDrift:0
+														  smoothingRise:PropF(@"smoothingRise")
+														  smoothingFall:PropF(@"smoothingFall")
+															  smoothing:PropF(@"smoothing")
+															  freqeuncy:PropF(@"frequency")
+															 resolution:PropF(@"resolution")
+																 random:0
+																 offset:fmodf((ofGetElapsedTimef()*PropF(@"offset"))+(iVoice/(NUM_VOICES+1.0)), 1.0)
+												   withFormerDictionary:currentVoice
+									   ];
 			
 			[voices replaceObjectAtIndex:iVoice withObject:newVoice];
 			
@@ -117,12 +119,13 @@
 	double rollPosSmoothing = 1.0-powf((1.0-sqrt(PropF(@"rollSmooth"))), 2.5);
 	
 	ofEnableAlphaBlending();
-
+	
 	ApplySurface(@"Floor");{
 		
 		ofSetColor(255, 255, 255, 255*PropF(@"alpha"));
 		ofFill();
-		
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
 		glPushMatrix();{
 			
 			for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
@@ -155,13 +158,15 @@
 			}
 			
 		} glPopMatrix();
-		
+		ofEnableAlphaBlending();
+
 		ofSetColor(0,0,0,255);
 		ofFill();
 		ofRect(-2.0, -PropF(@"floorDepth"), 4.0+[self aspect], -2.0); // top
 		ofRect(-2.0, 1.0, 4.0+[self aspect], 2.0); // bottom
 		ofRect(-2.0, -PropF(@"floorDepth"), 2.0, 4.0+PropF(@"floorDepth")); // left
 		ofRect([self aspect], -PropF(@"floorDepth"), 4.0+[self aspect], 4.0+PropF(@"floorDepth")); // right
+		
 		
 	} PopSurface();
 	
@@ -174,34 +179,47 @@
 	
 	float length = v1.length();
 	
-	ofBeginShape();
+	float texWidth = gradient.width;
+	float texXstep = texWidth/(NUM_VOICES+1);
+	float texHeight = gradient.height;
 	
-	ofVertex([self aspect], 0);
-	ofVertex(0, 0);
+	ofFill();
 	
-	glPushMatrix();{
+	
+	//		glTranslated(begin->x,begin->y, 0);
+	//		glRotated(-v1.angle(v2)+90, 0, 0, 1);
+	
+	int resolution = PropI(@"resolution");
+	float amplitude = fminf(PropF(@"amplitude"),begin->y);
+	
+	ofxPoint2f oldP = ofxPoint2f(0.0, 0.0);	
+	
+	for (int i = 0;i < resolution; i++) {
+		float xStep = 1.0/resolution;
+		float x = xStep * i;
+		float y = waveForm[iVoice]->sampleAt(x)*amplitude;
+		float texXstart = texXstep * iVoice;
 		
-		ofFill();
-		
-		//		glTranslated(begin->x,begin->y, 0);
-		//		glRotated(-v1.angle(v2)+90, 0, 0, 1);
-		
-		int resolution = PropI(@"resolution");
-		float amplitude = PropF(@"amplitude");
-		
-		for (int i = 0;i< resolution; i++) {
-			float x = 1.0/resolution*i;
+		ofxPoint2f p = ofxPoint2f(x*length, begin->y+y);
+		if(i > 0){
+			gradient.bind();
 			
-			if (i < resolution) {
-				ofxPoint2f p = ofxPoint2f(x*length, (begin->y+(waveForm[iVoice]->sampleAt(x))*amplitude));
-				ofVertex(p.x, p.y);
-			}
+			glBegin(GL_QUADS);
 			
+			glTexCoord2f(texXstart+(texXstep*(p.x/length)),0);	glVertex2f(p.x, 0);
+
+			glTexCoord2f(texXstart+(texXstep*(oldP.x/length)),0);	glVertex2f(oldP.x, 0);
+
+			glTexCoord2f(texXstart+(texXstep*(oldP.x/length)),texHeight);	glVertex2f(oldP.x, oldP.y);
+
+			glTexCoord2f(texXstart+(texXstep*(p.x/length)),texHeight);	glVertex2f(p.x, p.y);
+
+			glEnd();
+			gradient.unbind();
 		}
 		
-	} glPopMatrix();
-	
-	ofEndShape(true);
+		oldP = p;
+	}
 	
 }
 

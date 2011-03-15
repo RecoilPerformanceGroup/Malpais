@@ -47,6 +47,8 @@
 		4BA259911153B98B0008D49C /* BWToolkitFramework.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 4BA258A51153B0800008D49C /* BWToolkitFramework.framework */; };
 		7F06013D132E66FD003F5CE8 /* Box.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F06013B132E66FD003F5CE8 /* Box.mm */; };
 		7F06013E132E66FD003F5CE8 /* Box.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F06013C132E66FD003F5CE8 /* Box.xib */; };
+		7F060147132E8212003F5CE8 /* gradient slice.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F060146132E8212003F5CE8 /* gradient slice.png */; };
+		7F0601C2132EA99F003F5CE8 /* gradient wave.png in Resources */ = {isa = PBXBuildFile; fileRef = 7F0601C1132EA99F003F5CE8 /* gradient wave.png */; };
 		7F0F7752130C1A3F009A31C0 /* Ocean.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F0F7751130C1A3F009A31C0 /* Ocean.mm */; };
 		7F0F777A130C20A7009A31C0 /* Ocean.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F7779130C20A7009A31C0 /* Ocean.xib */; };
 		7F0F77DF130C25DC009A31C0 /* floortest.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 7F0F77DE130C25DC009A31C0 /* floortest.jpg */; };
@@ -328,6 +330,8 @@
 		7F06013A132E66FD003F5CE8 /* Box.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box.h; sourceTree = "<group>"; };
 		7F06013B132E66FD003F5CE8 /* Box.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Box.mm; sourceTree = "<group>"; };
 		7F06013C132E66FD003F5CE8 /* Box.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Box.xib; sourceTree = "<group>"; };
+		7F060146132E8212003F5CE8 /* gradient slice.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gradient slice.png"; path = "../../../../apps/recoil/Malpais/bin/data/gradient slice.png"; sourceTree = "<group>"; };
+		7F0601C1132EA99F003F5CE8 /* gradient wave.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "gradient wave.png"; path = "../../../../apps/recoil/Malpais/bin/data/gradient wave.png"; sourceTree = "<group>"; };
 		7F0F7750130C1A3F009A31C0 /* Ocean.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ocean.h; sourceTree = "<group>"; };
 		7F0F7751130C1A3F009A31C0 /* Ocean.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Ocean.mm; sourceTree = "<group>"; };
 		7F0F7779130C20A7009A31C0 /* Ocean.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Ocean.xib; sourceTree = "<group>"; };
@@ -1900,6 +1904,8 @@
 		DDF87490114AB2D0004B2FE2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				7F0601C1132EA99F003F5CE8 /* gradient wave.png */,
+				7F060146132E8212003F5CE8 /* gradient slice.png */,
 				335239441327A59300AFC8BB /* gradient.png */,
 				33F9CCEA130DB03F0036EF0B /* SendToQlab.scpt */,
 				7F0F77DE130C25DC009A31C0 /* floortest.jpg */,
@@ -2331,6 +2337,8 @@
 				7F20475E131AEBEA00388BC3 /* Beach.xib in Resources */,
 				7FAE26E3131FBC0500F38926 /* Voice.xib in Resources */,
 				7F06013E132E66FD003F5CE8 /* Box.xib in Resources */,
+				7F060147132E8212003F5CE8 /* gradient slice.png in Resources */,
+				7F0601C2132EA99F003F5CE8 /* gradient wave.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
