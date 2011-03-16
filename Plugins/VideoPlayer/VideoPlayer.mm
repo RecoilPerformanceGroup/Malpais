@@ -362,7 +362,7 @@
 			glPushMatrix();
 			
 			float aspect = Aspect(@"Wall",0);
-			[GetPlugin(Keystoner)  applySurface:@"Wall" projectorNumber:0 viewNumber:ViewNumber];
+			[GetPlugin(Keystoner)  applySurface:@"Wall" projectorNumber:1 viewNumber:ViewNumber];
 			//		ApplySurface(([NSString stringWithFormat:@"Skærm%i",i+1])){
 			glBegin(GL_QUADS);{
 				glTexCoord2f(topLeft[0], topLeft[1]);  glVertex2f(0, 0);

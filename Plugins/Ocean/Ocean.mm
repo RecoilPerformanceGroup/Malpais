@@ -38,8 +38,8 @@
 	}
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"drag"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:-2.0 minValue:-2.0 maxValue:2.0 +[self aspect] ] named:@"dragToX"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"dragToY"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0 maxValue:1.0] named:@"dragToX"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:-1.0 minValue:-1.0 maxValue:1.0] named:@"dragToY"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"dragWindowWidth"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.01 minValue:0.0 maxValue:1.0] named:@"stiffness"];
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:YES] named:@"reset"];
@@ -132,6 +132,10 @@
 	 }
 	 wallParticles.clear();
 	 */	
+
+	
+/*	The Wall on the side is not currently in use
+
 	int wallParticleResolution = 20;
 	
 	ofxParticle * lastParticle;
@@ -173,7 +177,7 @@
 		}
 		
 	}
-	
+*/	
 	
 }
 
@@ -197,8 +201,9 @@
 	}
 	
 	if(!dragSpring){
-		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
-		ofPoint dragPoint = ofPoint(wallX*400, PropF(@"dragToY")*400);
+//		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
+		float wallX = 0.5*[self aspect];
+		ofPoint dragPoint = ofPoint(wallX*400, 0.5*400);
 		ofxParticle* particleToDrag = physics->getNearestParticle(dragPoint);
 		if(particleToDrag){
 			dragOrigin = new ofPoint(particleToDrag->x, particleToDrag->y);
@@ -208,8 +213,8 @@
 			physics->add(dragSpring);
 		} 
 	} else {
-		dragParticle->set(dragOrigin->x + (((PropF(@"dragToX")*[self aspect]*400.0*3)-dragOrigin->x)*PropF(@"drag")),
-						  dragOrigin->y + (((PropF(@"dragToY")*400.0)-dragOrigin->y)*PropF(@"drag"))
+		dragParticle->set(dragOrigin->x + (((PropF(@"dragToX")*[self aspect]*400.0)-dragOrigin->x)*PropF(@"drag")),
+						  dragOrigin->y + ((-(PropF(@"dragToY")*400.0)-dragOrigin->y)*PropF(@"drag"))
 						  );
 	}
 	
@@ -336,7 +341,9 @@
 		int resolution = PropI(@"resolution");
 		float amplitude = PropF(@"amplitude");
 		
-		NSString * waveLengthStr = [NSString stringWithFormat:@"wave%iLength",iVoice];
+		NSString * waveChannelStr = [NSString stringWithFormat:@"wave%iChannel",iVoice];
+		
+		NSString * waveLengthStr = [NSString stringWithFormat:@"wave%iLength",(int)roundf(PropF(waveChannelStr))];
 
 		int arrayLength = PropF(waveLengthStr) * resolution;
 		
@@ -465,22 +472,23 @@
 		[self drawCloth:&fbo.getTexture(0) showGrid:YES folds:0];
 	} glPopMatrix();
 	
-	glPushMatrix();{
-		
-		glScaled(200*1.0/[self aspect], 400, 1);
-		
-		ofFill();
-		
-		ofSetColor(255, 0, 0,127);
-		
-		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
-		
-		ofRect(wallX-0.01, 0, 0.02, PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5));
-		
-		ofRect(wallX-0.01, PropF(@"dragToY")+(PropF(@"dragWindowWidth")*0.5), 0.02, 1.0);
-		
-		
-	} glPopMatrix();
+/*	The Wall on the side is not currently in use
+//	glPushMatrix();{
+//		
+//		glScaled(200*1.0/[self aspect], 400, 1);
+//		
+//		ofFill();
+//		
+//		ofSetColor(255, 0, 0,127);
+//		
+//		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
+//		
+//		ofRect(wallX-0.01, 0, 0.02, PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5));
+//		
+//		ofRect(wallX-0.01, PropF(@"dragToY")+(PropF(@"dragWindowWidth")*0.5), 0.02, 1.0);
+//		
+//		
+//	} glPopMatrix();*/
 }
 
 - (void)makeSpringWidth:(float) _width height:(float) _height{

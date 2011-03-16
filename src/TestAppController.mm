@@ -31,8 +31,8 @@ extern ofAppBaseWindow * window;
 	[pluginManagerController addPlugin:[[Beach alloc] init]];
 	[pluginManagerController addPlugin:[[Voice alloc] init]];
 	[pluginManagerController addPlugin:[[Statestik alloc] init]];
-	[pluginManagerController addPlugin:[[Box alloc] init]];
 	[pluginManagerController addPlugin:[[VideoPlayer alloc] init]];
+	[pluginManagerController addPlugin:[[Box alloc] init]];
 
 	[pluginManagerController addPlugin:[[SceneX alloc] init]];
 }
