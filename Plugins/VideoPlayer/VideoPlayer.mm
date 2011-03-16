@@ -145,7 +145,7 @@
 			return QTVisualContextIsNewImageAvailable(textureContext[PropI(@"video")-1], outputTime);
 		return NO;	
 	} else {
-		return NO;	
+		return forceDrawNextFrame;	
 	}
 }
 
@@ -205,10 +205,15 @@
 					codecTypeString = @"H.264";
 				} 
 				
+				NSArray* vtracks = [movie[i] tracksOfMediaType:QTMediaTypeVideo];
+				QTTrack* track = [vtracks objectAtIndex:0];
+				sizes[i] = [track apertureModeDimensionsForMode:QTMovieApertureModeClean];
+				
+				
 				[loadedFilesController addObject:[NSDictionary dictionaryWithObjectsAndKeys:
 												  [NSNumber numberWithInt:i],@"number",
 												  [NSString stringWithFormat:@"Malpais%@.mov",fileNumber],@"name",
-												  [NSString stringWithFormat:@"%dx%d",(*(ImageDescriptionHandle)videoTrackDescH)->width,(*(ImageDescriptionHandle)videoTrackDescH)->height],@"size",
+												  [NSString stringWithFormat:@"%ix%i",int(sizes[i].width),int( sizes[i].height)],@"size",
 												  codecTypeString, @"codec",
 												  QTStringFromTime([movie[i] duration]),@"duration",
 												  [NSNumber numberWithInt:[movie[i] chapterCount]],@"chapters",
@@ -361,8 +366,15 @@
 			ofSetColor(255,255, 255, 255);						
 			glPushMatrix();
 			
-			float aspect = Aspect(@"Wall",0);
-			[GetPlugin(Keystoner)  applySurface:@"Wall" projectorNumber:0 viewNumber:ViewNumber];
+			int projector = 1;
+			
+			float aspect;
+			if(i == 0){
+			 aspect = Aspect(@"Wall",projector);	
+			} else {
+				aspect = sizes[i].width / sizes[i].height;				
+			}
+			[GetPlugin(Keystoner)  applySurface:@"Wall" projectorNumber:projector viewNumber:ViewNumber];
 			//		ApplySurface(([NSString stringWithFormat:@"Skærm%i",i+1])){
 			glBegin(GL_QUADS);{
 				glTexCoord2f(topLeft[0], topLeft[1]);  glVertex2f(0, 0);

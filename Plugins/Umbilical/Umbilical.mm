@@ -111,7 +111,7 @@
 	mousex = 0.5 * [self aspect];
 	mousey = 0.0;
 	
-	endPos = ofxPoint2f(0,1);
+	endPos = ofxPoint2f([self aspect]*0.5,0.01);
 	
 	
 	physics = new ofxPhysics2d(ofPoint(0,0.0005));

@@ -202,7 +202,7 @@
 		
 		ofxPoint2f p = ofxPoint2f(x*length, begin->y+y);
 		if(i > 0){
-			gradient.bind();
+			gradient.getTextureReference().bind();
 			
 			glBegin(GL_QUADS);
 			
@@ -215,7 +215,7 @@
 			glTexCoord2f(texXstart+(texXstep*(p.x/length)),texHeight);	glVertex2f(p.x, p.y);
 
 			glEnd();
-			gradient.unbind();
+			gradient.getTextureReference().unbind();
 		}
 		
 		oldP = p;

@@ -18,6 +18,7 @@
 	QTMovie     		*movie[NUMVIDEOS];
 	QTVisualContextRef	textureContext[NUMVIDEOS];
 	CVOpenGLTextureRef  currentFrame[NUMVIDEOS];
+	NSSize sizes[NUMVIDEOS];
 	
 	int lastFramesVideo;
 	BOOL forceDrawNextFrame;
