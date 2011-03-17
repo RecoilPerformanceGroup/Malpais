@@ -21,6 +21,9 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.1 minValue:0.0 maxValue:1.0] named:@"smootingRise"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.35 minValue:0.0 maxValue:1.0] named:@"smoothingFall"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"echo"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"echoDelay"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:NUM_VOICES] named:@"echoSource"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:2.0 minValue:1.0 maxValue:4.0] named:@"backlineNo"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-5.0 maxValue:5.0] named:@"drift"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:5.0] named:@"offset"];
@@ -50,6 +53,8 @@
 -(void) setup{
 	
 	voices = [NSMutableArray array];
+	echoVoices = [NSMutableArray array];
+	
 	
 	for (int i = 0; i < NUM_VOICES+1; i++) {
 		waveForm[i] =  new MSA::Interpolator1D;
@@ -132,52 +137,52 @@
 	 }
 	 wallParticles.clear();
 	 */	
-
 	
-/*	The Wall on the side is not currently in use
-
-	int wallParticleResolution = 20;
 	
-	ofxParticle * lastParticle;
-	lastParticle = NULL;
-	
-	for (int i = 0; i < wallParticleResolution; i++) {
-		
-		float particleRadius = 1.5;
-		float particleMargin = (_particles[0][0].getRadius()/20.0);
-		
-		float wallX = (PropF(@"dragToX") < 0.5)?-((particleRadius+particleMargin)/wallParticleResolution):[self aspect]+((particleRadius+particleMargin)/wallParticleResolution);
-		
-		float rest;
-		
-		ofPoint wallParticlePos = ofPoint(wallX*400,400*(1.0/wallParticleResolution)*i);
-		
-		if (wallParticlePos.y/400.0 < PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5) ||
-			wallParticlePos.y/400.0 > PropF(@"dragToY")+(PropF(@"dragWindowWidth")*0.5)) {
-			
-			ofxParticle* p = new ofxParticle(wallParticlePos, particleRadius*400.0/wallParticleResolution);
-			if (i==0 || i==wallParticleResolution-1) {
-				p->setActive(false);
-			} else {
-				p->setActive(false);
-			}
-			
-			p->setMass(100);
-			wallParticles.push_back(p);
-			physics->add(p);
-			if(lastParticle){
-				rest = p->distanceTo(lastParticle);
-				ofxSpring* s = new ofxSpring(p, wallParticles[wallParticles.size()-2], rest*0.9, 1.0);
-				wallSprings.push_back(s);
-				physics->add(s);
-			}
-			
-			lastParticle = p;
-			
-		}
-		
-	}
-*/	
+	/*	The Wall on the side is not currently in use
+	 
+	 int wallParticleResolution = 20;
+	 
+	 ofxParticle * lastParticle;
+	 lastParticle = NULL;
+	 
+	 for (int i = 0; i < wallParticleResolution; i++) {
+	 
+	 float particleRadius = 1.5;
+	 float particleMargin = (_particles[0][0].getRadius()/20.0);
+	 
+	 float wallX = (PropF(@"dragToX") < 0.5)?-((particleRadius+particleMargin)/wallParticleResolution):[self aspect]+((particleRadius+particleMargin)/wallParticleResolution);
+	 
+	 float rest;
+	 
+	 ofPoint wallParticlePos = ofPoint(wallX*400,400*(1.0/wallParticleResolution)*i);
+	 
+	 if (wallParticlePos.y/400.0 < PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5) ||
+	 wallParticlePos.y/400.0 > PropF(@"dragToY")+(PropF(@"dragWindowWidth")*0.5)) {
+	 
+	 ofxParticle* p = new ofxParticle(wallParticlePos, particleRadius*400.0/wallParticleResolution);
+	 if (i==0 || i==wallParticleResolution-1) {
+	 p->setActive(false);
+	 } else {
+	 p->setActive(false);
+	 }
+	 
+	 p->setMass(100);
+	 wallParticles.push_back(p);
+	 physics->add(p);
+	 if(lastParticle){
+	 rest = p->distanceTo(lastParticle);
+	 ofxSpring* s = new ofxSpring(p, wallParticles[wallParticles.size()-2], rest*0.9, 1.0);
+	 wallSprings.push_back(s);
+	 physics->add(s);
+	 }
+	 
+	 lastParticle = p;
+	 
+	 }
+	 
+	 }
+	 */	
 	
 }
 
@@ -201,7 +206,7 @@
 	}
 	
 	if(!dragSpring){
-//		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
+		//		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
 		float wallX = 0.5*[self aspect];
 		ofPoint dragPoint = ofPoint(wallX*400, 0.5*400);
 		ofxParticle* particleToDrag = physics->getNearestParticle(dragPoint);
@@ -224,9 +229,11 @@
 	
 	for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
 		
+		bool isEchoSource = ((int)roundf(PropF(@"echoSource")) == iVoice);
+		
 		NSString * waveOnStr = [NSString stringWithFormat:@"wave%iOn",iVoice];
 		
-		if (PropB(waveOnStr)) {
+		if (PropB(waveOnStr) || isEchoSource) {
 			
 			NSString * waveChannelStr = [NSString stringWithFormat:@"wave%iChannel",iVoice];
 			
@@ -248,12 +255,11 @@
 			
 			[voices replaceObjectAtIndex:iVoice withObject:newVoice];
 			
-			NSMutableArray * newWave = [newVoice objectForKey:@"waveLine"];
-
-			if ([newWave count] > 0) {
-				waveForm[iVoice]->clear();
-				for (int i=0; i < [newWave count]; i++) {
-					waveForm[iVoice]->push_back([[newWave objectAtIndex:i] floatValue]);
+			if (isEchoSource) {
+				[echoVoices addObject:newVoice];
+				
+				if ([echoVoices count] > kEchoLength) {
+					[echoVoices removeObjectAtIndex:0];
 				}
 				
 			}
@@ -261,6 +267,37 @@
 		}	
 		
 	}
+	
+	// add echo
+	
+	NSString * waveOnStr;
+	
+	float echoDelay = PropF(@"echoDelay");
+	
+	for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
+		
+		waveOnStr = [NSString stringWithFormat:@"wave%iOn",iVoice];
+		
+		if (PropB(waveOnStr)) {
+			
+			NSMutableArray * newWave = [[voices objectAtIndex:iVoice] objectForKey:@"waveLine"];
+			
+			int echoWaveIndex = (int)fmax( 0, ([echoVoices count]-1)-roundf((PropF(@"echoDelay")*kEchoLength*iVoice/NUM_VOICES)));
+			NSMutableArray * echoWave = [[echoVoices objectAtIndex:echoWaveIndex] objectForKey:@"waveLine"];
+			
+			if ([newWave count] > 0) {
+				waveForm[iVoice]->clear();
+				for (int i=0; i < [newWave count]; i++) {
+					waveForm[iVoice]->push_back(
+												[[newWave objectAtIndex:i] floatValue] * (1.0-PropF(@"echo")) +
+												[[echoWave objectAtIndex:i] floatValue] * PropF(@"echo")
+												);
+				}
+				
+			}
+		}
+	}
+	
 	
 }
 
@@ -301,7 +338,7 @@
 		ofFill();
 		
 		float backLine = [GetPlugin(SceneX) getBackline:(int)round(PropF(@"backlineNo"))];
-
+		
 		ofRect(0, backLine, [self aspect], 1-backLine);
 		glPushMatrix();{
 			glTranslated(0, backLine,0);
@@ -323,7 +360,7 @@
 -(void) drawWave:(int)iVoice from:(ofxPoint2f*)begin to:(ofxPoint2f*)end{
 	
 #pragma mark -
-// TODO: draw folds as vertical springs that show when their perpendicular springs are shortened
+	// TODO: draw folds as vertical springs that show when their perpendicular springs are shortened
 #pragma mark -
 	
 	ofxVec2f v1 = ofxVec2f(end->x, end->y)-ofxVec2f(begin->x, begin->y);
@@ -345,9 +382,9 @@
 		NSString * waveChannelStr = [NSString stringWithFormat:@"wave%iChannel",iVoice];
 		
 		NSString * waveLengthStr = [NSString stringWithFormat:@"wave%iLength",(int)roundf(PropF(waveChannelStr))];
-
+		
 		ofSetColor(255, 255, 255, 255*PropF(waveLengthStr));
-
+		
 		int arrayLength = /* PropF(waveLengthStr) * */ resolution;
 		
 		glBegin(GL_QUAD_STRIP);
@@ -475,23 +512,23 @@
 		[self drawCloth:&fbo.getTexture(0) showGrid:YES folds:0];
 	} glPopMatrix();
 	
-/*	The Wall on the side is not currently in use
-//	glPushMatrix();{
-//		
-//		glScaled(200*1.0/[self aspect], 400, 1);
-//		
-//		ofFill();
-//		
-//		ofSetColor(255, 0, 0,127);
-//		
-//		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
-//		
-//		ofRect(wallX-0.01, 0, 0.02, PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5));
-//		
-//		ofRect(wallX-0.01, PropF(@"dragToY")+(PropF(@"dragWindowWidth")*0.5), 0.02, 1.0);
-//		
-//		
-//	} glPopMatrix();*/
+	/*	The Wall on the side is not currently in use
+	 //	glPushMatrix();{
+	 //		
+	 //		glScaled(200*1.0/[self aspect], 400, 1);
+	 //		
+	 //		ofFill();
+	 //		
+	 //		ofSetColor(255, 0, 0,127);
+	 //		
+	 //		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
+	 //		
+	 //		ofRect(wallX-0.01, 0, 0.02, PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5));
+	 //		
+	 //		ofRect(wallX-0.01, PropF(@"dragToY")+(PropF(@"dragWindowWidth")*0.5), 0.02, 1.0);
+	 //		
+	 //		
+	 //	} glPopMatrix();*/
 }
 
 - (void)makeSpringWidth:(float) _width height:(float) _height{
@@ -519,14 +556,14 @@
 		}
 	}
 	for (int i = 0; i <= grid; i++)
-    {
-        for (int j = 0; j <= (int)grid/[self aspect]; j++)
-        {
+	{
+		for (int j = 0; j <= (int)grid/[self aspect]; j++)
+		{
 			
-            if (j > 0)
-            {
-                ofxParticle *p1 = &_particles[i][j - 1];
-                ofxParticle *p2 = &_particles[i][j];
+			if (j > 0)
+			{
+				ofxParticle *p1 = &_particles[i][j - 1];
+				ofxParticle *p2 = &_particles[i][j];
 				float rest = p1->distanceTo(p2);
 				ofxSpring* s = new ofxSpring(p1, p2, rest, strength);
 				physics->add(s);
@@ -539,11 +576,11 @@
 					physics->add(s);
 					springs.push_back(s);
 				}
-            }
-            if (i > 0)
-            {
-                ofxParticle *p1 = &_particles[i - 1][j];
-                ofxParticle *p2 = &_particles[i][j];
+			}
+			if (i > 0)
+			{
+				ofxParticle *p1 = &_particles[i - 1][j];
+				ofxParticle *p2 = &_particles[i][j];
 				
 				float rest = p1->distanceTo(p2);
 				ofxSpring* s = new ofxSpring(p1, p2, rest, strength);
@@ -557,18 +594,18 @@
 					physics->add(s);
 					springs.push_back(s);
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 	
-    for(int i = 0 ; i < (int)(grid/[self aspect]); i++)
-    {
+	for(int i = 0 ; i < (int)(grid/[self aspect]); i++)
+	{
 		// locking edges
 		//_particles[(int)(i*[self aspect])][0].setActive(false);
 		//		_particles[0][i].setActive(false);
 		//		_particles[grid- 1][i].setActive(false);
 		//		_particles[(int)(i*[self aspect])][(int)(grid/[self aspect]) - 1].setActive(false);
-    }
+	}
 	
 }
 

@@ -16,6 +16,7 @@
 
 #define kFBOWidth			500
 #define kFBOHeight			1000
+#define kEchoLength			10*(NUM_VOICES+1)
 
 @interface Ocean : ofPlugin {
 
@@ -58,7 +59,9 @@
 	float mousex, mousey, mouseh;
 		
 	NSMutableArray * voices;
-	
+
+	NSMutableArray * echoVoices;
+
 }
 
 - (void)makeSpringWidth:(float) _width height:(float) _height;
