@@ -8,7 +8,7 @@
 
 #import "Ocean.h"
 #import "Keystoner.h"
-
+#import "SceneX.h"
 
 @implementation Ocean
 
@@ -21,7 +21,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.1 minValue:0.0 maxValue:1.0] named:@"smootingRise"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.35 minValue:0.0 maxValue:1.0] named:@"smoothingFall"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.45 minValue:0.0 maxValue:1.0] named:@"smoothing"];
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:2.0] named:@"floorDepth"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:2.0 minValue:1.0 maxValue:4.0] named:@"backlineNo"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:-5.0 maxValue:5.0] named:@"drift"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:5.0] named:@"offset"];
 	
@@ -299,19 +299,22 @@
 		
 		ofSetColor(255, 255, 255, 255);
 		ofFill();
-		ofRect(0, -PropF(@"floorDepth"), [self aspect], 1+PropF(@"floorDepth"));
+		
+		float backLine = [GetPlugin(SceneX) getBackline:(int)round(PropF(@"backlineNo"))];
+
+		ofRect(0, backLine, [self aspect], 1-backLine);
 		glPushMatrix();{
-			glTranslated(0, -PropF(@"floorDepth"),0);
-			glScaled(1.0/400.0, (1.0+PropF(@"floorDepth"))/400.0,0);
+			glTranslated(0, backLine,0);
+			glScaled(1.0/400.0, (1.0-backLine)/400.0,0);
 			[self drawCloth:&fbo.getTexture(0) showGrid:NO folds:0];
 		}glPopMatrix();
 		
 		ofSetColor(0,0,0,255);
 		ofFill();
-		ofRect(-2.0, -PropF(@"floorDepth"), 4.0+[self aspect], -2.0); // top
+		ofRect(-2.0, backLine, 4.0+[self aspect], -2.0); // top
 		ofRect(-2.0, 1.0, 4.0+[self aspect], 2.0); // bottom
-		ofRect(-2.0, -PropF(@"floorDepth"), 2.0, 4.0+PropF(@"floorDepth")); // left
-		ofRect([self aspect], -PropF(@"floorDepth"), 4.0+[self aspect], 4.0+PropF(@"floorDepth")); // right
+		ofRect(-2.0,backLine, 2.0, 4.0-backLine); // left
+		ofRect([self aspect], backLine, 4.0+[self aspect], 4.0-backLine); // right
 		
 	} PopSurface();
 	
@@ -333,8 +336,6 @@
 		ofNoFill();
 		ofSetLineWidth(4);
 		
-		ofSetColor(255, 255, 255, 255);
-		
 		glTranslated(begin->x,begin->y, 0);
 		glRotated(-v1.angle(v2)+90, 0, 0, 1);
 		
@@ -345,7 +346,9 @@
 		
 		NSString * waveLengthStr = [NSString stringWithFormat:@"wave%iLength",(int)roundf(PropF(waveChannelStr))];
 
-		int arrayLength = PropF(waveLengthStr) * resolution;
+		ofSetColor(255, 255, 255, 255*PropF(waveLengthStr));
+
+		int arrayLength = /* PropF(waveLengthStr) * */ resolution;
 		
 		glBegin(GL_QUAD_STRIP);
 		ofxPoint2f lastPoint = ofxPoint2f(0,0);		

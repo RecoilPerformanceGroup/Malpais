@@ -1,6 +1,6 @@
 #import "Statestik.h"
 #include "Keystoner.h"
-
+#include "SceneX.h"
 
 @implementation Statestik
 @synthesize surveyData;
@@ -10,7 +10,8 @@
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:10] named:@"displayGraph"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0 maxValue:1] named:@"percentageScale"];
-	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:2.0 minValue:1.0 maxValue:4.0] named:@"backlineNo"];
+
 	//	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"lineStart"];
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:3] named:@"lineStyleWidth"];
@@ -302,8 +303,13 @@
 	float t = lineTime - 0.5;
 	float p = 1.0/(1.0+pow(e,-(t)*10));
 	
+	float backLine = [GetPlugin(SceneX) getBackline:(int)round(PropF(@"backlineNo"))];
 	
 	ApplySurface(@"Floor");{
+
+		glTranslatef(0, backLine, 0);
+		glScalef(1, 1.0-backLine, 0);
+		
 		ofEnableAlphaBlending();
 		
 		ofFill();
@@ -326,11 +332,11 @@
 		
 		ofDisableAlphaBlending();
 		ofSetColor(0, 0, 0,255);
-		ofRect(0, 0, -1, 1);
-		ofRect([self aspect], 0, 1, 1);
+		ofRect(0, 0, -1, 1); // left
+		ofRect([self aspect], backLine, 1, 1); //right
 		
-		ofRect(0, 0, 1, -1);
-		ofRect(0, 1, 1, 1);
+		ofRect(0, 0, 1, -1); //top
+		ofRect(0, 1, 1, 1);//bottom
 		
 	} PopSurface();
 	
@@ -394,15 +400,16 @@
 		
 		if(floorP > 0){
 			ApplySurface(@"Floor");{
+
 				ofSetColor(255, 255, 255);
 				ofFill();
 				
 				glBegin(GL_LINE_STRIP);{
-					glVertex2f(middle*[self aspect], 0);
-					glVertex2f(middle*[self aspect], h*floorP);
+					glVertex2f(middle*[self aspect], backLine);
+					glVertex2f(middle*[self aspect], ofMap(h*floorP, 0, 1.0, backLine, 1, false));
 				}glEnd();
 				
-				ofCircle(middle*[self aspect], h*floorP, 0.01);
+				ofCircle(middle*[self aspect], ofMap(h*floorP, 0, 1.0, backLine, 1, false), 0.01);
 				
 			}PopSurface();
 		}
