@@ -278,8 +278,6 @@
 								<string>7FD2EC491309824700B274C9</string>
 								<string>330CC62012FB3067000283DE</string>
 								<string>DD9C01C512E8755600EF6F51</string>
-								<string>DD0A217F12EEFAB90068DCF1</string>
-								<string>DD6DCDED12E9B4FC00F2B664</string>
 								<string>DD2561D712F3267E00BD0498</string>
 								<string>33ED1B0613015A520090E1EB</string>
 								<string>DD593CDC12E4A761005F2189</string>
@@ -303,14 +301,14 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>20</integer>
-									<integer>17</integer>
+									<integer>11</integer>
+									<integer>9</integer>
 									<integer>4</integer>
 									<integer>0</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 1}, {314, 1026}}</string>
+							<string>{{0, 19}, {314, 1026}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -345,7 +343,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>7FBF1B3D12E49996009E32EF</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>Statestik.mm</string>
+								<string>Voice.mm</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -353,11 +351,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>7FBF1B3E12E49996009E32EF</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>Statestik.mm</string>
+										<string>Voice.mm</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7FC125D613326AD4009CEA97</string>
+										<string>7FC125EC133276BE009CEA97</string>
 										<key>history</key>
 										<array>
 											<string>7FBF1BBD12E49CC3009E32EF</string>
@@ -517,7 +515,6 @@
 											<string>7F405E8F132FF54A00A3CC14</string>
 											<string>7F40E8ED13316F3800EB771F</string>
 											<string>7F40E8EE13316F3800EB771F</string>
-											<string>7F40E8EF13316F3800EB771F</string>
 											<string>7F40E8F113316F3800EB771F</string>
 											<string>7F40E8F213316F3800EB771F</string>
 											<string>7FC1253513324647009CEA97</string>
@@ -525,13 +522,14 @@
 											<string>7FC1253713324647009CEA97</string>
 											<string>7FC1253913324647009CEA97</string>
 											<string>7FC1253A13324647009CEA97</string>
-											<string>7FC1253B13324647009CEA97</string>
-											<string>7FC12581133250EC009CEA97</string>
-											<string>7FC125881332519E009CEA97</string>
 											<string>7FC125A213325549009CEA97</string>
 											<string>7FC125A81332560E009CEA97</string>
-											<string>7FC125A91332560E009CEA97</string>
-											<string>7FC125AA1332560E009CEA97</string>
+											<string>7FC125E6133276BE009CEA97</string>
+											<string>7FC125E7133276BE009CEA97</string>
+											<string>7FC125E8133276BE009CEA97</string>
+											<string>7FC125E9133276BE009CEA97</string>
+											<string>7FC125EA133276BE009CEA97</string>
+											<string>7FC125EB133276BE009CEA97</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -848,7 +846,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7FC125D513326A91009CEA97</string>
+		<string>7FC125ED133276BE009CEA97</string>
 		<string>7FC1254613324647009CEA97</string>
 		<string>7FC1254713324647009CEA97</string>
 		<string>/Users/ole/Development/openFrameworks/apps/recoil/Malpais/malpais.xcodeproj</string>

@@ -181,7 +181,7 @@
 }
 
 -(float) aspect{
-	return [[[GetPlugin(Keystoner) getSurface:@"Wall" viewNumber:0 projectorNumber:0] aspect] floatValue];
+	return [[[GetPlugin(Keystoner) getSurface:@"Wall" viewNumber:0 projectorNumber:1] aspect] floatValue];
 }
 
 
