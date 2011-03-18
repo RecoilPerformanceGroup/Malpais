@@ -39,7 +39,8 @@
 					newGraph.filter[sizeY].setStartValue(1);
 					newGraph.filter[posX].setStartValue(0);
 					newGraph.filter[sizeX].setStartValue([self aspect]);
-					newGraph.valuesGoal[sizeY] = 0.338;
+					newGraph.valuesGoal[sizeY] = 0.5;
+					newGraph.valuesGoal[percentage] = 0.338;
 					newGraph.valuesGoal[posX] = 0;
 					newGraph.valuesGoal[sizeX] = [self aspect];
 					newGraph.type = WIPE_TOP;	
@@ -349,14 +350,14 @@
 				ofFill();
 				//glTranslated(0.1, 0.5, 0);
 				
-				float p = graphs[graphs.size()-1].values[sizeY]*100.0;
+				float p = graphs[graphs.size()-1].values[percentage]*100.0;
 				string s = ofToString(p, 1)+"%";
 				
 				float w = font->getStringBoundingBox(s, 0, 0).width;
 				float h = font->getStringBoundingBox(s, 0, 0).height;
 				
 				
-				glTranslated(Aspect(@"Wall",0)*0.5, 0.5, 0.0);
+				glTranslated(Aspect(@"Wall",1)*0.5, 0.5, 0.0);
 				glScaled(0.02*PropF(@"percentageScale"), 0.02*PropF(@"percentageScale"), 1.0);
 				
 				glTranslated(-w/2.0, 50, 0);
@@ -378,7 +379,7 @@
 		middle /= [self aspect];
 		float h = 1-graphs[graphs.size()-1].values[sizeY] - 0.05 + graphs[graphs.size()-1].values[dotOffset];
 		
-		float wallFloorFactor = (float)Aspect(@"Wall",0) / Aspect(@"Floor",0);
+		float wallFloorFactor = (float)Aspect(@"Wall",1) / Aspect(@"Floor",0);
 		float wallL = 1-0.7;
 		float floorL = h * wallFloorFactor;
 		
@@ -393,8 +394,8 @@
 		
 		ApplySurface(@"Wall");{				
 			glBegin(GL_LINES);{
-				glVertex2f(middle*Aspect(@"Wall",0), 1-wallL);
-				glVertex2f(middle*Aspect(@"Wall",0), 1-wallL+wallL*wallP);
+				glVertex2f(middle*Aspect(@"Wall",1), 1-wallL);
+				glVertex2f(middle*Aspect(@"Wall",1), 1-wallL+wallL*wallP);
 			}glEnd();
 		}PopSurface();
 		

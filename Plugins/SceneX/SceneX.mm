@@ -17,6 +17,21 @@
 
 }
 
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	if(object == Prop(@"backline1")){
+		backlinesCache[0] = PropF(@"backline1");	
+	}
+	if(object == Prop(@"backline2")){
+		backlinesCache[1] = PropF(@"backline2");	
+	}
+	if(object == Prop(@"backline3")){
+		backlinesCache[2] = PropF(@"backline3");	
+	}
+	if(object == Prop(@"backline4")){
+		backlinesCache[3] = PropF(@"backline4");	
+	}
+}
+
 -(void) setup{
 	for(int i=0;i<NUMIMAGES;i++){
 		images[i] = new ofImage();
@@ -51,6 +66,6 @@
 }
 
 -(float) getBackline:(int)n{
-	return PropF(([NSString stringWithFormat:@"backline%i", n]));
+	return backlinesCache[n-1];
 }
 @end
