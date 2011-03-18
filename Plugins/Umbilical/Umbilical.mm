@@ -71,10 +71,10 @@
 	
 	for(int iBand=0;iBand<NUM_BANDS;iBand++){
 		
-		NSMutableArray * aBand = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
+		WaveArray * aBand = [[WaveArray alloc]init];
 		
 		for (int iAmplitude=0; iAmplitude<MAX_RESOLUTION; iAmplitude++) {
-			[aBand addObject:[NSNumber numberWithDouble:0.0]];
+			[aBand addFloat:0.0];
 		}
 		
 		[waveForms addObject:aBand];
@@ -112,7 +112,6 @@
 	mousey = 0.0;
 	
 	endPos = ofxPoint2f([self aspect]*0.5,0.01);
-	
 	
 	physics = new ofxPhysics2d(ofPoint(0,0.0005));
 	physics->checkBounds(NO);
@@ -348,7 +347,7 @@
 				
 				for(int iBand=0;iBand<NUM_BANDS;iBand++){
 					
-					NSMutableArray * aBand = [NSMutableArray arrayWithCapacity:voiceLength];
+					WaveArray * aBand = [[WaveArray alloc]init];
 					
 					for (int iAmplitude=0; iAmplitude<voiceLength; iAmplitude++) {
 						
@@ -361,12 +360,12 @@
 						double postDriftBalance = 1.0-powf((1.0-sqrt(fabs(postDrift))), 2.0);
 						
 						if([[newWaveForms objectAtIndex:iBand] count] == [[oldWaveForms objectAtIndex:iBand] count]){
-							[aBand addObject:[NSNumber numberWithFloat:
-											  ((1.0-postDriftBalance)*[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue])+
-											  ((postDriftBalance)*[[[oldWaveForms objectAtIndex:iBand] objectAtIndex:iFrom] floatValue])
-											  ]];
+							[aBand addFloat:
+											  ((1.0-postDriftBalance)*[[newWaveForms objectAtIndex:iBand] getFloatAtIndex:iAmplitude])+
+											  ((postDriftBalance)*[[oldWaveForms objectAtIndex:iBand] getFloatAtIndex:iFrom])
+											  ];
 						} else {
-							[aBand addObject:[NSNumber numberWithFloat:[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue]]];
+							[aBand addFloat:[[newWaveForms objectAtIndex:iBand] getFloatAtIndex:iAmplitude]];
 						}
 						
 						
@@ -395,11 +394,11 @@
 			
 			if ([wave count] > 0) {
 				if(fabs(direction) > 0) {
-					distortion[iVoice]->push_back([[wave objectAtIndex:0] floatValue]);
+					distortion[iVoice]->push_back([wave getFloatAtIndex:0]);
 				}
 				waveForm[iVoice]->clear();
 				for (int i=0; i < [wave count]; i++) {
-					waveForm[iVoice]->push_back([[wave objectAtIndex:i] floatValue]);
+					waveForm[iVoice]->push_back([wave getFloatAtIndex:i]);
 				}
 			}
 			
@@ -548,7 +547,7 @@
 					float x = 1.0/(endSegment-startSegment)*(i-startSegment);
 					if (i < segments) {
 						float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
-						float val = [[[waveForms objectAtIndex:band] objectAtIndex:i] floatValue]*amplitude*f;
+						float val = [[waveForms objectAtIndex:band] getFloatAtIndex:i]*amplitude*f;
 						
 						//	ofxPoint2f p = ofxPoint2f(offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x*length)*(1.0-weighLiveOrBuffer)))*amplitude*f, 0);
 						ofxPoint2f p = ofxPoint2f(val, 0);

@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>ActivePerspectiveName</key>
-	<string>Project</string>
+	<string>Debug</string>
 	<key>AllowedModules</key>
 	<array>
 		<dict>
@@ -301,14 +301,11 @@
 							<key>PBXSmartGroupTreeModuleOutlineStateSelectionKey</key>
 							<array>
 								<array>
-									<integer>31</integer>
-									<integer>29</integer>
-									<integer>4</integer>
-									<integer>0</integer>
+									<integer>186</integer>
 								</array>
 							</array>
 							<key>PBXSmartGroupTreeModuleOutlineStateVisibleRectKey</key>
-							<string>{{0, 0}, {314, 1026}}</string>
+							<string>{{0, 2187}, {314, 1026}}</string>
 						</dict>
 						<key>PBXTopSmartGroupGIDs</key>
 						<array/>
@@ -324,8 +321,6 @@
 							<string>MainColumn</string>
 							<real>314</real>
 						</array>
-						<key>RubberWindowFrame</key>
-						<string>41 93 1834 1085 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXSmartGroupTreeModule</string>
@@ -336,14 +331,12 @@
 					<key>Dock</key>
 					<array>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
 								<string>7FBF1B3D12E49996009E32EF</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>Ocean.h</string>
+								<string>Wave.mm</string>
 								<key>PBXSplitModuleInNavigatorKey</key>
 								<dict>
 									<key>Split0</key>
@@ -351,11 +344,11 @@
 										<key>PBXProjectModuleGUID</key>
 										<string>7FBF1B3E12E49996009E32EF</string>
 										<key>PBXProjectModuleLabel</key>
-										<string>Ocean.h</string>
+										<string>Wave.mm</string>
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>7FC126461332C5EC009CEA97</string>
+										<string>7FC127001333B251009CEA97</string>
 										<key>history</key>
 										<array>
 											<string>7FBF1BBD12E49CC3009E32EF</string>
@@ -495,11 +488,9 @@
 											<string>7F4955781322A4A200C7FC05</string>
 											<string>7FEC5C5413294B13002E09C4</string>
 											<string>7FEC5C5513294B13002E09C4</string>
-											<string>7FE98C47132A8378000C7685</string>
 											<string>7FE98C58132A8397000C7685</string>
 											<string>7FCDD715132B955A00A988B6</string>
 											<string>7FCDD716132B955A00A988B6</string>
-											<string>7F06018C132EA8F2003F5CE8</string>
 											<string>7F06018D132EA8F2003F5CE8</string>
 											<string>7F060191132EA8F2003F5CE8</string>
 											<string>7F060192132EA8F2003F5CE8</string>
@@ -517,20 +508,24 @@
 											<string>7F40E8F213316F3800EB771F</string>
 											<string>7FC1253513324647009CEA97</string>
 											<string>7FC1253613324647009CEA97</string>
-											<string>7FC1253713324647009CEA97</string>
 											<string>7FC1253913324647009CEA97</string>
 											<string>7FC1253A13324647009CEA97</string>
-											<string>7FC125A213325549009CEA97</string>
-											<string>7FC125A81332560E009CEA97</string>
 											<string>7FC125E6133276BE009CEA97</string>
 											<string>7FC125E9133276BE009CEA97</string>
-											<string>7FC125EF13329CD4009CEA97</string>
-											<string>7FC125F41332A0E3009CEA97</string>
 											<string>7FC125F51332A0E3009CEA97</string>
-											<string>7FC125F61332A0E3009CEA97</string>
 											<string>7FC126261332C316009CEA97</string>
-											<string>7FC126441332C5EC009CEA97</string>
-											<string>7FC126451332C5EC009CEA97</string>
+											<string>7FC1265113339B82009CEA97</string>
+											<string>7FC1265213339B82009CEA97</string>
+											<string>7FC1265413339B82009CEA97</string>
+											<string>7FC1265713339B82009CEA97</string>
+											<string>7FC1265913339B82009CEA97</string>
+											<string>7FC126881333A409009CEA97</string>
+											<string>7FC126891333A409009CEA97</string>
+											<string>7FC1268A1333A409009CEA97</string>
+											<string>7FC1268B1333A409009CEA97</string>
+											<string>7FC126971333A516009CEA97</string>
+											<string>7FC126B01333A734009CEA97</string>
+											<string>7FC126BE1333A7BD009CEA97</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -545,8 +540,6 @@
 							<dict>
 								<key>Frame</key>
 								<string>{{0, 0}, {1498, 521}}</string>
-								<key>RubberWindowFrame</key>
-								<string>41 93 1834 1085 0 0 1920 1178 </string>
 							</dict>
 							<key>Module</key>
 							<string>PBXNavigatorGroup</string>
@@ -569,7 +562,7 @@
 									<key>GeometryConfiguration</key>
 									<dict>
 										<key>Frame</key>
-										<string>{{10, 27}, {1498, 431}}</string>
+										<string>{{10, 27}, {1498, 491}}</string>
 									</dict>
 									<key>Module</key>
 									<string>XCDetailModule</string>
@@ -624,8 +617,6 @@
 									<dict>
 										<key>Frame</key>
 										<string>{{10, 27}, {1498, 491}}</string>
-										<key>RubberWindowFrame</key>
-										<string>41 93 1834 1085 0 0 1920 1178 </string>
 									</dict>
 									<key>Module</key>
 									<string>PBXBuildResultsModule</string>
@@ -709,6 +700,8 @@
 					<dict>
 						<key>Frame</key>
 						<string>{{0, 0}, {1834, 374}}</string>
+						<key>RubberWindowFrame</key>
+						<string>41 93 1834 1085 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXDebugCLIModule</string>
@@ -783,7 +776,11 @@
 							</array>
 							<key>Frame</key>
 							<string>{{895, 0}, {939, 284}}</string>
+							<key>RubberWindowFrame</key>
+							<string>41 93 1834 1085 0 0 1920 1178 </string>
 						</dict>
+						<key>RubberWindowFrame</key>
+						<string>41 93 1834 1085 0 0 1920 1178 </string>
 					</dict>
 					<key>Module</key>
 					<string>PBXDebugSessionModule</string>
@@ -847,7 +844,7 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>7FC126471332C5EC009CEA97</string>
+		<string>7FC127011333B251009CEA97</string>
 		<string>7FC1254613324647009CEA97</string>
 		<string>7FC1254713324647009CEA97</string>
 		<string>/Users/ole/Development/openFrameworks/apps/recoil/Malpais/malpais.xcodeproj</string>

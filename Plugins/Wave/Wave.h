@@ -64,3 +64,17 @@
 
 
 @end
+
+@interface WaveArray : NSObject {
+
+	float array[MAX_RESOLUTION];
+	int count;
+}
+
+-(int) count;
+-(void) addFloat:(float)floatValue;
+-(float) getFloatAtIndex:(int)index;
+-(void) setFloat:(float)floatValue atIndex:(int)index;
+-(void) clear;
+
+@end

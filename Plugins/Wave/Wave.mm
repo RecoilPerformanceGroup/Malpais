@@ -257,7 +257,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 	
 	for(int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++){
 		
-		NSMutableArray * aVoice = [[voices objectAtIndex:iVoice] objectForKey:@"waveLine"];
+		WaveArray * aVoice = [[voices objectAtIndex:iVoice] objectForKey:@"waveLine"];
 		float resolution = [aVoice count];
 		
 		glPushMatrix(); {
@@ -321,7 +321,7 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 					
 					for(int a = 0; a < resolution; a++){
 						
-						float aBandAmplitude = [[[[[voices objectAtIndex:iVoice] objectForKey:@"bandLines"] objectAtIndex:iBand] objectAtIndex:a] floatValue];
+						float aBandAmplitude = [[[[voices objectAtIndex:iVoice] objectForKey:@"bandLines"] objectAtIndex:iBand] getFloatAtIndex:a] ;
 						
 						
 						glVertex2d(((levelsWidth/(NUM_VOICES+1.0))/(resolution-1))*a, (bandHeight*0.4*0.5)+(aBandAmplitude*bandHeight*0.2));
@@ -370,15 +370,13 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				ofSetLineWidth(1.5);
 				ofSetColor(255, 255, 0);
 				
-				NSNumber * anAmplitude;
-				
 				glBegin(GL_LINE_STRIP);
 				
 				int i = 0;
 				
-				for(anAmplitude in aVoice){
+				for(int iAmplitude = 0; iAmplitude < [aVoice count];iAmplitude++){
 					
-					glVertex2d(((levelsWidth/(NUM_VOICES+1.0))/(resolution-1))*i, (bandHeight*1.5*0.5)+([anAmplitude doubleValue]*bandHeight*1.5*0.5));
+					glVertex2d(((levelsWidth/(NUM_VOICES+1.0))/(resolution-1))*i, (bandHeight*1.5*0.5)+([aVoice getFloatAtIndex:iAmplitude]*bandHeight*1.5*0.5));
 					i++;
 				} 
 				
@@ -468,18 +466,18 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 									  [NSNumber numberWithFloat:offset],@"offset",
 									  [NSMutableArray arrayWithCapacity:NUM_BANDS], @"bandLevels",
 									  [NSMutableArray arrayWithCapacity:NUM_BANDS], @"bandLines",
-									  [NSMutableArray arrayWithCapacity:MAX_RESOLUTION], @"waveLine",
+									  [[WaveArray alloc] init], @"waveLine",
 									  nil];
 	
 	if (NUM_VOICES+1>index) {
 		
 		NSMutableArray * oldBandLevels = [NSMutableArray arrayWithCapacity:NUM_BANDS];
 		
-		NSMutableArray * oldBandLines = [NSMutableArray arrayWithCapacity:resolution];
-		NSMutableArray * newBandLines = [NSMutableArray arrayWithCapacity:resolution];
+		NSMutableArray * oldBandLines = [NSMutableArray arrayWithCapacity:NUM_BANDS];
+		NSMutableArray * newBandLines = [NSMutableArray arrayWithCapacity:NUM_BANDS];
 		
-		NSMutableArray * oldWaveLine = [NSMutableArray arrayWithCapacity:resolution];
-		NSMutableArray * newWaveLine = [NSMutableArray arrayWithCapacity:resolution];
+		WaveArray * oldWaveLine = [[WaveArray alloc] init];
+		WaveArray * newWaveLine = [[WaveArray alloc] init];
 		
 		
 		if (formerDictionary != nil && ![[NSNull null] isEqualTo:formerDictionary] ) {
@@ -493,30 +491,33 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			
 			// de-offset oldWaveLine
 			iFrom = (formerResolution-formerOffsetIndex)%formerResolution;
+			
+			WaveArray * formerWaveLine = [formerDictionary objectForKey:@"waveLine"];
+			
 			for (int iTo = 0; iTo < formerResolution; iTo++) {
-				[oldWaveLine addObject:[[formerDictionary objectForKey:@"waveLine"] objectAtIndex: iFrom]];
+				[oldWaveLine addFloat:[formerWaveLine getFloatAtIndex:iFrom]];
 				iFrom = (iFrom+1)%formerResolution;
 			}
 			if(formerResolution < resolution){ // handle increasing resolution by padding zeros 
 				for(int i=0; i < resolution - formerResolution; i++){
-					[oldWaveLine addObject:[NSNumber numberWithFloat:0.0]];
+					[oldWaveLine addFloat:0.0];
 				}
 			}
 			
 			// de-offset oldBandLines
 			for(int iBand = 0; iBand < NUM_BANDS; iBand++){
 				
-				NSMutableArray * formerBandLine = [[formerDictionary objectForKey:@"bandLines"] objectAtIndex:iBand];
-				NSMutableArray * oldBandLine = [NSMutableArray arrayWithCapacity:formerResolution];
+				WaveArray * formerBandLine = [[formerDictionary objectForKey:@"bandLines"] objectAtIndex:iBand];
+				WaveArray * oldBandLine = [[WaveArray alloc] init];
 				
 				iFrom = (formerResolution-formerOffsetIndex)%formerResolution;
 				for (int iTo = 0; iTo < formerResolution; iTo++) {
-					[oldBandLine addObject:[formerBandLine objectAtIndex:iFrom]];
+					[oldBandLine addFloat:[formerBandLine getFloatAtIndex:iFrom]];
 					iFrom = (iFrom+1)%formerResolution;
 				}
 				if(formerResolution < resolution){ // handle increasing resolution by padding zeros 
 					for(int i=0; i < resolution - formerResolution; i++){
-						[oldBandLine addObject:[NSNumber numberWithFloat:0.0]];
+						[oldBandLine addFloat:0.0];
 					}
 				}
 				[oldBandLines addObject:oldBandLine];
@@ -531,13 +532,13 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 			
 			//create empty oldWaveLine
 			for (int i = 0; i < resolution; i++) {
-				[oldWaveLine addObject:[NSNumber numberWithFloat:0.0]];
+				[oldWaveLine addFloat:0.0];
 			}
 			//create empty oldBandLines				
 			for(int iBand = 0; iBand < NUM_BANDS; iBand++){
-				NSMutableArray * oldBandLine = [NSMutableArray arrayWithCapacity:resolution];
+				WaveArray * oldBandLine = [[WaveArray alloc]init];
 				for (int i = 0; i < resolution; i++) {
-					[oldBandLine addObject:[NSNumber numberWithFloat:0.0]];
+					[oldBandLine addFloat:0.0];
 				}
 				[oldBandLines addObject:oldBandLine];
 				[oldBandLevels addObject:[NSNumber numberWithFloat:0.0]];
@@ -571,39 +572,37 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				newBandLevel = (smoothingFallFactor*oldBandLevel)+((1.0-smoothingFallFactor)*newBandLevel);
 			}
 			
-
 			[[newVoice objectForKey:@"bandLevels"] addObject:[NSNumber numberWithFloat:newBandLevel]];
 			
-			NSMutableArray * newBandLine = [NSMutableArray arrayWithCapacity:resolution];
+			WaveArray * newBandLine = [[WaveArray alloc]init];
 			
 			for (int i = 0; i < resolution; i++) {
 				
 				float formerAmplitude;
+				
 				if (iBand == 0) {
 					//when doing first band we take the former value
-					formerAmplitude = smoothingFactor*[[oldWaveLine objectAtIndex:i] floatValue];
+					formerAmplitude = smoothingFactor*[oldWaveLine getFloatAtIndex:i];
 					//formerAmplitude = 0;
 				} else {
 					//when doing other bands we take our own value, which is why we scale by 1.0/NUM_BANDS when adding the bands up
-					formerAmplitude = [[newWaveLine objectAtIndex:i] floatValue];
+					formerAmplitude = [newWaveLine getFloatAtIndex:i];
 				}
 				
 				float amp = sinf((((1.0*i)/resolution)*(1.0+iBand))*frequency*PI*2.0/*+(1.0/(1+iBand))*/-drift) * newBandLevel * amplitude;
-				
-				NSNumber * anAmplitude = [NSNumber numberWithFloat:
-										  ((1.0/NUM_BANDS) * amp			// scaling with 1.0/NUM_BANDS so the sum of bands will be normalised
+								
+				float anAmplitude = ((1.0/NUM_BANDS) * amp			// scaling with 1.0/NUM_BANDS so the sum of bands will be normalised
 										   * (1.0-smoothingFactor)
 										   )+formerAmplitude					// when adding the formerAmplitude, that we got from the if clause above
-										  ];
-				
-				
+				;
+								
 				if (iBand == 0) {
-					[newWaveLine addObject:anAmplitude];
+					[newWaveLine addFloat:anAmplitude];
 				} else {
-					[newWaveLine replaceObjectAtIndex:i withObject:anAmplitude];
+					[newWaveLine setFloat:anAmplitude atIndex:i];
 				}
 				
-				[newBandLine addObject:[NSNumber numberWithFloat:amp]];
+				[newBandLine addFloat:amp];
 				
 			}
 			[newBandLines addObject:newBandLine];
@@ -633,18 +632,18 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 		// offset newWaveLine
 		iFrom = offsetIndex%resolution;
 		for (int iTo = 0; iTo < resolution; iTo++) {
-			[[newVoice objectForKey:@"waveLine"] addObject:[newWaveLine objectAtIndex: iFrom]];
+			[[newVoice objectForKey:@"waveLine"] addFloat:[newWaveLine getFloatAtIndex:iFrom]];
 			iFrom = (iFrom+1)%resolution;
 		}
 		
 		// offset newBandLines
 		for(int iBand = 0; iBand < NUM_BANDS; iBand++){
 			
-			NSMutableArray * newBandLineWithOffset = [NSMutableArray arrayWithCapacity:resolution];
+			WaveArray * newBandLineWithOffset = [[WaveArray alloc]init];
 			iFrom = offsetIndex%resolution;
 			
 			for (int iTo = 0; iTo < resolution; iTo++) {
-				[newBandLineWithOffset addObject:[[newBandLines objectAtIndex:iBand] objectAtIndex:iFrom]];
+				[newBandLineWithOffset addFloat:[[newBandLines objectAtIndex:iBand] getFloatAtIndex:iFrom]];
 				iFrom = (iFrom+1)%resolution;
 			}
 			[[newVoice objectForKey:@"bandLines"] addObject:newBandLineWithOffset];
@@ -702,3 +701,51 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 }
 
 @end
+
+@implementation WaveArray
+
+-(id)init {
+	self = [super init];
+	if (self) {
+		count = 0;
+	}
+	return self;
+}
+
+-(void) addFloat:(float)floatValue{
+
+	if (floatValue > 2.0) {
+		Debugger();
+	}
+	
+	if ([self count] < MAX_RESOLUTION) {
+		array[count++] = floatValue;
+	}	
+}
+
+-(float) getFloatAtIndex:(int)index{
+	if (index < count) {
+
+		if (array[index] > 2.0) {
+			Debugger();
+		}
+		return array[index];
+	}
+}
+
+-(void) setFloat:(float)floatValue atIndex:(int)index{
+	if (index < count) {
+		array[index] = floatValue;
+	}
+}
+
+-(void) clear{
+	count = 0;
+}
+
+-(int) count{
+	return count;
+}
+
+@end
+

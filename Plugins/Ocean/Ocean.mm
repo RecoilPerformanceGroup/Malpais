@@ -195,6 +195,9 @@
 	}
 	
 	for (int i=0; i<springs.size(); i++) {
+		
+//		springs[i]->
+		
 		springs[i]->setStrength(PropF(@"stiffness"));
 	}
 	
@@ -280,17 +283,17 @@
 		
 		if (PropB(waveOnStr)) {
 			
-			NSMutableArray * newWave = [[voices objectAtIndex:iVoice] objectForKey:@"waveLine"];
+			WaveArray * newWave = [[voices objectAtIndex:iVoice] objectForKey:@"waveLine"];
 			
 			int echoWaveIndex = (int)fmax( 0, ([echoVoices count]-1)-roundf((PropF(@"echoDelay")*kEchoLength*iVoice/NUM_VOICES)));
-			NSMutableArray * echoWave = [[echoVoices objectAtIndex:echoWaveIndex] objectForKey:@"waveLine"];
+			WaveArray * echoWave = [[echoVoices objectAtIndex:echoWaveIndex] objectForKey:@"waveLine"];
 			
 			if ([newWave count] > 0) {
 				waveForm[iVoice]->clear();
 				for (int i=0; i < [newWave count]; i++) {
 					waveForm[iVoice]->push_back(
-												[[newWave objectAtIndex:i] floatValue] * (1.0-PropF(@"echo")) +
-												[[echoWave objectAtIndex:i] floatValue] * PropF(@"echo")
+												[newWave getFloatAtIndex:i] * (1.0-PropF(@"echo")) +
+												[echoWave getFloatAtIndex:i] * PropF(@"echo")
 												);
 				}
 				

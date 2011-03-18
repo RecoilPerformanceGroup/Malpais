@@ -57,10 +57,10 @@
 	
 	for(int iBand=0;iBand<NUM_BANDS;iBand++){
 		
-		NSMutableArray * aBand = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
+		WaveArray * aBand = [[WaveArray alloc]init];
 		
 		for (int iAmplitude=0; iAmplitude<MAX_RESOLUTION; iAmplitude++) {
-			[aBand addObject:[NSNumber numberWithDouble:0.0]];
+			[aBand addFloat:0.0];
 		}
 		
 		[waveForms addObject:aBand];
@@ -101,7 +101,7 @@
 	
 	for(int iBand=0;iBand<NUM_BANDS;iBand++){
 		
-		NSMutableArray * aBand = [NSMutableArray arrayWithCapacity:voiceLength];
+		WaveArray * aBand = [[WaveArray alloc]init];
 		
 		for (int iAmplitude=0; iAmplitude<voiceLength; iAmplitude++) {
 			
@@ -114,12 +114,12 @@
 			double postDriftBalance = 1.0-powf((1.0-sqrt(fabs(postDrift))), 2.0);
 			
 			if([[newWaveForms objectAtIndex:iBand] count] == [[oldWaveForms objectAtIndex:iBand] count]){
-				[aBand addObject:[NSNumber numberWithFloat:
-							  ((1.0-postDriftBalance)*[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue])+
-							  ((postDriftBalance)*[[[oldWaveForms objectAtIndex:iBand] objectAtIndex:iFrom] floatValue])
-							  ]];
+				[aBand addFloat:
+							  ((1.0-postDriftBalance)*[[newWaveForms objectAtIndex:iBand] getFloatAtIndex:iAmplitude])+
+							  ((postDriftBalance)*[[oldWaveForms objectAtIndex:iBand] getFloatAtIndex:iFrom])
+							  ];
 			} else {
-				[aBand addObject:[NSNumber numberWithFloat:[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue]]];
+				[aBand addFloat:[[newWaveForms objectAtIndex:iBand] getFloatAtIndex:iAmplitude]];
 			}
 
 			
@@ -159,7 +159,7 @@
 					
 					float x = ([self aspect]*i)/resolution;
 					//					float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
-					ofxPoint2f p = ofxPoint2f(x, [[[waveForms objectAtIndex:iBand] objectAtIndex:i] floatValue]*amplitude);
+					ofxPoint2f p = ofxPoint2f(x, [[waveForms objectAtIndex:iBand] getFloatAtIndex:i]*amplitude);
 					p.y *= 1*(1-PropF(@"falloffStrength")) + PropF(@"falloffStrength")*[self falloff:x*1.0/PropF(@"falloff")]*[self falloff:([self aspect]-x)*1.0/PropF(@"falloff")];
 					ofxVec2f v = p - lastPoint;
 					ofxVec2f h = ofxVec2f(-v.y,v.x);

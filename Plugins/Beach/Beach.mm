@@ -96,12 +96,12 @@
 			
 			[voices replaceObjectAtIndex:iVoice withObject:newVoice];
 			
-			NSMutableArray * newWave = [newVoice objectForKey:@"waveLine"];
+			WaveArray * newWave = [newVoice objectForKey:@"waveLine"];
 			
 			if ([newWave count] > 0) {
 				waveForm[iVoice]->clear();
 				for (int i=0; i < [newWave count]; i++) {
-					waveForm[iVoice]->push_back([[newWave objectAtIndex:i] floatValue]);
+					waveForm[iVoice]->push_back([newWave getFloatAtIndex:i]);
 				}
 				
 			}
