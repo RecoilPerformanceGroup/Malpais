@@ -1,7 +1,6 @@
 #import "Umbilical.h"
 #import "Keystoner.h"
 #import "Kinect.h"
-#import "SceneX.h"
 
 @implementation Umbilical
 
@@ -73,10 +72,10 @@
 	
 	for(int iBand=0;iBand<NUM_BANDS;iBand++){
 		
-		NSMutableArray * aBand = [NSMutableArray arrayWithCapacity:MAX_RESOLUTION];
+		WaveArray * aBand = [[WaveArray alloc]init];
 		
 		for (int iAmplitude=0; iAmplitude<MAX_RESOLUTION; iAmplitude++) {
-			[aBand addObject:[NSNumber numberWithDouble:0.0]];
+			[aBand addFloat:0.0];
 		}
 		
 		[waveForms addObject:aBand];
@@ -86,7 +85,10 @@
 }
 
 -(void) setup{	
+	aspectCache = [[[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] aspect] floatValue];
+
 	
+	sceneX = GetPlugin(SceneX);
 	voices = [NSMutableArray arrayWithCapacity:NUM_VOICES+1];
 	
 	for (int i = 0; i < NUM_VOICES+1; i++) {
@@ -114,7 +116,6 @@
 	mousey = 0.0;
 	
 	endPos = ofxPoint2f([self aspect]*0.5,0.01);
-	
 	
 	physics = new ofxPhysics2d(ofPoint(0,0.0005));
 	physics->checkBounds(NO);
@@ -198,7 +199,7 @@
 -(void) update:(NSDictionary *)drawingInformation{
 	startPos = ofxVec2f(PropF(@"startPosX"), PropF(@"startPosY"));
 	
-	
+	aspectCache = [[[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] aspect] floatValue];
 	
 	for(int i=0;i<springs.size();i++){
 		springs[i]->setStrength(PropF(@"springForce"));
@@ -225,7 +226,7 @@
 		
 		
 		
-		particles[i][0].moveTo(PropF(@"startPosX")*100.0, 100.0*[GetPlugin(SceneX) getBackline:1]);
+		particles[i][0].moveTo(PropF(@"startPosX")*100.0, 100.0*[sceneX getBackline:1]);
 		particles[i][0].stopMotion();
 		
 		
@@ -277,7 +278,7 @@
 			
 			float midDist =  fabs(0.5*[self aspect] - waveX[iVoice]);
 			for(int i=0;i<PropI(@"resolution");i++){
-				float x = (1.0-[GetPlugin(SceneX) getBackline:1])*(float)i/PropI(@"resolution") + [GetPlugin(SceneX) getBackline:1];
+				float x = (1.0-[sceneX getBackline:1])*(float)i/PropI(@"resolution") + [sceneX getBackline:1];
 				float offset = 0;			
 				if(PropF(@"endpointPushForce") > 0 && iVoice != 0){
 					//Ved det er snyd, men skal finde afstand til endpoint, og snyder
@@ -350,7 +351,7 @@
 				
 				for(int iBand=0;iBand<NUM_BANDS;iBand++){
 					
-					NSMutableArray * aBand = [NSMutableArray arrayWithCapacity:voiceLength];
+					WaveArray * aBand = [[WaveArray alloc]init];
 					
 					for (int iAmplitude=0; iAmplitude<voiceLength; iAmplitude++) {
 						
@@ -363,12 +364,12 @@
 						double postDriftBalance = 1.0-powf((1.0-sqrt(fabs(postDrift))), 2.0);
 						
 						if([[newWaveForms objectAtIndex:iBand] count] == [[oldWaveForms objectAtIndex:iBand] count]){
-							[aBand addObject:[NSNumber numberWithFloat:
-											  ((1.0-postDriftBalance)*[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue])+
-											  ((postDriftBalance)*[[[oldWaveForms objectAtIndex:iBand] objectAtIndex:iFrom] floatValue])
-											  ]];
+							[aBand addFloat:
+											  ((1.0-postDriftBalance)*[[newWaveForms objectAtIndex:iBand] getFloatAtIndex:iAmplitude])+
+											  ((postDriftBalance)*[[oldWaveForms objectAtIndex:iBand] getFloatAtIndex:iFrom])
+											  ];
 						} else {
-							[aBand addObject:[NSNumber numberWithFloat:[[[newWaveForms objectAtIndex:iBand] objectAtIndex:iAmplitude] floatValue]]];
+							[aBand addFloat:[[newWaveForms objectAtIndex:iBand] getFloatAtIndex:iAmplitude]];
 						}
 						
 						
@@ -397,11 +398,11 @@
 			
 			if ([wave count] > 0) {
 				if(fabs(direction) > 0) {
-					distortion[iVoice]->push_back([[wave objectAtIndex:0] floatValue]);
+					distortion[iVoice]->push_back([wave getFloatAtIndex:0]);
 				}
 				waveForm[iVoice]->clear();
 				for (int i=0; i < [wave count]; i++) {
-					waveForm[iVoice]->push_back([[wave objectAtIndex:i] floatValue]);
+					waveForm[iVoice]->push_back([wave getFloatAtIndex:i]);
 				}
 			}
 			
@@ -580,7 +581,7 @@
 		 }
 		 */	
 	} else {
-		begin.y = [GetPlugin(SceneX) getBackline:1];
+		begin.y = [sceneX getBackline:1];
 		
 		
 		
@@ -593,7 +594,7 @@
 			
 			glTranslated(begin.x,begin.y, 0);
 			glRotated(-v1.angle(v2)+90, 0, 0, 1);
-			glScaled(1.0-[GetPlugin(SceneX) getBackline:1], 1, 1);
+			glScaled(1.0-[sceneX getBackline:1], 1, 1);
 			
 			gradient.getTextureReference().bind();
 			
@@ -608,7 +609,7 @@
 					ofxVec2f v = p - lastPoint;
 					ofxVec2f h = ofxVec2f(-v.y,v.x);
 					h.normalize();
-					h *= 0.006*PropF(@"lineWidth");
+					h *= 0.003;
 					glTexCoord2f(0,0);
 					glVertex2f((p+h).x, (p+h).y);
 					glTexCoord2f(100,0);
@@ -705,7 +706,7 @@
 }
 
 -(float) aspect{
-	return [[[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] aspect] floatValue];
+	return aspectCache;
 }
 
 @end
