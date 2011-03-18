@@ -510,7 +510,12 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				NSMutableArray * oldBandLine = [NSMutableArray arrayWithCapacity:formerResolution];
 				
 				iFrom = (formerResolution-formerOffsetIndex)%formerResolution;
+
+				//TODO
+//				[oldBandLine addObjectsFromArray:[formerBandLine subarrayWithRange:NSMakeRange(<#NSUInteger loc#>, <#NSUInteger len#>)]];
+				
 				for (int iTo = 0; iTo < formerResolution; iTo++) {
+
 					[oldBandLine addObject:[formerBandLine objectAtIndex:iFrom]];
 					iFrom = (iFrom+1)%formerResolution;
 				}
@@ -589,18 +594,14 @@ static void BuildDeviceMenu(AudioDeviceList *devlist, NSPopUpButton *menu, Audio
 				}
 				
 				float amp = sinf((((1.0*i)/resolution)*(1.0+iBand))*frequency*PI*2.0/*+(1.0/(1+iBand))*/-drift) * newBandLevel * amplitude;
-				
-				NSNumber * anAmplitude = [NSNumber numberWithFloat:
-										  ((1.0/NUM_BANDS) * amp			// scaling with 1.0/NUM_BANDS so the sum of bands will be normalised
-										   * (1.0-smoothingFactor)
-										   )+formerAmplitude					// when adding the formerAmplitude, that we got from the if clause above
-										  ];
-				
+				float anAmp = ((1.0/NUM_BANDS) * amp			// scaling with 1.0/NUM_BANDS so the sum of bands will be normalised
+							   * (1.0-smoothingFactor)
+							   )+formerAmplitude;
 				
 				if (iBand == 0) {
-					[newWaveLine addObject:anAmplitude];
+					[newWaveLine addObject:[NSNumber numberWithFloat:anAmp]];
 				} else {
-					[newWaveLine replaceObjectAtIndex:i withObject:anAmplitude];
+					[newWaveLine replaceObjectAtIndex:i withObject:[NSNumber numberWithFloat:anAmp]];
 				}
 				
 				[newBandLine addObject:[NSNumber numberWithFloat:amp]];

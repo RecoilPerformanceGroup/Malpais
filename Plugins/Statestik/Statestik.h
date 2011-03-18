@@ -2,7 +2,7 @@
 #include "Filter.h"
 
 #define NUMGRAPHS 11
-#define NUMVALUES 9
+#define NUMVALUES 10
 enum GRAPH_TYPE {
 	WIPE_TOP
 };
@@ -16,7 +16,8 @@ enum filterIndexes {
 	g,
 	b,
 	a,
-	dotOffset
+	dotOffset,
+	percentage
 };
 
 struct Graph {

@@ -63,7 +63,9 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.002] named:@"springGlueForce"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:0.002] named:@"springGlueEndForce"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"springRepulsion"];	
-	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"lineWidth"];	
+	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"kinect"];
+
 	[self assignMidiChannel:7];
 	
 	
@@ -100,9 +102,9 @@
 			notOk = false;
 			waveX[i] = ofRandom(0, [self aspect]);
 			for(int j=0;j<i;j++){
-				if(fabs(waveX[i] - waveX[j]) < 0.02){
+				if(fabs(waveX[i] - waveX[j]) < 0.017){
 					notOk = true;
-					cout<<"Damn "<<waveX[i]<<"  "<<waveX[j]<<endl;
+				//	cout<<"Damn "<<waveX[i]<<"  "<<waveX[j]<<endl;
 				}
 			}
 		}		
@@ -124,7 +126,7 @@
 	}
 	particlesLength = 7;
 #ifdef SINGELMODE
-	numStrings = 1;
+	numStrings = 2;
 #else
 	numStrings = 10;
 #endif
@@ -275,7 +277,7 @@
 			
 			float midDist =  fabs(0.5*[self aspect] - waveX[iVoice]);
 			for(int i=0;i<PropI(@"resolution");i++){
-				float x = (float)i/PropI(@"resolution");
+				float x = (1.0-[GetPlugin(SceneX) getBackline:1])*(float)i/PropI(@"resolution") + [GetPlugin(SceneX) getBackline:1];
 				float offset = 0;			
 				if(PropF(@"endpointPushForce") > 0 && iVoice != 0){
 					//Ved det er snyd, men skal finde afstand til endpoint, og snyder
@@ -424,7 +426,6 @@
 				delete distortion[iVoice];
 				distortion[iVoice] = newDistortion;
 			}
-			
 		} else {
 			//Tøm bufferen forfra hvis den er slået fra
 			MSA::Interpolator1D * newDistortion = new MSA::Interpolator1D;
@@ -441,7 +442,7 @@
 	
 	
 	
-	if(mouseh < 0){
+	if(PropB(@"kinect")){
 		
 		NSMutableArray * pblobs = [GetPlugin(Kinect) persistentBlobs];
 		
@@ -456,10 +457,9 @@
 			}
 		}
 		
-	} else {
+	} else if (mouseh >= 0) {
 		endPos = ofxVec2f(mousex,mousey);
 	}
-	
 }
 
 
@@ -493,7 +493,6 @@
 		int u=0;
 		if(numStrings > 1)
 			u = 1;
-		
 		
 		
 		//---&
@@ -548,8 +547,8 @@
 					float x = 1.0/(endSegment-startSegment)*(i-startSegment);
 					if (i < segments) {
 						float f = [self falloff:(float)x/PropF(@"falloffStart")] * [self falloff:(1-x)/PropF(@"falloffEnd")];
-						float val = [[[waveForms objectAtIndex:band] objectAtIndex:i] floatValue]*amplitude*f;
-						
+						//float val = [[[waveForms objectAtIndex:band] objectAtIndex:i] floatValue]*amplitude*f;
+						float val = offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x*length)*(1.0-weighLiveOrBuffer)))*amplitude*f;
 						//	ofxPoint2f p = ofxPoint2f(offsets[iVoice][i]+((distortion[iVoice]->getData()[i]*weighLiveOrBuffer)+(waveForm[iVoice]->sampleAt(x*length)*(1.0-weighLiveOrBuffer)))*amplitude*f, 0);
 						ofxPoint2f p = ofxPoint2f(val, 0);
 						MSA::Vec2<float> springP = springInterpolator[u]->sampleAt(x);
@@ -557,7 +556,7 @@
 						ofxVec2f v = p - lastPoint;
 						ofxVec2f h = ofxVec2f(-v.y,v.x);
 						h.normalize();
-						h *= 0.003;
+						h *= 0.006*PropF(@"lineWidth");
 						
 						glTexCoord2f(0,x*300);
 						glVertex2f((p+h).x, (p+h).y);
@@ -609,7 +608,7 @@
 					ofxVec2f v = p - lastPoint;
 					ofxVec2f h = ofxVec2f(-v.y,v.x);
 					h.normalize();
-					h *= 0.003;
+					h *= 0.006*PropF(@"lineWidth");
 					glTexCoord2f(0,0);
 					glVertex2f((p+h).x, (p+h).y);
 					glTexCoord2f(100,0);

@@ -6,7 +6,7 @@
 #include "Wave.h"
 #include "ofxPhysics2d.h"
 
-//#define SINGELMODE
+#define SINGELMODE
 
 @interface Umbilical : ofPlugin {
 	
