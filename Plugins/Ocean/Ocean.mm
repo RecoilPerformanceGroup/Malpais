@@ -194,11 +194,27 @@
 		
 	}
 	
+	float stiffness = PropF(@"stiffness");
+	
 	for (int i=0; i<springs.size(); i++) {
 		
-//		springs[i]->
+		springs[i]->setStrength(stiffness);
+
+		if (dragSpring) {
+			
+			float distStiff, distanceA, distanceB;
+			
+			distanceA = dragSpring->getB()->distanceTo(springs[i]->getA());
+			distanceB = dragSpring->getB()->distanceTo(springs[i]->getB());
+			
+			distStiff = 1.0-(fmin(distanceA, distanceB)/400.0);
+			
+			distStiff = powf(distStiff,15);
+			
+//			if(distStiff > 0.95)
+				springs[i]->setStrength(fmaxf(stiffness, distStiff));
 		
-		springs[i]->setStrength(PropF(@"stiffness"));
+		}
 	}
 	
 	mouseParticle->set(mousex*400.0, mousey*400.0);
@@ -211,7 +227,7 @@
 	if(!dragSpring){
 		//		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
 		float wallX = 0.5*[self aspect];
-		ofPoint dragPoint = ofPoint(wallX*400, 0.5*400);
+		ofPoint dragPoint = ofPoint(wallX*400, 0.25*400);
 		ofxParticle* particleToDrag = physics->getNearestParticle(dragPoint);
 		if(particleToDrag){
 			dragOrigin = new ofPoint(particleToDrag->x, particleToDrag->y);
