@@ -10,6 +10,7 @@
 	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:NUMVIDEOS] named:@"video"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"chapter"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:0 maxValue:1] named:@"volume"];	
 	
 	[self assignMidiChannel:8];	
 	lastFramesVideo = 0;
@@ -23,6 +24,15 @@
 //
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	if(object == Prop(@"volume")){
+		dispatch_async(dispatch_get_main_queue(), ^{	
+			for(int i=0;i<NUMVIDEOS;i++){				
+				if(movie[i]){
+					[movie[i] setVolume:[object floatValue]];							
+				}
+			}
+		});
+	}
 	if(object == Prop(@"video")){		
 		if(PropI(@"video") == 0){			
 			NSLog(@"Reset video");

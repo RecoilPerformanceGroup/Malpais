@@ -5,6 +5,8 @@
 #include "ofxVec2f.h"
 #include "Wave.h"
 #include "ofxPhysics2d.h"
+#import "SceneX.h"
+
 
 #define SINGELMODE
 
@@ -43,6 +45,9 @@
 	
 	MSA::Interpolator2D ** springInterpolator;
 	ofImage gradient;
+	
+	SceneX * sceneX;
+	float aspectCache;
 }
 
 -(float) aspect;

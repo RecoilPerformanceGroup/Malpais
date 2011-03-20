@@ -38,6 +38,7 @@ struct Graph {
 	float lineTime;
 	
 	int graphCounter;
+	BOOL hideLine;
 }
 @property (readwrite, retain) NSMutableArray * surveyData;
 

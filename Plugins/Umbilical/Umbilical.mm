@@ -64,6 +64,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"springRepulsion"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"lineWidth"];	
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"kinect"];
+		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"trackingAlpha"];	
 
 	[self assignMidiChannel:7];
 	
@@ -156,7 +157,7 @@
 				
 				ofxSpring* s = new ofxSpring(p1, p2, 0, 0);
 				physics->add(s);
-				if(i == 0){
+				if(i == 0){	
 					springs.push_back(s);				
 					p->setMass(1000);
 				}
@@ -539,7 +540,7 @@
 				
 				ofNoFill();
 				
-				ofSetColor(255, 255, 255, 150);
+				ofSetColor(255, 255, 255, PropF(@"trackingAlpha")*255.0);
 				
 				gradient.getTextureReference().bind();
 				glBegin(GL_QUAD_STRIP);

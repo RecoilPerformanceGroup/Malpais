@@ -8,7 +8,7 @@
 -(void) initPlugin{
 	[self assignMidiChannel:10];
 	
-	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:10] named:@"displayGraph"];
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0 maxValue:20] named:@"displayGraph"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0 maxValue:1] named:@"percentageScale"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:2.0 minValue:1.0 maxValue:4.0] named:@"backlineNo"];
 
@@ -36,14 +36,17 @@
 			
 			switch (graphCounter) {
 				case 0:
+					[Prop(@"backlineNo") setIntValue:2];
 					newGraph.filter[sizeY].setStartValue(1);
 					newGraph.filter[posX].setStartValue(0);
 					newGraph.filter[sizeX].setStartValue([self aspect]);
-					newGraph.valuesGoal[sizeY] = 0.5;
+					newGraph.valuesGoal[sizeY] = 0.6;
+					newGraph.values[sizeY] = 1;
 					newGraph.valuesGoal[percentage] = 0.338;
 					newGraph.valuesGoal[posX] = 0;
 					newGraph.valuesGoal[sizeX] = [self aspect];
 					newGraph.type = WIPE_TOP;	
+					newGraph.filterDelay[sizeY] = 1;
 					
 					newGraph.filter[r].setStartValue(255);
 					newGraph.valuesGoal[r] = 255;
@@ -53,18 +56,19 @@
 					newGraph.valuesGoal[b] = 255;
 					newGraph.filter[a].setStartValue(255);
 					newGraph.valuesGoal[a] = 255;
-					
+					hideLine = NO;
 					
 					graphs.push_back(newGraph);
 					
 					break;
 				case 1:
-					graphs[0].valuesGoal[sizeY] = 0.587;
+					graphs[0].valuesGoal[sizeY] = 0.8;
+					graphs[0].valuesGoal[percentage] = 0.587;
 					
 					break;
 				case 2:
-					graphs[0].valuesGoal[sizeY] = 0.254;
-					
+					graphs[0].valuesGoal[sizeY] = 0.5;
+					graphs[0].valuesGoal[percentage] = 0.254;					
 					/*		graphs[0].valuesGoal[posX] = -2*[self aspect];
 					 graphs[1].valuesGoal[posX] = -2*[self aspect]+0.5*[self aspect];
 					 
@@ -88,7 +92,7 @@
 					newGraph.values[sizeY] = graphs[0].values[sizeY];
 					newGraph.filter[posX].setStartValue([self aspect]*0.5);
 					newGraph.filter[sizeX].setStartValue([self aspect]*0.5);
-					newGraph.valuesGoal[sizeY] = 0.045;
+					newGraph.valuesGoal[sizeY] = 0.145;
 					newGraph.valuesGoal[posX] = [self aspect]*0.5;
 					newGraph.valuesGoal[sizeX] = [self aspect]*0.5;
 					
@@ -105,6 +109,8 @@
 					newGraph.filter[a].setStartValue(255);
 					newGraph.valuesGoal[a] = 255;
 					
+					newGraph.valuesGoal[percentage] = 0.045;
+					
 					graphs.push_back(newGraph);
 					break;
 					
@@ -113,11 +119,11 @@
 					graphs[0].valuesGoal[posX] = -2*[self aspect];
 					graphs[1].valuesGoal[posX] = -2*[self aspect]+0.5*[self aspect];
 					
-					newGraph.filterDelay[sizeY] = 0.7;
+					newGraph.filterDelay[sizeY] = 0.0;
 					newGraph.filter[sizeY].setStartValue(0);
 					newGraph.filter[posX].setStartValue([self aspect]*0.0);
 					newGraph.filter[sizeX].setStartValue([self aspect]*1);
-					newGraph.valuesGoal[sizeY] = 0.154;
+					newGraph.valuesGoal[sizeY] = 0.254;
 					newGraph.valuesGoal[posX] = [self aspect]*0.0;
 					newGraph.valuesGoal[sizeX] = [self aspect]*1;	
 					newGraph.values[sizeY] = 0;
@@ -131,7 +137,8 @@
 					newGraph.valuesGoal[b] = 20;
 					newGraph.filter[a].setStartValue(255);
 					newGraph.valuesGoal[a] = 255;
-					
+					newGraph.valuesGoal[percentage] = 0.154;
+
 					graphs.push_back(newGraph);
 					
 					
@@ -143,7 +150,7 @@
 					newGraph.filter[sizeY].setStartValue(0);
 					newGraph.filter[posX].setStartValue([self aspect]*0.0);
 					newGraph.filter[sizeX].setStartValue([self aspect]*1);
-					newGraph.valuesGoal[sizeY] = 0.197;
+					newGraph.valuesGoal[sizeY] = 0.297;
 					newGraph.valuesGoal[posX] = [self aspect]*0.0;
 					newGraph.valuesGoal[sizeX] = [self aspect]*1;					
 					newGraph.type = WIPE_TOP;
@@ -158,9 +165,9 @@
 					newGraph.valuesGoal[a] = 255;
 					
 					newGraph.valuesGoal[dotOffset] = 0.1;
-					
+					newGraph.valuesGoal[percentage] = 0.197;
+
 					graphs[2].valuesGoal[posY] = newGraph.valuesGoal[sizeY];
-					graphs[2].valuesGoal[a] = 60.0;					
 
 					graphs.push_back(newGraph);	
 					
@@ -176,39 +183,38 @@
 					newGraph.valuesGoal[sizeX] = [self aspect]*1;					
 					newGraph.type = WIPE_TOP;
 					
-					newGraph.filter[r].setStartValue(100);
-					newGraph.valuesGoal[r] = 100;
-					newGraph.filter[g].setStartValue(255);
-					newGraph.valuesGoal[g] = 255;
-					newGraph.filter[b].setStartValue(255);
-					newGraph.valuesGoal[b] = 255;
+					newGraph.filter[r].setStartValue(255);
+					newGraph.valuesGoal[r] = 255;
+					newGraph.filter[g].setStartValue(0);
+					newGraph.valuesGoal[g] = 0;
+					newGraph.filter[b].setStartValue(0);
+					newGraph.valuesGoal[b] = 0;
 					newGraph.filter[a].setStartValue(255);
 					newGraph.valuesGoal[a] = 255;
 					
 					newGraph.valuesGoal[dotOffset] = 0.1;
-
+					newGraph.valuesGoal[percentage] = 0.303;
 					graphs.push_back(newGraph);	
 					
 					
 					graphs[2].valuesGoal[posY] += newGraph.valuesGoal[sizeY];
-					graphs[2].valuesGoal[a] = 60.0;					
 					graphs[3].valuesGoal[posY] += newGraph.valuesGoal[sizeY];
-					graphs[3].valuesGoal[a] = 60.0;					
 
 					
 					break;
 					
 				case 7:					
-					graphs[2].valuesGoal[posY] += 1;
-					graphs[3].valuesGoal[posY] += 1;
-					graphs[4].valuesGoal[posY] += 1;
+					graphs[2].valuesGoal[posY] += 1.1;
+					graphs[3].valuesGoal[posY] += 1.1;
+					graphs[4].valuesGoal[posY] += 1.1;
 					
 					newGraph.filterDelay[sizeY] = 0.5;
 					newGraph.values[sizeY] = 0;
 					newGraph.filter[sizeY].setStartValue(0);
 					newGraph.filter[posX].setStartValue([self aspect]*0.0);
 					newGraph.filter[sizeX].setStartValue([self aspect]*0.5);
-					newGraph.valuesGoal[sizeY] = 0.324;
+					newGraph.valuesGoal[sizeY] = 0.224;
+					newGraph.valuesGoal[percentage] = 0.27;
 					newGraph.valuesGoal[posX] = [self aspect]*0.0;
 					newGraph.valuesGoal[sizeX] = [self aspect]*0.5;					
 					newGraph.type = WIPE_TOP;
@@ -223,10 +229,7 @@
 					newGraph.valuesGoal[a] = 255;
 					
 					
-					graphs.push_back(newGraph);	
-					
-				
-					
+					graphs.push_back(newGraph);						
 					
 					break;
 					
@@ -234,7 +237,8 @@
 					newGraph.filter[sizeY].setStartValue(0);
 					newGraph.filter[posX].setStartValue([self aspect]*0.5);
 					newGraph.filter[sizeX].setStartValue([self aspect]*0.5);
-					newGraph.valuesGoal[sizeY] = 0.059;
+					newGraph.valuesGoal[sizeY] = 0.75;
+					newGraph.valuesGoal[percentage] = 0.741;
 					newGraph.valuesGoal[posX] = [self aspect]*0.5;
 					newGraph.valuesGoal[sizeX] = [self aspect]*0.5;					
 					newGraph.type = WIPE_TOP;
@@ -257,6 +261,92 @@
 					break;
 					
 					
+				case 9:					
+					newGraph.filter[sizeY].setStartValue(0);
+					newGraph.filter[posX].setStartValue([self aspect]*0.33333*2);
+					newGraph.filter[sizeX].setStartValue([self aspect]*0.33333);
+					newGraph.valuesGoal[sizeY] = 0.10;
+					newGraph.valuesGoal[percentage] = 0.032;
+					newGraph.valuesGoal[posX] = [self aspect]*0.33333*2;
+					newGraph.valuesGoal[sizeX] = [self aspect]*0.33333;					
+					newGraph.type = WIPE_TOP;
+					
+					newGraph.filter[r].setStartValue(255);
+					newGraph.valuesGoal[r] = 255;
+					newGraph.filter[g].setStartValue(255);
+					newGraph.valuesGoal[g] = 255;
+					newGraph.filter[b].setStartValue(255);
+					newGraph.valuesGoal[b] = 255;
+					newGraph.filter[a].setStartValue(255);
+					newGraph.valuesGoal[a] = 255;
+					
+					graphs[5].valuesGoal[posX] = 0;
+					graphs[6].valuesGoal[posX] = [self aspect]*0.3333;
+					graphs[5].valuesGoal[sizeX] = [self aspect]*0.3333;
+					graphs[6].valuesGoal[sizeX] = [self aspect]*0.3333;
+
+					
+					
+					graphs.push_back(newGraph);	
+					
+					break;
+				
+				case 10:		
+					hideLine = YES;
+					
+					graphs[5].time = 0;
+					graphs[5].filterDelay[sizeY] = 0.6;
+					graphs[5].valuesGoal[sizeY] = -0.2;
+					
+					graphs[6].time = 0;
+					graphs[6].filterDelay[sizeY] = 0.6;
+					graphs[6].valuesGoal[sizeY] = -0.2;
+					
+					graphs[7].time = 0;
+					graphs[7].filterDelay[sizeY] = 0.6;
+					graphs[7].valuesGoal[sizeY] = 0.2;
+					graphs[7].valuesGoal[sizeX] = [self aspect];
+					graphs[7].valuesGoal[posX] = 0;
+					graphs[7].valuesGoal[percentage] = 0.089;
+					break;
+					
+				case 11:		
+					graphs[6].valuesGoal[sizeX] = 0.5*[self aspect];
+					graphs[6].valuesGoal[posX] = 0.5*[self aspect];
+					graphs[7].valuesGoal[sizeY] = 0.4;
+					graphs[7].valuesGoal[percentage] = 0.337;
+					break;
+				case 12:		
+					graphs[6].valuesGoal[sizeY] = 0.7;
+					graphs[7].valuesGoal[percentage] = 0.628;
+					break;
+				case 13:		
+					graphs[6].valuesGoal[sizeY] = -0.2;
+					
+					graphs[7].time = 0;
+					graphs[7].filterDelay[sizeY] = 0.6;
+					graphs[7].valuesGoal[sizeY] = 0.5;
+					graphs[7].valuesGoal[percentage] = 0.35;
+					
+					break;
+					
+				case 14:		
+
+					graphs[7].valuesGoal[sizeY] = 0.1;
+					graphs[7].valuesGoal[percentage] = 0.029;
+					
+					break;
+			
+				case 15:		
+					graphs[7].valuesGoal[sizeY] = 1;
+					graphs[7].valuesGoal[percentage] = 0.98;
+					
+					break;
+					
+				case 16:		
+					graphs[7].valuesGoal[sizeY] = -0.1;
+					
+					break;
 				default:
 					break;
 			}
@@ -371,7 +461,7 @@
 	}PopSurface();
 	
 	//Line 
-	if(graphs.size() > 0){
+	if(graphs.size() > 0 && !hideLine){
 		ofSetColor(255, 255, 255);
 		ofFill();
 		
