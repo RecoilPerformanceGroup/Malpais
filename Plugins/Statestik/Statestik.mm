@@ -484,15 +484,18 @@
 		float wallP = ofClamp(p * 1.0/switchPercentage , 0, 1);
 		float floorP = ofClamp((p-switchPercentage) * 1.0/(1-switchPercentage) , 0, 1);
 		
-		glLineWidth(PropF(@"lineStyleWidth"));
-		glLineStipple(PropI(@"lineStyleDotsize"), 0xAAAA);
-		glEnable(GL_LINE_STIPPLE);
+		float lineStyleWidth = (0.01*PropF(@"lineStyleWidth"))+0.001;
 		
-		ApplySurface(@"Wall");{				
-			glBegin(GL_LINES);{
-				glVertex2f(middle*Aspect(@"Wall",1), 1-wallL);
-				glVertex2f(middle*Aspect(@"Wall",1), 1-wallL+wallL*wallP);
-			}glEnd();
+		ApplySurface(@"Wall");{
+			
+			float lineStart = 1-wallL;
+			float lineEnd = 1-wallL+wallL*wallP;
+			float lineX = (middle*Aspect(@"Wall",1))-(0.5*lineStyleWidth);
+			
+			for (float lineY=lineStart; lineY < lineEnd; lineY+=(2*lineStyleWidth)) {
+				ofRect(lineX, lineY, lineStyleWidth, lineStyleWidth);
+			}
+
 		}PopSurface();
 		
 		if(floorP > 0){
@@ -501,15 +504,20 @@
 				ofSetColor(255, 255, 255);
 				ofFill();
 				
-				glBegin(GL_LINE_STRIP);{
-					glVertex2f(middle*[self aspect], backLine);
-					glVertex2f(middle*[self aspect], ofMap(h*floorP, 0, 1.0, backLine, 1, false));
-				}glEnd();
+				float lineStart = backLine;
+				float lineEnd = ofMap(h*floorP, 0, 1.0, backLine, 1, false);
+				float lineX = (middle*[self aspect])-(0.5*lineStyleWidth);
+				
+				for (float lineY=lineStart; lineY < lineEnd; lineY+=(2*lineStyleWidth)) {
+					ofRect(lineX, lineY, lineStyleWidth, lineStyleWidth);
+				}
 				
 				ofCircle(middle*[self aspect], ofMap(h*floorP, 0, 1.0, backLine, 1, false), 0.01);
 				
 			}PopSurface();
 		}
+		
+		glDisable(GL_LINE_STIPPLE);
 		
 	}
 }
