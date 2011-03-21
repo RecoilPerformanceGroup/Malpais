@@ -377,21 +377,30 @@
 			glPushMatrix();
 			
 			int projector = 1;
+			[GetPlugin(Keystoner)  applySurface:@"Wall" projectorNumber:projector viewNumber:ViewNumber];
+
 			
 			float aspect;
 			if(i == 0){
-			 aspect = Aspect(@"Wall",projector);	
+				aspect = Aspect(@"Wall",projector);	
+				glBegin(GL_QUADS);{
+					glTexCoord2f(topLeft[0], topLeft[1]);  glVertex2f(0, 0);
+					glTexCoord2f(topRight[0], topRight[1]);     glVertex2f(aspect,  0);
+					glTexCoord2f(bottomRight[0], bottomRight[1]);    glVertex2f(aspect,  1);
+					glTexCoord2f(bottomLeft[0], bottomLeft[1]); glVertex2f( 0, 1);
+				}glEnd();
 			} else {
-				aspect = sizes[i].width / sizes[i].height;				
+				aspect = sizes[i].width / sizes[i].height;		
+				float projAspect =  Aspect(@"Wall",projector);
+				glBegin(GL_QUADS);{
+					glTexCoord2f(topLeft[0], topLeft[1]);  glVertex2f(-(aspect-projAspect), 0);
+					glTexCoord2f(topRight[0], topRight[1]);     glVertex2f(projAspect,  0);
+					glTexCoord2f(bottomRight[0], bottomRight[1]);    glVertex2f(projAspect,  1);
+					glTexCoord2f(bottomLeft[0], bottomLeft[1]); glVertex2f( -(aspect-projAspect), 1);
+				}glEnd();
 			}
-			[GetPlugin(Keystoner)  applySurface:@"Wall" projectorNumber:projector viewNumber:ViewNumber];
 			//		ApplySurface(([NSString stringWithFormat:@"Skærm%i",i+1])){
-			glBegin(GL_QUADS);{
-				glTexCoord2f(topLeft[0], topLeft[1]);  glVertex2f(0, 0);
-				glTexCoord2f(topRight[0], topRight[1]);     glVertex2f(aspect,  0);
-				glTexCoord2f(bottomRight[0], bottomRight[1]);    glVertex2f(aspect,  1);
-				glTexCoord2f(bottomLeft[0], bottomLeft[1]); glVertex2f( 0, 1);
-			}glEnd();
+
 			
 			
 			[GetPlugin(Keystoner)  popSurface];

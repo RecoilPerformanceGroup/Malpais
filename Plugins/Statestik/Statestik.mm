@@ -97,7 +97,8 @@
 					newGraph.valuesGoal[sizeX] = [self aspect]*0.5;
 					
 					newGraph.filterDelay[sizeY] = 0.9;
-					
+					newGraph.filterDelay[percentage] = 0.9;
+
 					newGraph.type = WIPE_TOP;
 					
 					newGraph.filter[r].setStartValue(255);
@@ -209,6 +210,8 @@
 					graphs[4].valuesGoal[posY] += 1.1;
 					
 					newGraph.filterDelay[sizeY] = 0.5;
+					newGraph.filterDelay[percentage] = 0.5;
+
 					newGraph.values[sizeY] = 0;
 					newGraph.filter[sizeY].setStartValue(0);
 					newGraph.filter[posX].setStartValue([self aspect]*0.0);
@@ -304,6 +307,8 @@
 					
 					graphs[7].time = 0;
 					graphs[7].filterDelay[sizeY] = 0.6;
+					graphs[7].filterDelay[percentage] = 0.6;
+
 					graphs[7].valuesGoal[sizeY] = 0.2;
 					graphs[7].valuesGoal[sizeX] = [self aspect];
 					graphs[7].valuesGoal[posX] = 0;
@@ -325,6 +330,7 @@
 					
 					graphs[7].time = 0;
 					graphs[7].filterDelay[sizeY] = 0.6;
+					graphs[7].filterDelay[percentage] = 0.6;
 					graphs[7].valuesGoal[sizeY] = 0.5;
 					graphs[7].valuesGoal[percentage] = 0.35;
 					

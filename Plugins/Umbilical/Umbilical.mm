@@ -46,6 +46,7 @@
 		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:
 		 [NSString stringWithFormat:@"wave%ilength",i]
 		 ];
+		[Prop( ([NSString stringWithFormat:@"wave%ilength",i]) ) setMidiSmoothing:0.7];
 	}
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.5 minValue:0.0 maxValue:1.0] named:@"startPosX"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"startPosY"];
