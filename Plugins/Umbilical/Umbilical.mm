@@ -86,6 +86,13 @@
 	[waveForms retain];
 }
 
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	if(object == Prop(@"Enabled")){
+		cout<<"Enabled"<<endl;
+		endPos = startPos + ofxVec2f(0,0.2);
+	}
+}
+
 -(void) setup{	
 	aspectCache = [[[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] aspect] floatValue];
 
@@ -101,6 +108,7 @@
 		
 		[voices addObject:[NSNull null]];
 		
+		/*
 		bool notOk = true;
 		while(notOk){
 			notOk = false;
@@ -111,7 +119,10 @@
 				//	cout<<"Damn "<<waveX[i]<<"  "<<waveX[j]<<endl;
 				}
 			}
-		}		
+		}*/
+		
+		waveX[i] = [self aspect]* (float) i/NUM_VOICES;			
+		
 	}
 	
 	mousex = 0.5 * [self aspect];
@@ -282,7 +293,7 @@
 			for(int i=0;i<PropI(@"resolution");i++){
 				float x = (1.0-[sceneX getBackline:1])*(float)i/PropI(@"resolution") + [sceneX getBackline:1];
 				float offset = 0;			
-				if(PropF(@"endpointPushForce") > 0 && iVoice != 0){
+				if(actualPushForce > 0 && iVoice != 0){
 					//Ved det er snyd, men skal finde afstand til endpoint, og snyder
 					ofxPoint2f thisPoint = ofxPoint2f(waveX[iVoice], x);
 					float dir = 1;
@@ -294,9 +305,9 @@
 					float d = fabs(0.5*[self aspect] - endPos.x)+0.05;
 					
 					if(xDist > 0){
-						offset = -dir*PropF(@"endpointPushForce") * 100 * [self offset:x] * d * xDist;
+						offset = -dir*actualPushForce * 100 * [self offset:x] * d * xDist;
 					} else {
-						offset = -dir*PropF(@"endpointPushForce") * 100 * [self offset:x] * d * (xDist)*0.8;
+						offset = -dir*actualPushForce * 100 * [self offset:x] * d * (xDist)*0.8;
 						//offset = xDist;
 					}
 					
@@ -448,20 +459,29 @@
 	if(PropB(@"kinect")){
 		
 		NSMutableArray * pblobs = [GetPlugin(Kinect) persistentBlobs];
-		
+		BOOL blobFound = NO;
 		if([pblobs count] >= 1){
 			PersistentBlob * oldest = nil;
 			for(PersistentBlob * b in pblobs){
-				if((oldest == nil || b->age > oldest->age) && [b centroidFiltered].x > 0 && [b centroidFiltered].x < [self aspect])
+				if(b->age > 20 && (oldest == nil || b->age > oldest->age) && [b centroidFiltered].x > 0 && [b centroidFiltered].x < [self aspect])
 					oldest = b;
 			}
 			if(oldest != nil){
-				endPos = ofxVec2f([oldest centroidFiltered].x,[oldest centroidFiltered].z);
-			}
+				blobFound = YES;
+				endPos += (ofxVec2f([oldest centroidFiltered].x,[oldest centroidFiltered].z)-endPos)*0.2;
+			} 
 		}
 		
+		if(blobFound){
+			actualPushForce += (PropF(@"endpointPushForce")-actualPushForce) * 0.05;			
+		} else {
+			actualPushForce += (0-actualPushForce) * 0.05;
+		}		
 	} else if (mouseh >= 0) {
-		endPos = ofxVec2f(mousex,mousey);
+		actualPushForce += (PropF(@"endpointPushForce")-actualPushForce) * 0.05;
+		endPos +=  (ofxVec2f(mousex,mousey) - endPos)*0.2;
+	} else {
+		actualPushForce += (0-actualPushForce) * 0.05;
 	}
 }
 
@@ -576,13 +596,7 @@
 			
 		}
 		
-		/*	for(int i=0;i<particlesLength;i++){
-		 ofSetColor(255, 0, 0,255);
-		 ofFill();
-		 ofCircle(particles[0][i].x/100.0, particles[0][i].y/100.0, 0.05);
-		 }
-		 */	
-	} else {
+		} else {
 		begin.y = [sceneX getBackline:1];
 		
 		
@@ -611,7 +625,7 @@
 					ofxVec2f v = p - lastPoint;
 					ofxVec2f h = ofxVec2f(-v.y,v.x);
 					h.normalize();
-					h *= 0.003;
+					h *= 0.006*PropF(@"lineWidth");;
 					glTexCoord2f(0,0);
 					glVertex2f((p+h).x, (p+h).y);
 					glTexCoord2f(100,0);

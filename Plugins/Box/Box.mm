@@ -22,6 +22,8 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"level"];
 	
 	[Prop(@"level") setMidiSmoothing:0.7];
+	[Prop(@"alpha") setMidiSmoothing:0.7];
+
 	[self assignMidiChannel:13];
 }
 
@@ -43,7 +45,7 @@
 	
 	ApplySurface(@"Wall");{
 		
-		ofSetColor(255, 255, 255, 255*PropF(@"alpha"));
+		ofSetColor(255, 255, 255, 255.0*PropF(@"alpha"));
 		ofFill();
 		
 		ofRect(0, 1.0-level, [self aspect], level);

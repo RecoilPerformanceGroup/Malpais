@@ -48,6 +48,8 @@
 	
 	SceneX * sceneX;
 	float aspectCache;
+	
+	float actualPushForce;
 }
 
 -(float) aspect;
