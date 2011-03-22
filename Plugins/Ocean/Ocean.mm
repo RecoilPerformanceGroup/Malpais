@@ -48,6 +48,8 @@
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:YES] named:@"reset"];
 	
 	[self assignMidiChannel:9];
+	
+	asp = [self aspect];
 }
 
 -(void) setup{
@@ -119,9 +121,9 @@
 	_particles = new ofxParticle*[grid];
 	for(int x = 0 ; x < grid+1 ;x++)
 	{
-		_particles[x] = new ofxParticle[(int)(grid/[self aspect])+1];
+		_particles[x] = new ofxParticle[(int)(grid/asp)+1];
 	}
-	[self makeSpringWidth:[self aspect]*400.0 height:1.0*400.0];
+	[self makeSpringWidth:asp*400.0 height:1.0*400.0];
 	
 	[[properties objectForKey:@"reset"] setBoolValue:NO];
 	[[properties objectForKey:@"drag"] setFloatValue:0.0];
@@ -151,7 +153,7 @@
 	 float particleRadius = 1.5;
 	 float particleMargin = (_particles[0][0].getRadius()/20.0);
 	 
-	 float wallX = (PropF(@"dragToX") < 0.5)?-((particleRadius+particleMargin)/wallParticleResolution):[self aspect]+((particleRadius+particleMargin)/wallParticleResolution);
+	 float wallX = (PropF(@"dragToX") < 0.5)?-((particleRadius+particleMargin)/wallParticleResolution):asp+((particleRadius+particleMargin)/wallParticleResolution);
 	 
 	 float rest;
 	 
@@ -187,6 +189,8 @@
 }
 
 -(void) update:(NSDictionary *)drawingInformation{
+	
+	asp = [self aspect];
 	
 	if (PropB(@"reset")) {
 		
@@ -225,8 +229,8 @@
 	}
 	
 	if(!dragSpring){
-		//		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
-		float wallX = 0.5*[self aspect];
+		//		float wallX = (PropF(@"dragToX") < 0.5)?0:asp;
+		float wallX = 0.5*asp;
 		ofPoint dragPoint = ofPoint(wallX*400, 0.25*400);
 		ofxParticle* particleToDrag = physics->getNearestParticle(dragPoint);
 		if(particleToDrag){
@@ -237,7 +241,7 @@
 			physics->add(dragSpring);
 		} 
 	} else {
-		dragParticle->set(dragOrigin->x + (((PropF(@"dragToX")*[self aspect]*400.0)-dragOrigin->x)*PropF(@"drag")),
+		dragParticle->set(dragOrigin->x + (((PropF(@"dragToX")*asp*400.0)-dragOrigin->x)*PropF(@"drag")),
 						  dragOrigin->y + ((-(PropF(@"dragToY")*400.0)-dragOrigin->y)*PropF(@"drag"))
 						  );
 	}
@@ -358,7 +362,7 @@
 		
 		float backLine = [GetPlugin(SceneX) getBackline:(int)round(PropF(@"backlineNo"))];
 		
-		ofRect(0, backLine, [self aspect], 1-backLine);
+		ofRect(0, backLine, asp, 1-backLine);
 		glPushMatrix();{
 			glTranslated(0, backLine,0);
 			glScaled(1.0/400.0, (1.0-backLine)/400.0,0);
@@ -367,10 +371,10 @@
 		
 		ofSetColor(0,0,0,255);
 		ofFill();
-		ofRect(-2.0, backLine, 4.0+[self aspect], -2.0); // top
-		ofRect(-2.0, 1.0, 4.0+[self aspect], 2.0); // bottom
+		ofRect(-2.0, backLine, 4.0+asp, -2.0); // top
+		ofRect(-2.0, 1.0, 4.0+asp, 2.0); // bottom
 		ofRect(-2.0,backLine, 2.0, 4.0-backLine); // left
-		ofRect([self aspect], backLine, 4.0+[self aspect], 4.0-backLine); // right
+		ofRect(asp, backLine, 4.0+asp, 4.0-backLine); // right
 		
 	} PopSurface();
 	
@@ -435,10 +439,10 @@
 	ofSetColor(0, 0,0,255);
 	for (int i = 0; i < grid; i++)
 	{
-		for (int j = 0; j < ((int)(grid/[self aspect])); j++)
+		for (int j = 0; j < ((int)(grid/asp)); j++)
 		{
 			float texCoorX = ref->getWidth()/grid*1.0f;
-			float texCoorY = ref->getHeight()/grid*1.0f*[self aspect];
+			float texCoorY = ref->getHeight()/grid*1.0f*asp;
 			ofxParticle *p1 = &_particles[i][j];
 			ofxParticle *p2 = &_particles[i+1][j];
 			ofxParticle *p3 = &_particles[i+1][j+1];
@@ -468,10 +472,10 @@
 	ref->bind();
 	for (int i = 0; i < grid; i++)
 	{
-		for (int j = 0; j < ((int)(grid/[self aspect])); j++)
+		for (int j = 0; j < ((int)(grid/asp)); j++)
 		{
 			float texCoorX = ref->getWidth()/grid*1.0f;
-			float texCoorY = ref->getHeight()/grid*1.0f*[self aspect];
+			float texCoorY = ref->getHeight()/grid*1.0f*asp;
 			ofxParticle *p1 = &_particles[i][j];
 			ofxParticle *p2 = &_particles[i+1][j];
 			ofxParticle *p3 = &_particles[i+1][j+1];
@@ -521,12 +525,12 @@
 			ofFill();
 		}
 		ofSetColor(255, 255, 0,100);
-		ofEllipse(mousex*200.0*(1.0/[self aspect]), mousey*400.0, 15, 15);
+		ofEllipse(mousex*200.0*(1.0/asp), mousey*400.0, 15, 15);
 	}
 	
 	glPushMatrix();{
 		
-		glTranslated((0.5-[self aspect])*200, 0, 0);
+		glTranslated((0.5-asp)*200, 0, 0);
 		ofSetColor(255, 255, 255,127);
 		[self drawCloth:&fbo.getTexture(0) showGrid:YES folds:0];
 	} glPopMatrix();
@@ -534,13 +538,13 @@
 	/*	The Wall on the side is not currently in use
 	 //	glPushMatrix();{
 	 //		
-	 //		glScaled(200*1.0/[self aspect], 400, 1);
+	 //		glScaled(200*1.0/asp, 400, 1);
 	 //		
 	 //		ofFill();
 	 //		
 	 //		ofSetColor(255, 0, 0,127);
 	 //		
-	 //		float wallX = (PropF(@"dragToX") < 0.5)?0:[self aspect];
+	 //		float wallX = (PropF(@"dragToX") < 0.5)?0:asp;
 	 //		
 	 //		ofRect(wallX-0.01, 0, 0.02, PropF(@"dragToY")-(PropF(@"dragWindowWidth")*0.5));
 	 //		
@@ -552,7 +556,7 @@
 
 - (void)makeSpringWidth:(float) _width height:(float) _height{
 	gridSizeX = _width/((grid)*1.0);
-	gridSizeY = ((_height*[self aspect])/((grid)*1.0));
+	gridSizeY = ((_height*asp)/((grid)*1.0));
 	
 	//	gridSizeX = img.getWidth()/grid;
 	//	gridSizeY = img.getHeight()/grid;
@@ -564,7 +568,7 @@
 	
 	for(int x = 0 ; x <= grid  ;x++)
 	{
-		for(int y = 0 ; y <= (int)grid/[self aspect]  ;y++)
+		for(int y = 0 ; y <= (int)grid/asp  ;y++)
 		{
 			ofPoint particlePos = ofPoint(gridPosX+x*gridSizeX,gridPosY+y*gridSizeY);
 			ofxParticle* p = new ofxParticle(particlePos, pSize);
@@ -576,7 +580,7 @@
 	}
 	for (int i = 0; i <= grid; i++)
 	{
-		for (int j = 0; j <= (int)grid/[self aspect]; j++)
+		for (int j = 0; j <= (int)grid/asp; j++)
 		{
 			
 			if (j > 0)
@@ -617,26 +621,26 @@
 		}
 	}
 	
-	for(int i = 0 ; i < (int)(grid/[self aspect]); i++)
+	for(int i = 0 ; i < (int)(grid/asp); i++)
 	{
 		// locking edges
-		//_particles[(int)(i*[self aspect])][0].setActive(false);
+		//_particles[(int)(i*asp)][0].setActive(false);
 		//		_particles[0][i].setActive(false);
 		//		_particles[grid- 1][i].setActive(false);
-		//		_particles[(int)(i*[self aspect])][(int)(grid/[self aspect]) - 1].setActive(false);
+		//		_particles[(int)(i*asp)][(int)(grid/asp) - 1].setActive(false);
 	}
 	
 }
 
 -(void) controlMousePressed:(float)x y:(float)y button:(int)button{
-	mousex = [self aspect]*x / 200.0;
+	mousex = asp*x / 200.0;
 	mousey = y / 400.0;
 	mouseh = (controlMouseFlags & NSShiftKeyMask)?0.0:10.0;	
 	
 	bMousePressed = true;
 	if(button == 0){
-		ofPoint mousePoint = ofPoint(x-((0.5-[self aspect])*200), y);
-		mouseParticle->set(x-((0.5-[self aspect])*200),y);
+		ofPoint mousePoint = ofPoint(x-((0.5-asp)*200), y);
+		mouseParticle->set(x-((0.5-asp)*200),y);
 		ofxParticle* particleUnderMouse = physics->getNearestParticle(mousePoint);
 		if(particleUnderMouse){
 			float rest = mouseParticle->distanceTo(particleUnderMouse);
@@ -648,13 +652,13 @@
 }
 
 -(void) controlMouseDragged:(float)x y:(float)y button:(int)button{
-	mousex = [self aspect] * x / 200.0;
+	mousex = asp * x / 200.0;
 	mousey = y / 400.0;
 	mouseh = (controlMouseFlags & NSShiftKeyMask)?0.0:10.0;	
 }
 
 -(void) controlMouseReleased:(float)x y:(float)y{
-	mousex = [self aspect] * x / 200.0;
+	mousex = asp * x / 200.0;
 	mousey = y / 400.0;
 	mouseh = -1;
 	bMousePressed = false;

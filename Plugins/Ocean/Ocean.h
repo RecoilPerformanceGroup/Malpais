@@ -56,7 +56,7 @@
 	
 	MSA::Interpolator1D	* waveForm[NUM_VOICES+1];
 	
-	float mousex, mousey, mouseh;
+	float mousex, mousey, mouseh, asp;
 		
 	NSMutableArray * voices;
 
