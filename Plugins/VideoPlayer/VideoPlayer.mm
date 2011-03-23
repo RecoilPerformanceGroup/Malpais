@@ -393,10 +393,10 @@
 				aspect = sizes[i].width / sizes[i].height;		
 				float projAspect =  Aspect(@"Wall",projector);
 				glBegin(GL_QUADS);{
-					glTexCoord2f(topLeft[0], topLeft[1]);  glVertex2f(-(aspect-projAspect), 0);
-					glTexCoord2f(topRight[0], topRight[1]);     glVertex2f(projAspect,  0);
-					glTexCoord2f(bottomRight[0], bottomRight[1]);    glVertex2f(projAspect,  1);
-					glTexCoord2f(bottomLeft[0], bottomLeft[1]); glVertex2f( -(aspect-projAspect), 1);
+					glTexCoord2f(topLeft[0], topLeft[1]);  glVertex2f(-(aspect-projAspect)*0.5, 0);
+					glTexCoord2f(topRight[0], topRight[1]);     glVertex2f(projAspect+(aspect-projAspect)*0.5,  0);
+					glTexCoord2f(bottomRight[0], bottomRight[1]);    glVertex2f(projAspect+(aspect-projAspect)*0.5,  1);
+					glTexCoord2f(bottomLeft[0], bottomLeft[1]); glVertex2f( -(aspect-projAspect)*0.5, 1);
 				}glEnd();
 			}
 			//		ApplySurface(([NSString stringWithFormat:@"Skærm%i",i+1])){

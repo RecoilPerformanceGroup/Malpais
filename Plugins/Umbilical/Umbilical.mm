@@ -65,8 +65,8 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"springRepulsion"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"lineWidth"];	
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"kinect"];
-		[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"trackingAlpha"];	
-
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1] named:@"trackingAlpha"];	
+	
 	[self assignMidiChannel:7];
 	
 	
@@ -88,14 +88,13 @@
 
 -(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
 	if(object == Prop(@"Enabled")){
-		cout<<"Enabled"<<endl;
-		endPos = startPos + ofxVec2f(0,0.2);
+		endPos = startPos + ofxVec2f(0,0.1);
 	}
 }
 
 -(void) setup{	
 	aspectCache = [[[GetPlugin(Keystoner) getSurface:@"Floor" viewNumber:0 projectorNumber:0] aspect] floatValue];
-
+	
 	
 	sceneX = GetPlugin(SceneX);
 	voices = [NSMutableArray arrayWithCapacity:NUM_VOICES+1];
@@ -109,19 +108,19 @@
 		[voices addObject:[NSNull null]];
 		
 		/*
-		bool notOk = true;
-		while(notOk){
-			notOk = false;
-			waveX[i] = ofRandom(0, [self aspect]);
-			for(int j=0;j<i;j++){
-				if(fabs(waveX[i] - waveX[j]) < 0.017){
-					notOk = true;
-				//	cout<<"Damn "<<waveX[i]<<"  "<<waveX[j]<<endl;
-				}
-			}
-		}*/
+		 bool notOk = true;
+		 while(notOk){
+		 notOk = false;
+		 waveX[i] = ofRandom(0, [self aspect]);
+		 for(int j=0;j<i;j++){
+		 if(fabs(waveX[i] - waveX[j]) < 0.017){
+		 notOk = true;
+		 //	cout<<"Damn "<<waveX[i]<<"  "<<waveX[j]<<endl;
+		 }
+		 }
+		 }*/
 		
-		waveX[i] = [self aspect]* (float) i/NUM_VOICES;			
+		waveX[i] = [self aspect]*( (float) i/NUM_VOICES - 0.5*1/NUM_VOICES);			
 		
 	}
 	
@@ -300,9 +299,13 @@
 					if(thisPoint.x < 0.5*[self aspect])
 						dir = -1;
 					
-					float xDist = dir*(endPos.x - thisPoint.x)+0.1;
+					float xDist = dir*(leftPoint.x - thisPoint.x)+0.1;
+					float d = fabs(0.5*[self aspect] - leftPoint.x)+0.05;
+					if(dir > 0){
+						xDist = dir*(rightPoint.x - thisPoint.x)+0.1;
+						d = fabs(0.5*[self aspect] - rightPoint.x)+0.05;
+					}
 					
-					float d = fabs(0.5*[self aspect] - endPos.x)+0.05;
 					
 					if(xDist > 0){
 						offset = -dir*actualPushForce * 100 * [self offset:x] * d * xDist;
@@ -378,9 +381,9 @@
 						
 						if([[newWaveForms objectAtIndex:iBand] count] == [[oldWaveForms objectAtIndex:iBand] count]){
 							[aBand addFloat:
-											  ((1.0-postDriftBalance)*[[newWaveForms objectAtIndex:iBand] getFloatAtIndex:iAmplitude])+
-											  ((postDriftBalance)*[[oldWaveForms objectAtIndex:iBand] getFloatAtIndex:iFrom])
-											  ];
+							 ((1.0-postDriftBalance)*[[newWaveForms objectAtIndex:iBand] getFloatAtIndex:iAmplitude])+
+							 ((postDriftBalance)*[[oldWaveForms objectAtIndex:iBand] getFloatAtIndex:iFrom])
+							 ];
 						} else {
 							[aBand addFloat:[[newWaveForms objectAtIndex:iBand] getFloatAtIndex:iAmplitude]];
 						}
@@ -457,8 +460,8 @@
 	
 	
 	if(PropB(@"kinect")){
-		
-		NSMutableArray * pblobs = [GetPlugin(Kinect) persistentBlobs];
+		Kinect * kinect = GetPlugin(Kinect);
+		NSMutableArray * pblobs = [kinect persistentBlobs];
 		BOOL blobFound = NO;
 		if([pblobs count] >= 1){
 			PersistentBlob * oldest = nil;
@@ -469,6 +472,29 @@
 			if(oldest != nil){
 				blobFound = YES;
 				endPos += (ofxVec2f([oldest centroidFiltered].x,[oldest centroidFiltered].z)-endPos)*0.2;
+				
+				xn::DepthMetaData dmd;
+				[kinect getDepthGenerator]->getXnDepthGenerator().GetMetaData(dmd);	
+				const XnDepthPixel* pixels = dmd.Data();
+				
+				ofxVec2f p = ofxVec2f([oldest getLeftmostPoint]);				
+				if(pixels[(int)(p.x*640+p.y*480*640)] > 0){
+					ofxPoint3f kinectLeftPoint = ofxPoint3f(p.x*640, p.y*480, pixels[(int)(p.x*640+p.y*480*640)]);
+					
+					ofxPoint3f l = [kinect convertWorldToFloor:[kinect convertKinectToWorld:kinectLeftPoint]];				
+					leftPoint += (ofxPoint2f(l.x,l.z) - leftPoint) * 0.2;
+					//cout<<ofxPoint2f(l.x,l.z).x<<"  "<<ofxPoint2f(l.x,l.z).y<<endl;
+				}
+				
+				ofxVec2f p2 = ofxVec2f([oldest getRightmostPoint]);				
+				if(pixels[(int)(p2.x*640+p2.y*480*640)] > 0){
+					ofxPoint3f kinectRightPoint = ofxPoint3f(p2.x*640, p2.y*480, pixels[(int)(p2.x*640+p2.y*480*640)]);
+					
+					ofxPoint3f r = [kinect convertWorldToFloor:[kinect convertKinectToWorld:kinectRightPoint]];				
+					rightPoint += (ofxPoint2f(r.x,r.z) - rightPoint) * 0.2;
+					//cout<<ofxPoint2f(l.x,l.z).x<<"  "<<ofxPoint2f(l.x,l.z).y<<endl;
+				}
+				
 			} 
 		}
 		
@@ -596,7 +622,7 @@
 			
 		}
 		
-		} else {
+	} else {
 		begin.y = [sceneX getBackline:1];
 		
 		
@@ -685,7 +711,16 @@
 	ofEllipse(startPos.x*200*(1.0/[self aspect]), startPos.y*400, 15, 15);
 	ofEllipse(endPos.x*200*(1.0/[self aspect]), endPos.y*400, 15, 15);
 	
+	ofSetColor(255, 0, 100,100);
 	
+	ofEllipse(leftPoint.x*200*(1.0/[self aspect]), leftPoint.y*400, 8, 8);
+	ofEllipse(rightPoint.x*200*(1.0/[self aspect]), rightPoint.y*400, 8, 8);
+	
+	
+	ofLine(endPos.x*200*(1.0/[self aspect]), endPos.y*400,  leftPoint.x*200*(1.0/[self aspect]) ,endPos.y*400);
+	ofLine(endPos.x*200*(1.0/[self aspect]), endPos.y*400,  rightPoint.x*200*(1.0/[self aspect]) ,endPos.y*400);
+
+
 	glPushMatrix();{
 		
 		glScaled(200*1.0/[self aspect], 400, 1);

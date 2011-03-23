@@ -48,6 +48,32 @@
 	return low;
 }
 
+-(ofxPoint2f) getLeftmostPoint{
+	ofxPoint2f left = ofxPoint2f(1000,0);
+	Blob * blob;
+	for(blob in blobs){
+		if([blob getLeftmostPoint].x < left.x){
+			left = [blob getLeftmostPoint];
+		}
+	}
+	
+
+	return left;
+}
+
+-(ofxPoint2f) getRightmostPoint{
+	ofxPoint2f right;
+	Blob * blob;
+	for(blob in blobs){
+		ofxVec2f p = [blob getRightmostPoint]; 
+		if(p.x > right.x){
+			right = p;
+		}
+	}
+	return right;
+}
+
+
 -(ofxPoint3f) centroidFiltered{
 	//return ofxPoint2f(centroidFiltered[0], centroidFiltered[1]);
 	return *centroidFiltered;
@@ -96,8 +122,7 @@
 }
 
 
--(ofxPoint2f) getLowestPoint{
-	
+-(ofxPoint2f) getLowestPoint{	
 	if(low)
 		return *low;
 	else {
@@ -112,8 +137,42 @@
 			}
 		}
 		return *low;
-	}
-	
+	}	
+}
+
+-(ofxPoint2f) getRightmostPoint{	
+	if(_right)
+		return *_right;
+	else {
+		for(int u=0;u< [self nPts];u++){
+			if(!_right || [self pts][u].x > _right->x){
+				if(_right){
+					_right->x = [self pts][u].x;
+					_right->y = [self pts][u].y;
+				} else {
+					_right = new ofxPoint2f([self pts][u]);
+				}
+			}
+		}
+		return *_right;
+	}	
+}
+-(ofxPoint2f) getLeftmostPoint{	
+	if(_left)
+		return *_left;
+	else {
+		for(int u=0;u< [self nPts];u++){
+			if(!_left || [self pts][u].x < _left->x){
+				if(_left){
+					_left->x = [self pts][u].x;
+					_left->y = [self pts][u].y;
+				} else {
+					_left = new ofxPoint2f([self pts][u]);
+				}
+			}
+		}
+		return *_left;
+	}	
 }
 
 -(id)initWithBlob:(ofxCvBlob*)_blob{
@@ -1407,6 +1466,10 @@
 	[customProperties setValue:[NSNumber numberWithFloat:coord.x] forKey:[NSString stringWithFormat:@"proj%ix",point]];
 	[customProperties setValue:[NSNumber numberWithFloat:coord.y] forKey:[NSString stringWithFormat:@"proj%iy",point]];
 	projPointCache[point] = nil;
+}
+
+-(ofxDepthGenerator*) getDepthGenerator{
+	return &depth;	
 }
 
 -(ofxUserGenerator*) getUserGenerator{

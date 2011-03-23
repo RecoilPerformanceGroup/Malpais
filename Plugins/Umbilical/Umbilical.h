@@ -28,6 +28,8 @@
 	
 	ofxVec2f startPos;
 	ofxVec2f endPos;
+	ofxVec2f leftPoint;
+	ofxVec2f rightPoint;
 	
 	float waveX[NUM_VOICES+1];
 	
@@ -50,6 +52,9 @@
 	float aspectCache;
 	
 	float actualPushForce;
+	
+	float blobLeftOffset;
+	float blobRightOffset;
 }
 
 -(float) aspect;

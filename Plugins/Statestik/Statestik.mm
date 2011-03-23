@@ -488,12 +488,13 @@
 		
 		ApplySurface(@"Wall");{
 			
-			float lineStart = 1-wallL;
+			float lineStart = 1-wallL+0.04;
 			float lineEnd = 1-wallL+wallL*wallP;
 			float lineX = (middle*Aspect(@"Wall",1))-(0.5*lineStyleWidth);
-			
+			float aspect = Aspect(@"Wall",1);
+
 			for (float lineY=lineStart; lineY < lineEnd; lineY+=(2*lineStyleWidth)) {
-				ofRect(lineX, lineY, lineStyleWidth, lineStyleWidth);
+				ofRect(lineX, lineY, lineStyleWidth*aspect, lineStyleWidth);
 			}
 
 		}PopSurface();
@@ -508,8 +509,10 @@
 				float lineEnd = ofMap(h*floorP, 0, 1.0, backLine, 1, false);
 				float lineX = (middle*[self aspect])-(0.5*lineStyleWidth);
 				
+				float aspect = Aspect(@"Floor",0);
+				
 				for (float lineY=lineStart; lineY < lineEnd; lineY+=(2*lineStyleWidth)) {
-					ofRect(lineX, lineY, lineStyleWidth, lineStyleWidth);
+					ofRect(lineX, lineY, lineStyleWidth*aspect, lineStyleWidth);
 				}
 				
 				ofCircle(middle*[self aspect], ofMap(h*floorP, 0, 1.0, backLine, 1, false), 0.01);

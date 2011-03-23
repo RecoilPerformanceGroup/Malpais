@@ -33,6 +33,8 @@ struct Dancer {
 @property (assign) NSMutableArray * blobs;
 
 -(ofxPoint2f) getLowestPoint;
+-(ofxPoint2f) getLeftmostPoint;
+-(ofxPoint2f) getRightmostPoint;
 -(ofxPoint3f) centroidFiltered;
 -(void) dealloc;
 
@@ -46,6 +48,8 @@ struct Dancer {
 	ofxCvBlob * originalblob;
 	ofxCvBlob * floorblob;
 	ofxPoint2f * low;
+	ofxPoint2f * _left;
+	ofxPoint2f * _right;
 	int segment;
 	
 	int avgDepth;
@@ -73,8 +77,8 @@ struct Dancer {
 -(BOOL) hole;
 
 -(ofxPoint2f) getLowestPoint;
-
-
+-(ofxPoint2f) getLeftmostPoint;
+-(ofxPoint2f) getRightmostPoint;
 
 @end
 
@@ -176,6 +180,7 @@ struct Dancer {
 
 -(ofxTrackedUser*) getDancer:(int)d;
 -(ofxUserGenerator*) getUserGenerator;
+-(ofxDepthGenerator*) getDepthGenerator;
 
 -(void) performBlobTracking:(id)param;
 
