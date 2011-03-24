@@ -21,7 +21,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1.0 minValue:0.0 maxValue:1.0] named:@"alpha"];
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"level"];
 	
-	[Prop(@"level") setMidiSmoothing:0.7];
+	[Prop(@"level") setMidiSmoothing:0.75];
 	[Prop(@"alpha") setMidiSmoothing:0.7];
 
 	[self assignMidiChannel:13];

@@ -11,6 +11,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:NUMVIDEOS] named:@"video"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0 minValue:0 maxValue:1] named:@"chapter"];	
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:0 maxValue:1] named:@"volume"];	
+	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:0 maxValue:1] named:@"alpha"];	
 	
 	[self assignMidiChannel:8];	
 	lastFramesVideo = 0;
@@ -34,9 +35,10 @@
 		});
 	}
 	if(object == Prop(@"video")){		
-		if(PropI(@"video") == 0){			
-			NSLog(@"Reset video");
-			dispatch_async(dispatch_get_main_queue(), ^{		
+		dispatch_async(dispatch_get_main_queue(), ^{		
+			
+			if(PropI(@"video") == 0){			
+				NSLog(@"Reset video");
 				for(int i=0;i<NUMVIDEOS;i++){				
 					if(movie[i]){
 						[movie[i] gotoBeginning];				
@@ -50,9 +52,7 @@
 				[((NumberProperty*) Prop(@"chapter")) setMaxValue:[NSNumber numberWithInt:0]];
 				[Prop(@"chapter") setIntValue:0];
 				
-			});			
-		} else {
-			dispatch_async(dispatch_get_main_queue(), ^{	
+			} else {
 				for(int i=0;i<NUMVIDEOS;i++){				
 					if(movie[i]){
 						[movie[i] gotoBeginning];				
@@ -60,6 +60,7 @@
 					}
 				}
 				if(movie[PropI(@"video")-1]){
+					cout<<"Change video to "<<PropI(@"video")-1<<endl;
 					QTMovie * mov = movie[PropI(@"video")-1];
 					
 					[chapterSelector removeAllItems];				
@@ -75,9 +76,10 @@
 						[Prop(@"chapter") setIntValue:0];
 					}				
 				}
-			});			
-			
-		}
+				
+			}
+		});			
+		
 	}
 	
 	if(object == Prop(@"chapter")){
@@ -140,6 +142,7 @@
 //
 
 -(BOOL) willDraw:(NSMutableDictionary *)drawingInformation{
+	return YES;
 	if(PropI(@"video") > 0 && PropI(@"video") <= NUMVIDEOS){
 		QTVisualContextTask(textureContext[PropI(@"video")-1]);
 		
@@ -356,7 +359,7 @@
 
 -(void) draw:(NSDictionary*)drawingInformation{
 	if(PropI(@"video") > 0 && PropI(@"video") <= NUMVIDEOS){
-		
+		ofEnableAlphaBlending();
 		//	NSLog(@"Draw");
 		int i = PropI(@"video")-1;
 		
@@ -373,12 +376,12 @@
 			
 			glEnable(target);
 			glBindTexture(target, _name);
-			ofSetColor(255,255, 255, 255);						
+			ofSetColor(255,255, 255, 255.0*PropF(@"alpha"));						
 			glPushMatrix();
 			
 			int projector = 1;
 			[GetPlugin(Keystoner)  applySurface:@"Wall" projectorNumber:projector viewNumber:ViewNumber];
-
+			
 			
 			float aspect;
 			if(i == 0){
@@ -400,7 +403,7 @@
 				}glEnd();
 			}
 			//		ApplySurface(([NSString stringWithFormat:@"Skærm%i",i+1])){
-
+			
 			
 			
 			[GetPlugin(Keystoner)  popSurface];
