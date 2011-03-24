@@ -34,34 +34,47 @@
 			}
 		});
 	}
-	if(object == Prop(@"video")){		
-		dispatch_async(dispatch_get_main_queue(), ^{		
+	if(object == Prop(@"video")){	
+		if(lastObservertionVideo != [object intValue]){
+			lastObservertionVideo = [object intValue];
+			cout<<"Change video "<<[object intValue]<<endl;
 			
 			if(PropI(@"video") == 0){			
-				NSLog(@"Reset video");
-				for(int i=0;i<NUMVIDEOS;i++){				
-					if(movie[i]){
-						[movie[i] gotoBeginning];				
-						[movie[i] setRate:0.0];							
+				dispatch_async(dispatch_get_main_queue(), ^{		
+					
+					NSLog(@"Reset video");
+					for(int i=0;i<NUMVIDEOS;i++){				
+						if(movie[i]){
+							[movie[i] gotoBeginning];				
+							[movie[i] setRate:0.0];							
+						}
 					}
-				}
-				forceDrawNextFrame = YES;
-				lastFramesVideo = 0;
-				[chapterSelector removeAllItems];
-				[chapterSelector addItemWithTitle:@" - No Chapters - "];
-				[((NumberProperty*) Prop(@"chapter")) setMaxValue:[NSNumber numberWithInt:0]];
+					forceDrawNextFrame = YES;
+					lastFramesVideo = 0;
+					[chapterSelector removeAllItems];
+					[chapterSelector addItemWithTitle:@" - No Chapters - "];
+					[((NumberProperty*) Prop(@"chapter")) setMaxValue:[NSNumber numberWithInt:0]];
+					
+				});			
+				
 				[Prop(@"chapter") setIntValue:0];
 				
 			} else {
-				for(int i=0;i<NUMVIDEOS;i++){				
-					if(movie[i]){
-						[movie[i] gotoBeginning];				
-						[movie[i] setRate:0.0];							
+				dispatch_async(dispatch_get_main_queue(), ^{		
+					
+					for(int i=0;i<NUMVIDEOS;i++){				
+						if(movie[i]){
+							[movie[i] gotoBeginning];				
+							[movie[i] setRate:0.0];							
+						}
 					}
-				}
+					
+				});			
+				
 				if(movie[PropI(@"video")-1]){
 					cout<<"Change video to "<<PropI(@"video")-1<<endl;
 					QTMovie * mov = movie[PropI(@"video")-1];
+					
 					
 					[chapterSelector removeAllItems];				
 					if([mov chapterCount] > 0){
@@ -78,8 +91,7 @@
 				}
 				
 			}
-		});			
-		
+		}
 	}
 	
 	if(object == Prop(@"chapter")){
@@ -169,7 +181,7 @@
 -(void) setup{	
 	
 	NSLog(@"Setup video");
-	[Prop(@"video") setFloatValue:0];
+	[Prop(@"video") setIntValue:0];
 	dispatch_async(dispatch_get_main_queue(), ^{	
 		
 		NSError * error = [NSError alloc];			
@@ -242,6 +254,7 @@
 		for(int i=0;i<NUMVIDEOS;i++){
 			[movie[i] retain];
 			[movie[i] stop];
+			[movie[i] gotoBeginning];
 			[movie[i] setAttribute:[NSNumber numberWithBool:NO] forKey:QTMovieLoopsAttribute];
 			
 			QTOpenGLTextureContextCreate(kCFAllocatorDefault,								

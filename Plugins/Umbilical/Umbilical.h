@@ -55,6 +55,8 @@
 	
 	float blobLeftOffset;
 	float blobRightOffset;
+	
+	float timer;
 }
 
 -(float) aspect;

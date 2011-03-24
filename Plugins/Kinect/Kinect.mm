@@ -276,7 +276,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:1 minValue:0 maxValue:1] named:@"persistentDist"];	
 	
 	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:1.0] named:@"blobTracking"];
-	
+	[self addProperty:[BoolProperty boolPropertyWithDefaultvalue:0.0] named:@"debug"];
 	[self assignMidiChannel:2];
 	
 	if([customProperties valueForKey:@"point0a"] == nil){
@@ -308,6 +308,12 @@
 	point3Cache[2] = nil;
 	
 	
+}
+
+-(void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+	if(object == Prop(@"debug")){
+		[drawCalibration setState:[object boolValue]];
+	}
 }
 
 -(void) setup{

@@ -504,12 +504,12 @@
 
 				ofSetColor(255, 255, 255);
 				ofFill();
-				
+				float aspect = Aspect(@"Floor",0);
+
 				float lineStart = backLine;
 				float lineEnd = ofMap(h*floorP, 0, 1.0, backLine, 1, false);
-				float lineX = (middle*[self aspect])-(0.5*lineStyleWidth);
+				float lineX = (middle*[self aspect])-(0.5*lineStyleWidth*aspect);
 				
-				float aspect = Aspect(@"Floor",0);
 				
 				for (float lineY=lineStart; lineY < lineEnd; lineY+=(2*lineStyleWidth)) {
 					ofRect(lineX, lineY, lineStyleWidth*aspect, lineStyleWidth);

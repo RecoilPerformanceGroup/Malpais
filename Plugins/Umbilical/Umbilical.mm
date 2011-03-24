@@ -281,6 +281,13 @@
 	
 	
 	int resolution = (int)roundf(PropF(@"resolution"));
+
+	int updateDriftTimes = 0;
+	while(ofGetElapsedTimeMillis() - timer > 16){
+		timer += 16;
+		updateDriftTimes ++;
+	}
+	timer = ofGetElapsedTimeMillis();
 	
 	for (int iVoice = 0; iVoice < NUM_VOICES+1; iVoice++) {
 		//Offsets
@@ -398,50 +405,50 @@
 			}
 			
 			wave = [newVoice objectForKey:@"waveLine"];
-			
-			float direction = PropF(@"direction");
-			
-			if(direction < 0){
-				MSA::Interpolator1D * newDistortion = new MSA::Interpolator1D;
-				newDistortion->reserve(resolution);
-				for (int i=distortion[iVoice]->size()-1; i >= 0 ; i--) {
-					newDistortion->push_back(distortion[iVoice]->getData()[i]);
+			for(int q=0;q<updateDriftTimes;q++){
+			float direction = PropF(@"direction");			
+				if(direction < 0){
+					MSA::Interpolator1D * newDistortion = new MSA::Interpolator1D;
+					newDistortion->reserve(resolution);
+					for (int i=distortion[iVoice]->size()-1; i >= 0 ; i--) {
+						newDistortion->push_back(distortion[iVoice]->getData()[i]);
+					}
+					distortion[iVoice]->clear();
+					delete distortion[iVoice];
+					distortion[iVoice] = newDistortion;
 				}
-				distortion[iVoice]->clear();
-				delete distortion[iVoice];
-				distortion[iVoice] = newDistortion;
-			}
-			
-			if ([wave count] > 0) {
-				if(fabs(direction) > 0) {
-					distortion[iVoice]->push_back([wave getFloatAtIndex:0]);
+				
+				if ([wave count] > 0) {
+					if(fabs(direction) > 0) {
+						distortion[iVoice]->push_back([wave getFloatAtIndex:0]);
+					}
+					waveForm[iVoice]->clear();
+					for (int i=0; i < [wave count]; i++) {
+						waveForm[iVoice]->push_back([wave getFloatAtIndex:i]);
+					}
 				}
-				waveForm[iVoice]->clear();
-				for (int i=0; i < [wave count]; i++) {
-					waveForm[iVoice]->push_back([wave getFloatAtIndex:i]);
+				
+				if (distortion[iVoice]->size() > resolution) {
+					MSA::Interpolator1D * newDistortion = new MSA::Interpolator1D;
+					newDistortion->reserve(resolution);
+					for (int i=distortion[iVoice]->size()-resolution; i < distortion[iVoice]->size() ; i++) {
+						newDistortion->push_back(distortion[iVoice]->getData()[i]);
+					}
+					distortion[iVoice]->clear();
+					delete distortion[iVoice];
+					distortion[iVoice] = newDistortion;
 				}
-			}
-			
-			if (distortion[iVoice]->size() > resolution) {
-				MSA::Interpolator1D * newDistortion = new MSA::Interpolator1D;
-				newDistortion->reserve(resolution);
-				for (int i=distortion[iVoice]->size()-resolution; i < distortion[iVoice]->size() ; i++) {
-					newDistortion->push_back(distortion[iVoice]->getData()[i]);
+				
+				if(direction < 0){
+					MSA::Interpolator1D * newDistortion = new MSA::Interpolator1D;
+					newDistortion->reserve(resolution);
+					for (int i=distortion[iVoice]->size()-1; i >= 0 ; i--) {
+						newDistortion->push_back(distortion[iVoice]->getData()[i]);
+					}
+					distortion[iVoice]->clear();
+					delete distortion[iVoice];
+					distortion[iVoice] = newDistortion;
 				}
-				distortion[iVoice]->clear();
-				delete distortion[iVoice];
-				distortion[iVoice] = newDistortion;
-			}
-			
-			if(direction < 0){
-				MSA::Interpolator1D * newDistortion = new MSA::Interpolator1D;
-				newDistortion->reserve(resolution);
-				for (int i=distortion[iVoice]->size()-1; i >= 0 ; i--) {
-					newDistortion->push_back(distortion[iVoice]->getData()[i]);
-				}
-				distortion[iVoice]->clear();
-				delete distortion[iVoice];
-				distortion[iVoice] = newDistortion;
 			}
 		} else {
 			//Tøm bufferen forfra hvis den er slået fra
@@ -457,7 +464,7 @@
 		
 	}
 	
-	
+
 	
 	if(PropB(@"kinect")){
 		Kinect * kinect = GetPlugin(Kinect);
@@ -719,8 +726,8 @@
 	
 	ofLine(endPos.x*200*(1.0/[self aspect]), endPos.y*400,  leftPoint.x*200*(1.0/[self aspect]) ,endPos.y*400);
 	ofLine(endPos.x*200*(1.0/[self aspect]), endPos.y*400,  rightPoint.x*200*(1.0/[self aspect]) ,endPos.y*400);
-
-
+	
+	
 	glPushMatrix();{
 		
 		glScaled(200*1.0/[self aspect], 400, 1);

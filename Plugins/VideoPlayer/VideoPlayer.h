@@ -29,6 +29,8 @@
 	
 	IBOutlet NSPopUpButton * videoSelector;
 	IBOutlet NSPopUpButton * chapterSelector;
+	
+	int lastObservertionVideo;
 
 }
 
