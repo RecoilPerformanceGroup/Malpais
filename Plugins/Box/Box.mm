@@ -22,7 +22,7 @@
 	[self addProperty:[NumberProperty sliderPropertyWithDefaultvalue:0.0 minValue:0.0 maxValue:1.0] named:@"level"];
 	
 	[Prop(@"level") setMidiSmoothing:0.7];
-	//[Prop(@"alpha") setMidiSmoothing:0.7];
+	[Prop(@"alpha") setMidiSmoothing:0.7];
 
 	[self assignMidiChannel:13];
 }
@@ -45,7 +45,7 @@
 	float level = PropF(@"level");
 	
 	ApplySurface(@"Wall");{
-		cout<<PropF(@"alpha")*255.0<<endl;
+		//cout<<PropF(@"alpha")*255.0<<endl;
 //		glColor4d(255, 255, 255, PropF(@"alpha")*1.0);
 		ofSetColor(255.0*PropF(@"alpha"), 255.0*PropF(@"alpha"), 255.0*PropF(@"alpha"), 255.0);
 		ofFill();
